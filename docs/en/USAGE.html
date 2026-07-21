@@ -182,42 +182,229 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <main class="main">
 <h1 id="idm-usage-tutorial">IDM Usage Tutorial</h1>
 <h2 id="overview">Overview</h2>
-<p>IDM (Integrated Distance Monitor) is a contactless bed leveling sensor for 3D printers, communicating with Klipper via CAN bus or USB.</p>
-<h2 id="hardware-connection">Hardware Connection</h2>
-<h3 id="can-mode-recommended">CAN Mode (Recommended)</h3>
-<p>Connect the IDM sensor to the printer's CAN bus:</p>
-<pre><code>Host ─── CAN Bus ─── IDM Sensor
-           │
-           └── Tool Board / Other CAN Devices</code></pre>
-<h3 id="usb-mode">USB Mode</h3>
-<p>Connect directly to the host via USB.</p>
+<p>IDM (Integrated Distance Monitor) is a contactless bed leveling sensor for 3D printers, featuring built-in accelerometer and temperature sensor. Communicates with Klipper via CAN bus or USB.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="language-bash">cd ~
+git clone https://gitee.com/NBTP/IDM.git
+cd IDM
+~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+./install.sh</code></pre>
 <h2 id="klipper-configuration">Klipper Configuration</h2>
-<p>Add the following to <code>printer.cfg</code>:</p>
+<h3 id="complete-configuration">Complete Configuration</h3>
+<pre><code class="language-ini">[scanner]
+mcu: idm
+sensor: idm
+calibration_method: touch             # touch / scan / second_probe
+speed: 40
+lift_speed: 5
+backlash_comp: 0.5
+x_offset: 0
+y_offset: 21.1
+trigger_distance: 2
+trigger_dive_threshold: 1.5
+trigger_hysteresis: 0.006
+cal_nozzle_z: 0.1
+cal_floor: 0.1
+cal_ceil: 5
+cal_speed: 1.0
+cal_move_speed: 10
+default_model_name: default
+mesh_main_direction: x
+mesh_overscan: 3
+mesh_cluster_size: 1
+mesh_runs: 1
+
+# Touch mode settings
+scanner_touch_max_temp: 180
+scanner_touch_speed: 5
+scanner_touch_accel: 100
+
+# Temperature compensation
+temperature_compensation: True</code></pre>
+<h3 id="required-settings">Required Settings</h3>
+<p><strong>Enable force_move (required)</strong>:</p>
+<pre><code class="language-ini">[force_move]
+enable_force_move: True</code></pre>
+<p><strong>Update Z endstop</strong>:</p>
+<pre><code class="language-ini">[stepper_z]
+endstop_pin: probe:z_virtual_endstop</code></pre>
+<p><strong>Safe Z homing</strong>:</p>
+<pre><code class="language-ini">[safe_z_home]
+home_xy_position: 150, 150
+speed: 50
+z_hop: 10
+z_hop_speed: 5</code></pre>
+<p>Remove existing <code>[probe]</code> section. For CAN mode, remove any <code>serial:</code> line.</p>
+<h3 id="mcu-configuration">MCU Configuration</h3>
 <pre><code class="language-ini">[mcu idm]
-canbus_uuid: 2ca7ad8c2899     # Replace with your device UUID
+canbus_uuid: 2ca7ad8c2899
 
 [temperature_sensor idm_temp]
 sensor_type: temperature_mcu
 sensor_mcu: idm
 min_temp: 0
-max_temp: 100
-
-[idm]
-sensor_type: IDM</code></pre>
+max_temp: 100</code></pre>
 <h3 id="get-can-uuid">Get CAN UUID</h3>
 <pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
+<h3 id="list-serial-ports-usb-mode">List Serial Ports (USB mode)</h3>
+<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+<hr>
 <h2 id="calibration">Calibration</h2>
-<h3 id="z-offset-calibration">Z Offset Calibration</h3>
+<h3 id="initialize-z-position">Initialize Z Position</h3>
+<p>Before calibration, set initial Z position:</p>
 <ol>
-<li>Run <code>PROBE_CALIBRATE</code> command</li>
-<li>Use the paper method to manually adjust nozzle height</li>
-<li>Run <code>ACCEPT</code> to save the result</li>
-<li>Run <code>SAVE_CONFIG</code> to write to config</li>
+<li>Run <code>G28 X Y</code> (home XY only, do NOT home Z)</li>
+<li>Move nozzle to bed center</li>
+<li>Run <code>SET_KINEMATIC_POSITION z=80</code></li>
+<li>Manually lower nozzle until it touches the bed (use a sheet of paper)</li>
+<li>Run <code>SET_KINEMATIC_POSITION z=0</code></li>
 </ol>
-<h3 id="temperature-compensation">Temperature Compensation</h3>
-<p>The IDM sensor includes built-in temperature compensation:</p>
-<pre><code class="language-ini">[idm]
-temperature_compensation: True</code></pre>
+<h3 id="manual-calibration-scan-mode">Manual Calibration (scan mode)</h3>
+<pre><code class="language-gcode">IDM_CALIBRATE
+# Adjust Z offset using paper method
+ACCEPT
+SAVE_CONFIG</code></pre>
+<h3 id="touch-mode">Touch Mode</h3>
+<p>Touch mode uses nozzle-bed contact for calibration, suitable for any bed surface.</p>
+<p><strong>Full workflow</strong>:</p>
+<ol>
+<li>Manual touch calibration:</li>
+<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL
+# Adjust nozzle until just touching the bed
+ACCEPT
+SAVE_CONFIG</code></pre>
+</ol>
+<ol>
+<li>Touch threshold calibration (after homing):</li>
+<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500
+SAVE_CONFIG</code></pre>
+</ol>
+<ol>
+<li>Auto Z offset measurement:</li>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO
+SAVE_CONFIG</code></pre>
+</ol>
+<ol>
+<li>Save fixed offset compensation:</li>
+<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+</ol>
+<ol>
+<li>Add auto-calibration to print start G-code (see below).</li>
+</ol>
+<h3 id="second-probe-mode">Second Probe Mode</h3>
+<p>For TAP or mechanical endstop as a second probe:</p>
+<pre><code class="language-ini">[scanner]
+calibration_method: second_probe
+z_offset: 0.5
+probe_speed: 1
+probe_pin: ...</code></pre>
+<p>Calibration command:</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<hr>
+<h2 id="multi-model-management">Multi-Model Management</h2>
+<p>Save and switch between calibrations for different PEI sheets:</p>
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>IDM_MODEL_SAVE NAME=<name></code></td>
+<td>Save current calibration</td>
+</tr>
+<tr>
+<td><code>IDM_MODEL_SELECT NAME=<name></code></td>
+<td>Load a saved calibration</td>
+</tr>
+<tr>
+<td><code>IDM_MODEL_LIST</code></td>
+<td>List all calibrations</td>
+</tr>
+<tr>
+<td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
+<td>Delete a calibration</td>
+</tr>
+</table>
+<hr>
+<h2 id="temperature-compensation-optimization">Temperature Compensation Optimization</h2>
+<p>IDM has built-in temperature compensation. Parameters can be optimized through data collection (~1 hour).</p>
+<h3 id="data-collection">Data Collection</h3>
+<p>Ensure <code>[temperature_sensor IDM_coil]</code> is in <code>printer.cfg</code>, then run:</p>
+<pre><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
+<p>Data files are generated at <code>/tmp/data1</code>, <code>/tmp/data2</code>, <code>/tmp/data3</code>.</p>
+<h3 id="calculate-parameters">Calculate Parameters</h3>
+<pre><code class="language-bash">~/klippy-env/bin/python ~/IDM/arg_fit.py</code></pre>
+<p>Check the generated <code>fit_result.png</code> — compensated data should be close to horizontal.</p>
+<hr>
+<h2 id="accelerometer">Accelerometer</h2>
+<p>IDM includes a built-in accelerometer for resonance compensation.</p>
+<p><strong>lis2dw (square chip)</strong>:</p>
+<pre><code class="language-ini">[lis2dw]
+cs_pin: idm:PA15
+spi_bus: spi1
+
+[resonance_tester]
+accel_chip: lis2dw
+probe_points: 150,150,20</code></pre>
+<p><strong>adxl345 (rectangular chip)</strong>:</p>
+<pre><code class="language-ini">[adxl345]
+cs_pin: idm:PA15
+spi_bus: spi1
+axes_map: x,y,z
+
+[resonance_tester]
+accel_chip: adxl345
+probe_points: 150,150,20</code></pre>
+<p>Run resonance measurement:</p>
+<pre><code class="language-gcode">SHAPER_CALIBRATE AXIS=X
+SHAPER_CALIBRATE AXIS=Y
+SAVE_CONFIG</code></pre>
+<hr>
+<h2 id="bed-mesh">Bed Mesh</h2>
+<pre><code class="language-ini">[bed_mesh]
+speed: 120
+horizontal_move_z: 5
+mesh_min: 15, 15
+mesh_max: 235, 235
+probe_count: 5, 5
+algorithm: bicubic
+zero_reference_position: 150, 150      # Required for Touch mode</code></pre>
+<p>Run:</p>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG</code></pre>
+<h3 id="adaptive-mesh">Adaptive Mesh</h3>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
+<h3 id="high-power-bed-macro">High-Power Bed Macro</h3>
+<p>For AC heated beds (500W+), disable heater during probing:</p>
+<pre><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
+rename_existing: _BED_MESH_CALIBRATE
+gcode:
+    {% set TARGET_TEMP = printer.heater_bed.target %}
+    M140 S0
+    _BED_MESH_CALIBRATE {rawparams}
+    M140 S{TARGET_TEMP}</code></pre>
+<hr>
+<h2 id="print-start-g-code">Print Start G-code</h2>
+<p>Add to the end of <code>PRINT_START</code> macro:</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO
+BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
+<hr>
+<h2 id="moonraker-auto-update">Moonraker Auto Update</h2>
+<pre><code class="language-ini">[update_manager idm]
+type: git_repo
+channel: dev
+path: ~/IDM
+origin: https://gitee.com/NBTP/IDM.git
+env: ~/klippy-env/bin/python
+requirements: requirements.txt
+install_script: install.sh
+is_system_service: False
+managed_services: klipper
+info_tags:
+  desc=idm</code></pre>
+<hr>
 <h2 id="common-commands">Common Commands</h2>
 <table>
 <tr>
@@ -234,33 +421,22 @@ temperature_compensation: True</code></pre>
 </tr>
 <tr>
 <td><code>PROBE_ACCURACY</code></td>
-<td>Probe accuracy test (10 repetitions)</td>
+<td>Probe accuracy test (10 reps)</td>
+</tr>
+<tr>
+<td><code>PROBE_CALIBRATE METHOD=AUTO</code></td>
+<td>Auto Z offset measurement</td>
 </tr>
 <tr>
 <td><code>BED_MESH_CALIBRATE</code></td>
 <td>Bed mesh calibration</td>
 </tr>
 <tr>
-<td><code>PROBE_CALIBRATE</code></td>
-<td>Z offset calibration</td>
+<td><code>IDM_CALIBRATE</code></td>
+<td>Manual sensor calibration</td>
 </tr>
 </table>
-<h2 id="bed-mesh">Bed Mesh</h2>
-<pre><code class="language-ini">[bed_mesh]
-speed: 120
-horizontal_move_z: 5
-mesh_min: 15, 15
-mesh_max: 235, 235
-probe_count: 5, 5
-algorithm: bicubic</code></pre>
-<p>Run mesh calibration:</p>
-<pre><code>BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG</code></pre>
-<h2 id="adaptive-mesh">Adaptive Mesh</h2>
-<p>Add to <code>PRINT_START</code> macro:</p>
-<pre><code>BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
-<p>Automatically probes only the current print area before each print, saving time.</p>
+<hr>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <table>
 <tr>
@@ -270,23 +446,43 @@ SAVE_CONFIG</code></pre>
 </tr>
 <tr>
 <td>Probe failed</td>
-<td>Dirty sensor</td>
-<td>Clean sensor lens</td>
+<td>Dirty sensor lens</td>
+<td>Clean lens with alcohol wipe</td>
 </tr>
 <tr>
-<td>Value drift</td>
-<td>Temperature change</td>
-<td>Re-calibrate after bed temp stabilizes</td>
+<td>Z offset drift</td>
+<td>Temperature variation</td>
+<td>Calibrate at print temp; configure temp compensation</td>
+</tr>
+<tr>
+<td>"Internal error: IDM model convergence"</td>
+<td>model_offset too large</td>
+<td><code>IDM_MODEL REMOVE=default</code> then re-calibrate</td>
+</tr>
+<tr>
+<td>"no model" homing error</td>
+<td>Config format error</td>
+<td>Check indentation and section name syntax</td>
+</tr>
+<tr>
+<td>Bed mesh anomalies</td>
+<td>Bed heater EMI</td>
+<td>Configure bed-off macro; check sensor mounting</td>
 </tr>
 <tr>
 <td>CAN communication timeout</td>
-<td>Loose wiring</td>
-<td>Check CAN wiring and termination resistor</td>
+<td>Frequency mismatch / loose wiring</td>
+<td>Check frequency and termination resistor; ensure no serial line</td>
 </tr>
 <tr>
 <td>Cannot get UUID</td>
-<td>Not in BL mode</td>
-<td>Use IDM Flash Web to enter bootloader</td>
+<td>Device not in BL mode</td>
+<td>Send reboot via CAN or power cycle</td>
+</tr>
+<tr>
+<td>Firmware too old</td>
+<td>Feature incompatibility</td>
+<td>Update firmware via IDM Flash Web</td>
 </tr>
 </table>
 <hr>
