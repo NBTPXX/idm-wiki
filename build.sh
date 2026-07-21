@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DIST_DIR="$SCRIPT_DIR/dist"
+DIST_DIR="$SCRIPT_DIR/docs"
 CONTENT_DIR="$SCRIPT_DIR/content"
 
 rm -rf "$DIST_DIR"
@@ -433,9 +433,9 @@ index_html = """<!DOCTYPE html>
 </html>"""
 with open(os.path.join(dist_dir, 'index.html'), 'w', encoding='utf-8') as f:
     f.write(index_html)
-print("Generated: dist/index.html (redirect)")
+print("Generated: docs/index.html (redirect)")
 
-print("\nBuild complete! dist/ directory is ready for deployment.")
+print("\nBuild complete! docs/ directory is ready for deployment.")
 PYEOF
 
 echo "Build finished successfully."
