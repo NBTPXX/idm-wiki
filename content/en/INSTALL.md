@@ -38,12 +38,6 @@ curl http://localhost:8888/api/env
 
 Open in browser: `http://<printer-ip>:8888`
 
-Fluidd/Mainsail iframe embedding:
-
-```html
-<iframe src="http://localhost:8888" style="width:100%;height:100vh"></iframe>
-```
-
 ## Uninstall
 
 ```bash

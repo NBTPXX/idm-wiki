@@ -38,12 +38,6 @@ curl http://localhost:8888/api/env
 
 浏览器打开：`http://<打印机IP>:8888`
 
-Fluidd/Mainsail iframe 嵌入：
-
-```html
-<iframe src="http://localhost:8888" style="width:100%;height:100vh"></iframe>
-```
-
 ## 卸载
 
 ```bash
