@@ -31,7 +31,7 @@ python3 server.py
 ## Verify Installation
 
 ```bash
-curl http://localhost:8888/api/env
+curl http://<printer-ip>:8888/api/env
 ```
 
 ## Access the Web Interface

@@ -31,7 +31,7 @@ python3 server.py
 ## 验证安装
 
 ```bash
-curl http://localhost:8888/api/env
+curl http://<打印机IP>:8888/api/env
 ```
 
 ## 访问 Web 界面
