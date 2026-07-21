@@ -28,7 +28,7 @@ USB 模式下会显示所有可用固件文件，不做频率筛选。
 
 ## 刷写流程
 
-![USB 模式刷写界面](../images/usb-flash.png)
+![USB 模式刷写界面](../images/usb-workflow.svg)
 
 1. 选择 USB 模式
 2. 选择串口（或填写 bootloader 串口）

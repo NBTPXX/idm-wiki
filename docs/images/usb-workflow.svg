@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0d1117"/><stop offset="100%" stop-color="#161b22"/></linearGradient>
+    <linearGradient id="stepGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1c2128"/><stop offset="100%" stop-color="#161b22"/></linearGradient>
+    <linearGradient id="endGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f78166"/><stop offset="100%" stop-color="#da3633"/></linearGradient>
+  </defs>
+
+  <rect width="720" height="380" rx="8" fill="url(#bgGrad)"/>
+  <text x="360" y="28" fill="#f0f6fc" font-size="16" font-weight="700" text-anchor="middle">USB 模式刷写流程</text>
+  <line x1="160" y1="36" x2="560" y2="36" stroke="#30363d" stroke-width="0.5"/>
+
+  <!-- Row 1 -->
+  <rect x="30" y="55" width="140" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="100" y="78" fill="#8b949e" font-size="9" text-anchor="middle">Step 1</text>
+  <text x="100" y="95" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">选择 USB 模式</text>
+  <text x="100" y="110" fill="#8b949e" font-size="9" text-anchor="middle">自动过滤 IDM 设备</text>
+
+  <line x1="170" y1="88" x2="215" y2="88" stroke="#30363d" stroke-width="1.5"/>
+
+  <rect x="220" y="55" width="140" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="290" y="78" fill="#8b949e" font-size="9" text-anchor="middle">Step 2</text>
+  <text x="290" y="95" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">选择串口</text>
+  <text x="290" y="110" fill="#8b949e" font-size="9" text-anchor="middle">/dev/serial/by-id/...</text>
+
+  <line x1="360" y1="88" x2="405" y2="88" stroke="#30363d" stroke-width="1.5"/>
+
+  <rect x="410" y="55" width="140" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="480" y="78" fill="#8b949e" font-size="9" text-anchor="middle">Step 3</text>
+  <text x="480" y="95" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">选择固件文件</text>
+  <text x="480" y="110" fill="#8b949e" font-size="9" text-anchor="middle">显示所有可用固件</text>
+
+  <line x1="550" y1="88" x2="595" y2="88" stroke="#30363d" stroke-width="1.5"/>
+
+  <rect x="600" y="55" width="100" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="650" y="78" fill="#8b949e" font-size="9" text-anchor="middle">Step 4</text>
+  <text x="650" y="95" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">Enter BL</text>
+  <text x="650" y="110" fill="#8b949e" font-size="9" text-anchor="middle">Katapult 协议</text>
+
+  <!-- Arrow down -->
+  <line x1="650" y1="120" x2="650" y2="240" stroke="#30363d" stroke-width="1.5"/>
+
+  <!-- Row 2 -->
+  <rect x="560" y="245" width="130" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="625" y="268" fill="#8b949e" font-size="9" text-anchor="middle">Step 5</text>
+  <text x="625" y="285" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">开始刷写</text>
+  <text x="625" y="300" fill="#8b949e" font-size="9" text-anchor="middle">串口 250kbps</text>
+
+  <line x1="560" y1="278" x2="515" y2="278" stroke="#30363d" stroke-width="1.5"/>
+
+  <rect x="385" y="245" width="130" height="65" rx="6" fill="url(#stepGrad)" stroke="#30363d" stroke-width="1"/>
+  <text x="450" y="268" fill="#8b949e" font-size="9" text-anchor="middle">Step 6</text>
+  <text x="450" y="285" fill="#f0f6fc" font-size="12" font-weight="600" text-anchor="middle">退出 Bootloader</text>
+  <text x="450" y="300" fill="#8b949e" font-size="9" text-anchor="middle">CONNECT + COMPLETE</text>
+
+  <line x1="385" y1="278" x2="340" y2="278" stroke="#30363d" stroke-width="1.5"/>
+
+  <rect x="210" y="245" width="130" height="65" rx="6" fill="url(#endGrad)" stroke="#da3633" stroke-width="0.5"/>
+  <text x="275" y="275" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">Done</text>
+  <text x="275" y="293" fill="rgba(255,255,255,0.7)" font-size="10" text-anchor="middle">固件刷写完成</text>
+
+  <!-- Bottom legend -->
+  <rect x="30" y="330" width="660" height="35" rx="4" fill="#1c2128" stroke="#30363d" stroke-width="0.5"/>
+  <rect x="50" y="341" width="8" height="8" rx="2" fill="url(#stepGrad)" stroke="#30363d"/>
+  <text x="64" y="350" fill="#8b949e" font-size="10">用户操作</text>
+  <rect x="140" y="341" width="8" height="8" rx="2" fill="url(#endGrad)"/>
+  <text x="154" y="350" fill="#8b949e" font-size="10">完成</text>
+  <text x="230" y="350" fill="#484f58" font-size="10">通信协议：Katapult 串口 · CMD_HEADER \x01\x88 · CMD_TRAILER \x99\x03 · CRC16-CCITT</text>
+</svg>

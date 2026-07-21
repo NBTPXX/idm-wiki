@@ -26,7 +26,7 @@ Click "Detect BL" to automatically scan for bootloader devices:
 
 If the device is already in bootloader mode, filling in the boot-serial field can skip detection and flash directly.
 
-![USB Mode Flash Interface](../images/usb-flash.png)
+![USB Mode Flash Interface](../images/usb-workflow.svg)
 
 ## Flashing Procedure
 

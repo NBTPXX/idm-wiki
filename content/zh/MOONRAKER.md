@@ -30,7 +30,7 @@ info_tags:
 - 服务管理：Services 面板查看、启停服务
 - 状态查看：通过 Moonraker API 获取打印机连接状态
 
-![Fluidd Update Manager 中的 IDM Flash Web](../images/moonraker-fluidd.png)
+![Fluidd Update Manager 中的 IDM Flash Web](../images/system-architecture.svg)
 
 ## 手动配置
 

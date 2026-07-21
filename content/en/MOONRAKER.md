@@ -30,7 +30,7 @@ Adds idm_flash_web to ~/printer_data/moonraker.asvc.
 - Service management: View and start/stop services in the Services panel
 - Status viewing: Get printer connection status via Moonraker API
 
-![IDM Flash Web in Fluidd Update Manager](../images/moonraker-fluidd.png)
+![IDM Flash Web in Fluidd Update Manager](../images/system-architecture.svg)
 
 ## Manual Configuration
 
