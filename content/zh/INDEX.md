@@ -11,7 +11,6 @@ IDM Flash Web 是一个基于浏览器的固件刷写工具，用于给 IDM 3D �
 - [USB 模式刷写](USB_FLASH.html)
 - [DFU 模式刷写](DFU_FLASH.html)
 - [Moonraker 集成](MOONRAKER.html)
-- [使用教程](USAGE.html)
 
 ## 快速开始
 

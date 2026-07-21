@@ -14,28 +14,34 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("INDEX" "USAGE" "__SEC__" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "MOONRAKER")
+NAV_ITEMS=("__SEC__" "INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "MOONRAKER" "__SEC__" "USAGE_SETUP" "USAGE_CALIBRATE" "USAGE_ADVANCED")
 
 NAV_LABELS_ZH=(
-  "概览"
-  "IDM 使用教程"
   "刷写指南"
+  "概览"
   "安装指南"
   "CAN 模式刷写"
   "USB 模式刷写"
   "DFU 模式刷写"
   "Moonraker 集成"
+  "使用教程"
+  "安装与配置"
+  "校准"
+  "高级功能"
 )
 
 NAV_LABELS_EN=(
-  "Overview"
-  "IDM Usage Tutorial"
   "Flashing Guide"
+  "Overview"
   "Installation Guide"
   "CAN Mode Flashing"
   "USB Mode Flashing"
   "DFU Mode Flashing"
   "Moonraker Integration"
+  "Usage Tutorial"
+  "Setup & Config"
+  "Calibration"
+  "Advanced Features"
 )
 
 python3 - "$DIST_DIR" "$CONTENT_DIR" \

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CAN Mode Flashing - IDM Wiki</title>
+<title>Calibration - IDM Wiki</title>
 <style>
 
 :root {
@@ -166,81 +166,114 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html">Overview</a>
       <a href="INSTALL.html">Installation Guide</a>
-      <a href="CAN_FLASH.html" class="active">CAN Mode Flashing</a>
+      <a href="CAN_FLASH.html">CAN Mode Flashing</a>
       <a href="USB_FLASH.html">USB Mode Flashing</a>
       <a href="DFU_FLASH.html">DFU Mode Flashing</a>
       <a href="MOONRAKER.html">Moonraker Integration</a>
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html">Setup & Config</a>
-      <a href="USAGE_CALIBRATE.html">Calibration</a>
+      <a href="USAGE_CALIBRATE.html" class="active">Calibration</a>
       <a href="USAGE_ADVANCED.html">Advanced Features</a>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'CAN_FLASH.html'">
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_CALIBRATE.html'">
         <option value="zh">中文</option>
         <option value="en" selected>English</option>
     </select>
   </div>
 </nav>
 <main class="main">
-<h1 id="can-mode-flashing">CAN Mode Flashing</h1>
-<p>CAN mode communicates with devices via SocketCAN, suitable for IDM sensors connected via CAN bus.</p>
-<h2 id="can-frequency-selection">CAN Frequency Selection</h2>
-<p>Select the CAN frequency from the dropdown based on the firmware build:</p>
+<h1 id="calibration">Calibration</h1>
+<h2 id="initialize-z-position">Initialize Z Position</h2>
+<p>Before calibration, set the initial Z position:</p>
+<ol>
+<li>Run <code>G28 X Y</code> (home XY only, do NOT home Z)</li>
+<li>Move nozzle to bed center</li>
+<li>Run <code>SET_KINEMATIC_POSITION z=80</code></li>
+<li>Manually lower nozzle until touching the bed (use a sheet of paper)</li>
+<li>Run <code>SET_KINEMATIC_POSITION z=0</code></li>
+</ol>
+<h2 id="manual-calibration-scan-mode">Manual Calibration (scan mode)</h2>
+<pre><code class="language-gcode">IDM_CALIBRATE
+# Adjust Z offset using paper method
+ACCEPT
+SAVE_CONFIG</code></pre>
+<h2 id="touch-mode">Touch Mode</h2>
+<p>Touch mode uses nozzle-bed contact for calibration, suitable for any bed surface.</p>
+<p><strong>Full workflow</strong>:</p>
+<p><strong>Step 1: Manual Touch</strong></p>
+<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL
+# Adjust nozzle until just touching the bed
+ACCEPT
+SAVE_CONFIG</code></pre>
+<p><strong>Step 2: Touch Threshold Calibration</strong> (after homing)</p>
+<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500
+SAVE_CONFIG</code></pre>
+<p><strong>Step 3: Auto Z Offset Measurement</strong></p>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO
+SAVE_CONFIG</code></pre>
+<p><strong>Step 4: Save Fixed Offset</strong></p>
+<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<p>> Add auto-calibration to print start G-code — see Advanced Features page.</p>
+<h2 id="second-probe-mode">Second Probe Mode</h2>
+<p>For TAP or mechanical endstop as a second probe:</p>
+<pre><code class="language-ini">[scanner]
+calibration_method: second_probe
+z_offset: 0.5
+probe_speed: 1
+probe_pin: ...</code></pre>
+<p>Calibration command:</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<h2 id="multi-model-management">Multi-Model Management</h2>
+<p>Save and switch calibrations for different PEI sheets:</p>
 <table>
 <tr>
-<th>Option</th>
-<th>Frequency</th>
+<th>Command</th>
 <th>Description</th>
 </tr>
 <tr>
-<td>1000000</td>
-<td>1M</td>
-<td>High speed</td>
+<td><code>IDM_MODEL_SAVE NAME=<name></code></td>
+<td>Save current calibration</td>
 </tr>
 <tr>
-<td>500000</td>
-<td>500k</td>
-<td>Medium speed</td>
+<td><code>IDM_MODEL_SELECT NAME=<name></code></td>
+<td>Load a saved calibration</td>
 </tr>
 <tr>
-<td>250000</td>
-<td>250k</td>
-<td>Low speed</td>
+<td><code>IDM_MODEL_LIST</code></td>
+<td>List all calibrations</td>
 </tr>
 <tr>
-<td>Other</td>
-<td>-</td>
-<td>Firmware without frequency tag</td>
+<td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
+<td>Delete a calibration</td>
 </tr>
 </table>
-<h2 id="firmware-types">Firmware Types</h2>
-<ul>
-<li><strong>IDM Main Firmware (main)</strong>: Standard sensor operating firmware</li>
-<li><strong>Bootloader Override Firmware (deployer)</strong>: Flashed during initial deployment to replace the existing bootloader</li>
-</ul>
-<h2 id="can-uuid">CAN UUID</h2>
-<p>Flashing requires the device's 6-byte UUID. Click "Query" to automatically scan for Katapult nodes on the CAN bus.</p>
-<p>Prerequisites:</p>
-<ul>
-<li>Device is in Katapult bootloader mode</li>
-<li>CAN interface is configured and enabled (e.g., <code>can0</code>)</li>
-</ul>
-<h2 id="enterexit-bootloader">Enter/Exit Bootloader</h2>
-<ul>
-<li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0</li>
-<li><strong>Exit BL</strong>: Runs the clear node → set node ID → CONNECT → COMPLETE sequence</li>
-</ul>
-<p><img src="../images/can-workflow.svg" alt="CAN Mode Flash Interface"></p>
-<h2 id="flashing-procedure">Flashing Procedure</h2>
-<ol>
-<li>Select CAN mode</li>
-<li>Choose frequency and firmware type</li>
-<li>Select firmware version and file</li>
-<li>Click "Query" to get CAN UUID</li>
-<li>Click "Enter BL" if needed</li>
-<li>Click "Start Flashing"</li>
-<li>Watch console output and wait for completion</li>
-</ol>
+<h2 id="common-commands">Common Commands</h2>
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>QUERY_PROBE</code></td>
+<td>Query current probe value</td>
+</tr>
+<tr>
+<td><code>PROBE</code></td>
+<td>Perform single probe</td>
+</tr>
+<tr>
+<td><code>PROBE_ACCURACY</code></td>
+<td>Probe accuracy test (10 reps)</td>
+</tr>
+<tr>
+<td><code>PROBE_CALIBRATE METHOD=AUTO</code></td>
+<td>Auto Z offset measurement</td>
+</tr>
+<tr>
+<td><code>IDM_CALIBRATE</code></td>
+<td>Manual sensor calibration</td>
+</tr>
+</table>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 

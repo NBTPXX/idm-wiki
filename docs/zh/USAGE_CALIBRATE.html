@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CAN Mode Flashing - IDM Wiki</title>
+<title>校准 - IDM Wiki</title>
 <style>
 
 :root {
@@ -163,86 +163,119 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <body>
 <nav class="sidebar">
   <h2>IDM Wiki</h2>
-      <div class="sec-header">Flashing Guide</div>
-      <a href="INDEX.html">Overview</a>
-      <a href="INSTALL.html">Installation Guide</a>
-      <a href="CAN_FLASH.html" class="active">CAN Mode Flashing</a>
-      <a href="USB_FLASH.html">USB Mode Flashing</a>
-      <a href="DFU_FLASH.html">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html">Moonraker Integration</a>
-      <div class="sec-header">Usage Tutorial</div>
-      <a href="USAGE_SETUP.html">Setup & Config</a>
-      <a href="USAGE_CALIBRATE.html">Calibration</a>
-      <a href="USAGE_ADVANCED.html">Advanced Features</a>
+      <div class="sec-header">刷写指南</div>
+      <a href="INDEX.html">概览</a>
+      <a href="INSTALL.html">安装指南</a>
+      <a href="CAN_FLASH.html">CAN 模式刷写</a>
+      <a href="USB_FLASH.html">USB 模式刷写</a>
+      <a href="DFU_FLASH.html">DFU 模式刷写</a>
+      <a href="MOONRAKER.html">Moonraker 集成</a>
+      <div class="sec-header">使用教程</div>
+      <a href="USAGE_SETUP.html">安装与配置</a>
+      <a href="USAGE_CALIBRATE.html" class="active">校准</a>
+      <a href="USAGE_ADVANCED.html">高级功能</a>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'CAN_FLASH.html'">
-        <option value="zh">中文</option>
-        <option value="en" selected>English</option>
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_CALIBRATE.html'">
+        <option value="zh" selected>中文</option>
+        <option value="en">English</option>
     </select>
   </div>
 </nav>
 <main class="main">
-<h1 id="can-mode-flashing">CAN Mode Flashing</h1>
-<p>CAN mode communicates with devices via SocketCAN, suitable for IDM sensors connected via CAN bus.</p>
-<h2 id="can-frequency-selection">CAN Frequency Selection</h2>
-<p>Select the CAN frequency from the dropdown based on the firmware build:</p>
+<h1 id="">校准</h1>
+<h2 id="-z-">初始化 Z 位置</h2>
+<p>校准前先设置 Z 轴初始位置：</p>
+<ol>
+<li>执行 <code>G28 X Y</code>（仅归零 XY，不要归零 Z）</li>
+<li>移动喷嘴到热床中央</li>
+<li>执行 <code>SET_KINEMATIC_POSITION z=80</code></li>
+<li>手动降低喷嘴至贴床（垫 A4 纸），感到轻微阻力即可</li>
+<li>执行 <code>SET_KINEMATIC_POSITION z=0</code></li>
+</ol>
+<h2 id="scan-">手动校准（scan 模式）</h2>
+<pre><code class="language-gcode">IDM_CALIBRATE
+# 参照纸片法调整 Z 偏移
+ACCEPT
+SAVE_CONFIG</code></pre>
+<h2 id="touch-">Touch 模式</h2>
+<p>Touch 模式利用喷嘴接触热床来校准，适用于各种热床表面。</p>
+<p><strong>完整工作流</strong>：</p>
+<p><strong>第 1 步：手动 Touch</strong></p>
+<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL
+# 调整喷嘴刚好贴床
+ACCEPT
+SAVE_CONFIG</code></pre>
+<p><strong>第 2 步：Touch 阈值校准</strong>（归零后执行）</p>
+<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500
+SAVE_CONFIG</code></pre>
+<p><strong>第 3 步：自动 Z 偏移测量</strong></p>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO
+SAVE_CONFIG</code></pre>
+<p><strong>第 4 步：保存固定偏移补偿</strong></p>
+<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<p>> 打印起始 G-code 中需加入自动校准，见高级功能页。</p>
+<h2 id="second-probe-">Second Probe 模式</h2>
+<p>使用 TAP 或机械限位开关作为第二探针：</p>
+<pre><code class="language-ini">[scanner]
+calibration_method: second_probe
+z_offset: 0.5                          # 第二探针触发高度与喷嘴的偏移
+probe_speed: 1
+probe_pin: ...</code></pre>
+<p>校准命令：</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<h2 id="">多模型管理</h2>
+<p>针对不同 PEI 板保存独立校准：</p>
 <table>
 <tr>
-<th>Option</th>
-<th>Frequency</th>
-<th>Description</th>
+<th>命令</th>
+<th>说明</th>
 </tr>
 <tr>
-<td>1000000</td>
-<td>1M</td>
-<td>High speed</td>
+<td><code>IDM_MODEL_SAVE NAME=<name></code></td>
+<td>保存当前校准</td>
 </tr>
 <tr>
-<td>500000</td>
-<td>500k</td>
-<td>Medium speed</td>
+<td><code>IDM_MODEL_SELECT NAME=<name></code></td>
+<td>载入已保存的校准</td>
 </tr>
 <tr>
-<td>250000</td>
-<td>250k</td>
-<td>Low speed</td>
+<td><code>IDM_MODEL_LIST</code></td>
+<td>列出所有校准</td>
 </tr>
 <tr>
-<td>Other</td>
-<td>-</td>
-<td>Firmware without frequency tag</td>
+<td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
+<td>删除校准</td>
 </tr>
 </table>
-<h2 id="firmware-types">Firmware Types</h2>
-<ul>
-<li><strong>IDM Main Firmware (main)</strong>: Standard sensor operating firmware</li>
-<li><strong>Bootloader Override Firmware (deployer)</strong>: Flashed during initial deployment to replace the existing bootloader</li>
-</ul>
-<h2 id="can-uuid">CAN UUID</h2>
-<p>Flashing requires the device's 6-byte UUID. Click "Query" to automatically scan for Katapult nodes on the CAN bus.</p>
-<p>Prerequisites:</p>
-<ul>
-<li>Device is in Katapult bootloader mode</li>
-<li>CAN interface is configured and enabled (e.g., <code>can0</code>)</li>
-</ul>
-<h2 id="enterexit-bootloader">Enter/Exit Bootloader</h2>
-<ul>
-<li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0</li>
-<li><strong>Exit BL</strong>: Runs the clear node → set node ID → CONNECT → COMPLETE sequence</li>
-</ul>
-<p><img src="../images/can-workflow.svg" alt="CAN Mode Flash Interface"></p>
-<h2 id="flashing-procedure">Flashing Procedure</h2>
-<ol>
-<li>Select CAN mode</li>
-<li>Choose frequency and firmware type</li>
-<li>Select firmware version and file</li>
-<li>Click "Query" to get CAN UUID</li>
-<li>Click "Enter BL" if needed</li>
-<li>Click "Start Flashing"</li>
-<li>Watch console output and wait for completion</li>
-</ol>
+<h2 id="">常用命令</h2>
+<table>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+<tr>
+<td><code>QUERY_PROBE</code></td>
+<td>查询当前探测值</td>
+</tr>
+<tr>
+<td><code>PROBE</code></td>
+<td>执行单次探测</td>
+</tr>
+<tr>
+<td><code>PROBE_ACCURACY</code></td>
+<td>探测精度测试（重复 10 次）</td>
+</tr>
+<tr>
+<td><code>PROBE_CALIBRATE METHOD=AUTO</code></td>
+<td>自动 Z 偏移测量</td>
+</tr>
+<tr>
+<td><code>IDM_CALIBRATE</code></td>
+<td>手动传感器校准</td>
+</tr>
+</table>
 <hr>
-<p><a href="INDEX.html">← Back to Home</a></p>
+<p><a href="INDEX.html">← 返回首页</a></p>
 
 </main>
 </body>
