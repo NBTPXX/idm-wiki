@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USB Mode Flashing - IDM Flash Wiki</title>
+<style>
+
+:root {
+  --bg: #0d1117;
+  --bg-sidebar: #161b22;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --link: #58a6ff;
+  --link-hover: #79c0ff;
+  --border: #30363d;
+  --code-bg: #1c2128;
+  --accent: #f78166;
+  --heading: #f0f6fc;
+  --table-row-alt: #161b22;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+.sidebar h2 {
+  color: var(--accent);
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar a {
+  display: block;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: all 0.15s;
+}
+.sidebar a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+}
+.sidebar a.active {
+  color: var(--link);
+  background: rgba(88,166,255,0.1);
+  font-weight: 600;
+}
+.sidebar .lang {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.sidebar .lang select {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.main {
+  margin-left: 260px;
+  padding: 32px 48px;
+  max-width: 860px;
+  width: 100%;
+}
+h1 { color: var(--heading); font-size: 28px; margin-bottom: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+h2 { color: var(--heading); font-size: 22px; margin-top: 32px; margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { color: var(--heading); font-size: 18px; margin-top: 24px; margin-bottom: 8px; font-weight: 600; }
+h4 { color: var(--heading); font-size: 16px; margin-top: 20px; margin-bottom: 6px; }
+p { margin-bottom: 16px; }
+ul, ol { margin-bottom: 16px; padding-left: 24px; }
+li { margin-bottom: 4px; }
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+pre {
+  background: var(--code-bg);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+}
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--heading);
+}
+tr:nth-child(even) td {
+  background: var(--table-row-alt);
+}
+strong { color: var(--heading); font-weight: 600; }
+em { color: var(--accent); font-style: italic; }
+hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar {
+    position: relative; width: 100%; min-width: 100%;
+    padding: 16px; border-right: none; border-bottom: 1px solid var(--border);
+  }
+  .main { margin-left: 0; padding: 20px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <h2>IDM Flash Wiki</h2>
+      <a href="INDEX.html">Overview</a>
+      <a href="INSTALL.html">Installation Guide</a>
+      <a href="CAN_FLASH.html">CAN Mode Flashing</a>
+      <a href="USB_FLASH.html" class="active">USB Mode Flashing</a>
+      <a href="DFU_FLASH.html">DFU Mode Flashing</a>
+      <a href="BOOTLOADER.html">Bootloader Management</a>
+      <a href="MOONRAKER.html">Moonraker Integration</a>
+  <div class="lang">
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USB_FLASH.html'">
+        <option value="zh">中文</option>
+        <option value="en" selected>English</option>
+    </select>
+  </div>
+</nav>
+<main class="main">
+<h1 id="usb-mode-flashing">USB Mode Flashing</h1>
+<p>USB mode communicates with devices via serial port, suitable for IDM sensors connected via USB serial.</p>
+<h2 id="serial-port-selection">Serial Port Selection</h2>
+<ul>
+<li><strong>Serial Port</strong>: Select the device's regular serial port (e.g., <code>/dev/serial/by-id/usb-IDM_*</code>)</li>
+<li><strong>Bootloader Serial</strong>: The serial port after the device enters bootloader. If already in BL mode, fill in this field directly</li>
+</ul>
+<p>Device list is automatically filtered to show only devices containing "IDM".</p>
+<h2 id="firmware-selection">Firmware Selection</h2>
+<p>All available firmware files are shown in USB mode without frequency filtering.</p>
+<h2 id="enterexit-bootloader">Enter/Exit Bootloader</h2>
+<ul>
+<li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via Katapult serial protocol</li>
+<li><strong>Exit BL</strong>: Uses prime + CONNECT + COMPLETE sequence without relying on DTR toggle</li>
+</ul>
+<h2 id="auto-detect-bootloader">Auto-Detect Bootloader</h2>
+<p>Click "Detect BL" to automatically scan for bootloader devices:</p>
+<ul>
+<li>If the current port is already a BL device (name contains katapult/canboot), confirm directly</li>
+<li>Otherwise scan /dev/serial/by-id/<em> and /dev/ttyUSB</em>, /dev/ttyACM*</li>
+</ul>
+<p>If the device is already in bootloader mode, filling in the boot-serial field can skip detection and flash directly.</p>
+<h2 id="flashing-procedure">Flashing Procedure</h2>
+<ol>
+<li>Select USB mode</li>
+<li>Select serial port (or fill in bootloader serial)</li>
+<li>Select firmware type, version, and file</li>
+<li>If not in bootloader mode, click "Enter BL"</li>
+<li>Click "Start Flashing"</li>
+</ol>
+<hr>
+<p><a href="INDEX.html">← Back to Home</a></p>
+
+</main>
+</body>
+</html>

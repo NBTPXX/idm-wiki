@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USB 模式刷写 - IDM Flash Wiki</title>
+<style>
+
+:root {
+  --bg: #0d1117;
+  --bg-sidebar: #161b22;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --link: #58a6ff;
+  --link-hover: #79c0ff;
+  --border: #30363d;
+  --code-bg: #1c2128;
+  --accent: #f78166;
+  --heading: #f0f6fc;
+  --table-row-alt: #161b22;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+.sidebar h2 {
+  color: var(--accent);
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar a {
+  display: block;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: all 0.15s;
+}
+.sidebar a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+}
+.sidebar a.active {
+  color: var(--link);
+  background: rgba(88,166,255,0.1);
+  font-weight: 600;
+}
+.sidebar .lang {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.sidebar .lang select {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.main {
+  margin-left: 260px;
+  padding: 32px 48px;
+  max-width: 860px;
+  width: 100%;
+}
+h1 { color: var(--heading); font-size: 28px; margin-bottom: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+h2 { color: var(--heading); font-size: 22px; margin-top: 32px; margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { color: var(--heading); font-size: 18px; margin-top: 24px; margin-bottom: 8px; font-weight: 600; }
+h4 { color: var(--heading); font-size: 16px; margin-top: 20px; margin-bottom: 6px; }
+p { margin-bottom: 16px; }
+ul, ol { margin-bottom: 16px; padding-left: 24px; }
+li { margin-bottom: 4px; }
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+pre {
+  background: var(--code-bg);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+}
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  font-weight: 600;
+  color: var(--heading);
+}
+tr:nth-child(even) td {
+  background: var(--table-row-alt);
+}
+strong { color: var(--heading); font-weight: 600; }
+em { color: var(--accent); font-style: italic; }
+hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar {
+    position: relative; width: 100%; min-width: 100%;
+    padding: 16px; border-right: none; border-bottom: 1px solid var(--border);
+  }
+  .main { margin-left: 0; padding: 20px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <h2>IDM Flash Wiki</h2>
+      <a href="INDEX.html">概览</a>
+      <a href="INSTALL.html">安装指南</a>
+      <a href="CAN_FLASH.html">CAN 模式刷写</a>
+      <a href="USB_FLASH.html" class="active">USB 模式刷写</a>
+      <a href="DFU_FLASH.html">DFU 模式刷写</a>
+      <a href="BOOTLOADER.html">Bootloader 管理</a>
+      <a href="MOONRAKER.html">Moonraker 集成</a>
+  <div class="lang">
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USB_FLASH.html'">
+        <option value="zh" selected>中文</option>
+        <option value="en">English</option>
+    </select>
+  </div>
+</nav>
+<main class="main">
+<h1 id="usb-">USB 模式刷写</h1>
+<p>USB 模式通过串口与设备通信，适用于使用 USB 串口连接的 IDM 传感器。</p>
+<h2 id="">串口选择</h2>
+<ul>
+<li><strong>串口端口</strong>：选择设备的常规串口（如 <code>/dev/serial/by-id/usb-IDM_*</code>）</li>
+<li><strong>Bootloader 串口</strong>：设备进入 bootloader 后的串口。若设备已在 BL 模式，可直接填写此字段</li>
+</ul>
+<p>设备列表自动过滤，仅显示包含 "IDM" 的设备。</p>
+<h2 id="">固件选择</h2>
+<p>USB 模式下会显示所有可用固件文件，不做频率筛选。</p>
+<h2 id="-bootloader">进出 Bootloader</h2>
+<ul>
+<li><strong>Enter BL</strong>：通过 Katapult 串口协议发送 KLIPPER_REBOOT_CMD</li>
+<li><strong>Exit BL</strong>：使用 prime + CONNECT + COMPLETE 序列退出，不依赖 DTR 切换</li>
+</ul>
+<h2 id="-bootloader">自动检测 Bootloader</h2>
+<p>点击「检测 BL」按钮自动扫描 bootloader 设备：</p>
+<ul>
+<li>当前端口若是 BL 设备（名称含 katapult/canboot），直接确认</li>
+<li>否则扫描 /dev/serial/by-id/<em> 和 /dev/ttyUSB</em>、/dev/ttyACM*</li>
+</ul>
+<p>若设备已在 bootloader 模式，填写 boot-serial 字段可跳过检测直接刷写。</p>
+<h2 id="">刷写流程</h2>
+<ol>
+<li>选择 USB 模式</li>
+<li>选择串口（或填写 bootloader 串口）</li>
+<li>选择固件类型、版本和文件</li>
+<li>若非 bootloader 模式，点击「Enter BL」</li>
+<li>点击「开始刷写」</li>
+</ol>
+<hr>
+<p><a href="INDEX.html">← 返回首页</a></p>
+
+</main>
+</body>
+</html>
