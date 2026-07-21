@@ -14,30 +14,30 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER" "__SEC__" "USAGE")
+NAV_ITEMS=("INDEX" "USAGE" "__SEC__" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER")
 
 NAV_LABELS_ZH=(
   "概览"
+  "IDM 使用教程"
+  "刷写指南"
   "安装指南"
   "CAN 模式刷写"
   "USB 模式刷写"
   "DFU 模式刷写"
   "Bootloader 管理"
   "Moonraker 集成"
-  "刷写指南"
-  "IDM 使用教程"
 )
 
 NAV_LABELS_EN=(
   "Overview"
+  "IDM Usage Tutorial"
+  "Flashing Guide"
   "Installation Guide"
   "CAN Mode Flashing"
   "USB Mode Flashing"
   "DFU Mode Flashing"
   "Bootloader Management"
   "Moonraker Integration"
-  "Flashing Guide"
-  "IDM Usage Tutorial"
 )
 
 python3 - "$DIST_DIR" "$CONTENT_DIR" \
@@ -389,14 +389,14 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{raw_title} - IDM Flash Wiki</title>
+<title>{raw_title} - IDM Wiki</title>
 <style>
 {CSS}
 </style>
 </head>
 <body>
 <nav class="sidebar">
-  <h2>IDM Flash Wiki</h2>
+  <h2>IDM Wiki</h2>
 {chr(10).join(sidebar_items)}
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + '{page_name}.html'">
@@ -451,10 +451,10 @@ index_html = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="refresh" content="0;url=zh/INDEX.html">
-<title>IDM Flash Wiki</title>
+<title>IDM Wiki</title>
 </head>
 <body>
-<p>Redirecting to <a href="zh/INDEX.html">IDM Flash Wiki</a>...</p>
+<p>Redirecting to <a href="zh/INDEX.html">IDM Wiki</a>...</p>
 </body>
 </html>"""
 with open(os.path.join(dist_dir, 'index.html'), 'w', encoding='utf-8') as f:
