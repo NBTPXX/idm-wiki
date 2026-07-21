@@ -14,7 +14,7 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER" "USAGE")
+NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER" "__SEC__" "USAGE")
 
 NAV_LABELS_ZH=(
   "概览"
@@ -24,7 +24,8 @@ NAV_LABELS_ZH=(
   "DFU 模式刷写"
   "Bootloader 管理"
   "Moonraker 集成"
-  "使用教程"
+  "刷写指南"
+  "IDM 使用教程"
 )
 
 NAV_LABELS_EN=(
@@ -35,7 +36,8 @@ NAV_LABELS_EN=(
   "DFU Mode Flashing"
   "Bootloader Management"
   "Moonraker Integration"
-  "Usage Tutorial"
+  "Flashing Guide"
+  "IDM Usage Tutorial"
 )
 
 python3 - "$DIST_DIR" "$CONTENT_DIR" \
@@ -118,6 +120,15 @@ body {
   color: var(--link);
   background: rgba(88,166,255,0.1);
   font-weight: 600;
+}
+.sidebar .sec-header {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 16px 12px 4px 12px;
+  margin-top: 4px;
 }
 .sidebar .lang {
   margin-top: 24px;
@@ -358,10 +369,13 @@ def md_to_html(text):
 def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     sidebar_items = []
     for j, item in enumerate(nav_items):
-        href = f"{item}.html"
         label = nav_labels[j]
-        active = ' class="active"' if item == page_name else ''
-        sidebar_items.append(f'      <a href="{href}"{active}>{label}</a>')
+        if item == "__SEC__":
+            sidebar_items.append(f'      <div class="sec-header">{label}</div>')
+        else:
+            href = f"{item}.html"
+            active = ' class="active"' if item == page_name else ''
+            sidebar_items.append(f'      <a href="{href}"{active}>{label}</a>')
 
     lang_opts = []
     for lc, lname in [("zh", "中文"), ("en", "English")]:
@@ -413,6 +427,8 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
     os.makedirs(lang_dist, exist_ok=True)
 
     for page_name in nav_items:
+        if page_name == "__SEC__":
+            continue
         md_file = os.path.join(lang_path, f"{page_name}.md")
         if not os.path.exists(md_file):
             print(f"WARNING: {md_file} not found, skipping")
