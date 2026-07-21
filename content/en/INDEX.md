@@ -2,6 +2,8 @@
 
 IDM Flash Web is a browser-based firmware flashing tool for IDM 3D printer sensors. It supports CAN, USB serial, and DFU connection modes.
 
+![Main Interface](../images/main-ui.png)
+
 ## Contents
 
 - [Installation Guide](INSTALL.html)

@@ -4,9 +4,15 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DIST_DIR="$SCRIPT_DIR/docs"
 CONTENT_DIR="$SCRIPT_DIR/content"
+IMAGES_DIR="$SCRIPT_DIR/images"
 
 rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
+
+if [[ -d "$IMAGES_DIR" ]]; then
+  cp -r "$IMAGES_DIR" "$DIST_DIR/images"
+  echo "Copied images to docs/images/"
+fi
 
 NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER")
 
@@ -183,6 +189,7 @@ tr:nth-child(even) td {
 }
 strong { color: var(--heading); font-weight: 600; }
 em { color: var(--accent); font-style: italic; }
+img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin: 8px 0 16px 0; display: block; }
 hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -238,6 +245,7 @@ def md_to_html(text):
         list_type = None
 
     def inline_md(text):
+        text = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1">', text)
         text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
         text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)

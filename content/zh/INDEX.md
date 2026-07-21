@@ -2,6 +2,8 @@
 
 IDM Flash Web 是一个基于浏览器的固件刷写工具，用于给 IDM 3D 打印机传感器刷写固件。支持 CAN、USB 串口和 DFU 三种连接模式。
 
+![主界面](../images/main-ui.png)
+
 ## 目录
 
 - [安装指南](INSTALL.html)

@@ -138,6 +138,7 @@ tr:nth-child(even) td {
 }
 strong { color: var(--heading); font-weight: 600; }
 em { color: var(--accent); font-style: italic; }
+img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin: 8px 0 16px 0; display: block; }
 hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -197,6 +198,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <li>DFU mode usually requires holding a physical button (e.g., BOOT0) while powering on</li>
 <li>After flashing, power cycle the device to exit DFU mode</li>
 </ul>
+<p><img src="../images/dfu-flash.png" alt="DFU Mode Flash Interface"></p>
 <h2 id="flashing-procedure">Flashing Procedure</h2>
 <ol>
 <li>Put the device in DFU mode (hold BOOT0 button while powering on)</li>

@@ -138,6 +138,7 @@ tr:nth-child(even) td {
 }
 strong { color: var(--heading); font-weight: 600; }
 em { color: var(--accent); font-style: italic; }
+img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin: 8px 0 16px 0; display: block; }
 hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -198,6 +199,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <li>刷写完成后需要重新上电以退出 DFU 模式</li>
 </ul>
 <h2 id="">刷写流程</h2>
+<p><img src="../images/dfu-flash.png" alt="DFU 模式刷写界面"></p>
 <ol>
 <li>将设备置于 DFU 模式（按住 BOOT0 按钮上电）</li>
 <li>选择 DFU 模式</li>

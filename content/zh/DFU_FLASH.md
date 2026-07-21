@@ -25,6 +25,8 @@ DFU 模式使用 dfu-util 工具，适用于设备处于 USB DFU 模式时。
 
 ## 刷写流程
 
+![DFU 模式刷写界面](../images/dfu-flash.png)
+
 1. 将设备置于 DFU 模式（按住 BOOT0 按钮上电）
 2. 选择 DFU 模式
 3. 选择正确的 Flash Address

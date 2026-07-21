@@ -138,6 +138,7 @@ tr:nth-child(even) td {
 }
 strong { color: var(--heading); font-weight: 600; }
 em { color: var(--accent); font-style: italic; }
+img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin: 8px 0 16px 0; display: block; }
 hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -216,6 +217,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0</li>
 <li><strong>Exit BL</strong>: Runs the clear node → set node ID → CONNECT → COMPLETE sequence</li>
 </ul>
+<p><img src="../images/can-flash.png" alt="CAN Mode Flash Interface"></p>
 <h2 id="flashing-procedure">Flashing Procedure</h2>
 <ol>
 <li>Select CAN mode</li>

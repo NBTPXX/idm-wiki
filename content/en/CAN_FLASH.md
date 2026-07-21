@@ -31,6 +31,8 @@ Prerequisites:
 - **Enter BL**: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0
 - **Exit BL**: Runs the clear node → set node ID → CONNECT → COMPLETE sequence
 
+![CAN Mode Flash Interface](../images/can-flash.png)
+
 ## Flashing Procedure
 
 1. Select CAN mode

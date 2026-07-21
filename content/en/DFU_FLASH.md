@@ -23,6 +23,8 @@ Click "Detect DFU" to run `dfu-util -l` and scan for DFU devices.
 - DFU mode usually requires holding a physical button (e.g., BOOT0) while powering on
 - After flashing, power cycle the device to exit DFU mode
 
+![DFU Mode Flash Interface](../images/dfu-flash.png)
+
 ## Flashing Procedure
 
 1. Put the device in DFU mode (hold BOOT0 button while powering on)
