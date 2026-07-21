@@ -14,7 +14,7 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER")
+NAV_ITEMS=("INDEX" "INSTALL" "CAN_FLASH" "USB_FLASH" "DFU_FLASH" "BOOTLOADER" "MOONRAKER" "USAGE")
 
 NAV_LABELS_ZH=(
   "概览"
@@ -24,6 +24,7 @@ NAV_LABELS_ZH=(
   "DFU 模式刷写"
   "Bootloader 管理"
   "Moonraker 集成"
+  "使用教程"
 )
 
 NAV_LABELS_EN=(
@@ -34,6 +35,7 @@ NAV_LABELS_EN=(
   "DFU Mode Flashing"
   "Bootloader Management"
   "Moonraker Integration"
+  "Usage Tutorial"
 )
 
 python3 - "$DIST_DIR" "$CONTENT_DIR" \

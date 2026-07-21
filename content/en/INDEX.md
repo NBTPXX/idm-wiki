@@ -12,6 +12,7 @@ IDM Flash Web is a browser-based firmware flashing tool for IDM 3D printer senso
 - [DFU Mode Flashing](DFU_FLASH.html)
 - [Bootloader Management](BOOTLOADER.html)
 - [Moonraker Integration](MOONRAKER.html)
+- [Usage Tutorial](USAGE.html)
 
 ## Quick Start
 

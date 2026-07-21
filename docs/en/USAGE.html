@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moonraker Integration - IDM Flash Wiki</title>
+<title>IDM Usage Tutorial - IDM Flash Wiki</title>
 <style>
 
 :root {
@@ -160,41 +160,125 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
       <a href="USB_FLASH.html">USB Mode Flashing</a>
       <a href="DFU_FLASH.html">DFU Mode Flashing</a>
       <a href="BOOTLOADER.html">Bootloader Management</a>
-      <a href="MOONRAKER.html" class="active">Moonraker Integration</a>
-      <a href="USAGE.html">Usage Tutorial</a>
+      <a href="MOONRAKER.html">Moonraker Integration</a>
+      <a href="USAGE.html" class="active">Usage Tutorial</a>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'MOONRAKER.html'">
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE.html'">
         <option value="zh">中文</option>
         <option value="en" selected>English</option>
     </select>
   </div>
 </nav>
 <main class="main">
-<h1 id="moonraker-integration">Moonraker Integration</h1>
-<p>IDM Flash Web can integrate with the Klipper ecosystem's Moonraker API.</p>
-<h2 id="automatic-configuration">Automatic Configuration</h2>
-<p>Automatically configured after running install.sh:</p>
-<h3 id="updatemanager-moonrakerconf">update_manager (moonraker.conf)</h3>
-<pre><code class="language-ini">[update_manager idm_flash_web]
-type: git_repo
-channel: dev
-path: ~/idm-documents
-origin: https://gitee.com/NBTP/idm-documents.git
-is_system_service: False
-managed_services: idm_flash_web
-info_tags:
-    desc=IDM Flash Web Tool</code></pre>
-<h3 id="moonrakerasvc">moonraker.asvc</h3>
-<p>Adds idm_flash_web to ~/printer_data/moonraker.asvc.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li>Online updates: One-click update in Fluidd/Mainsail Update Manager</li>
-<li>Service management: View and start/stop services in the Services panel</li>
-<li>Status viewing: Get printer connection status via Moonraker API</li>
-</ul>
-<p><img src="../images/system-architecture.svg" alt="IDM Flash Web in Fluidd Update Manager"></p>
-<h2 id="manual-configuration">Manual Configuration</h2>
-<p>If automatic configuration fails, you can manually add the above configuration.</p>
+<h1 id="idm-usage-tutorial">IDM Usage Tutorial</h1>
+<h2 id="overview">Overview</h2>
+<p>IDM (Integrated Distance Monitor) is a contactless bed leveling sensor for 3D printers, communicating with Klipper via CAN bus or USB.</p>
+<h2 id="hardware-connection">Hardware Connection</h2>
+<h3 id="can-mode-recommended">CAN Mode (Recommended)</h3>
+<p>Connect the IDM sensor to the printer's CAN bus:</p>
+<pre><code>Host ─── CAN Bus ─── IDM Sensor
+           │
+           └── Tool Board / Other CAN Devices</code></pre>
+<h3 id="usb-mode">USB Mode</h3>
+<p>Connect directly to the host via USB.</p>
+<h2 id="klipper-configuration">Klipper Configuration</h2>
+<p>Add the following to <code>printer.cfg</code>:</p>
+<pre><code class="language-ini">[mcu idm]
+canbus_uuid: 2ca7ad8c2899     # Replace with your device UUID
+
+[temperature_sensor idm_temp]
+sensor_type: temperature_mcu
+sensor_mcu: idm
+min_temp: 0
+max_temp: 100
+
+[idm]
+sensor_type: IDM</code></pre>
+<h3 id="get-can-uuid">Get CAN UUID</h3>
+<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
+<h2 id="calibration">Calibration</h2>
+<h3 id="z-offset-calibration">Z Offset Calibration</h3>
+<ol>
+<li>Run <code>PROBE_CALIBRATE</code> command</li>
+<li>Use the paper method to manually adjust nozzle height</li>
+<li>Run <code>ACCEPT</code> to save the result</li>
+<li>Run <code>SAVE_CONFIG</code> to write to config</li>
+</ol>
+<h3 id="temperature-compensation">Temperature Compensation</h3>
+<p>The IDM sensor includes built-in temperature compensation:</p>
+<pre><code class="language-ini">[idm]
+temperature_compensation: True</code></pre>
+<h2 id="common-commands">Common Commands</h2>
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>QUERY_PROBE</code></td>
+<td>Query current probe value</td>
+</tr>
+<tr>
+<td><code>PROBE</code></td>
+<td>Perform single probe</td>
+</tr>
+<tr>
+<td><code>PROBE_ACCURACY</code></td>
+<td>Probe accuracy test (10 repetitions)</td>
+</tr>
+<tr>
+<td><code>BED_MESH_CALIBRATE</code></td>
+<td>Bed mesh calibration</td>
+</tr>
+<tr>
+<td><code>PROBE_CALIBRATE</code></td>
+<td>Z offset calibration</td>
+</tr>
+</table>
+<h2 id="bed-mesh">Bed Mesh</h2>
+<pre><code class="language-ini">[bed_mesh]
+speed: 120
+horizontal_move_z: 5
+mesh_min: 15, 15
+mesh_max: 235, 235
+probe_count: 5, 5
+algorithm: bicubic</code></pre>
+<p>Run mesh calibration:</p>
+<pre><code>BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG</code></pre>
+<h2 id="adaptive-mesh">Adaptive Mesh</h2>
+<p>Add to <code>PRINT_START</code> macro:</p>
+<pre><code>BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
+<p>Automatically probes only the current print area before each print, saving time.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<tr>
+<th>Issue</th>
+<th>Possible Cause</th>
+<th>Solution</th>
+</tr>
+<tr>
+<td>Probe failed</td>
+<td>Dirty sensor</td>
+<td>Clean sensor lens</td>
+</tr>
+<tr>
+<td>Value drift</td>
+<td>Temperature change</td>
+<td>Re-calibrate after bed temp stabilizes</td>
+</tr>
+<tr>
+<td>CAN communication timeout</td>
+<td>Loose wiring</td>
+<td>Check CAN wiring and termination resistor</td>
+</tr>
+<tr>
+<td>Cannot get UUID</td>
+<td>Not in BL mode</td>
+<td>Use IDM Flash Web to enter bootloader</td>
+</tr>
+</table>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 
