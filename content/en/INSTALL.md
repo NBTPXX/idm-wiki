@@ -9,11 +9,12 @@
 ## Get Source Code
 
 ```bash
-cd ~
+# Gitee (primary)
 git clone https://gitee.com/NBTP/idm-documents.git
-```
 
-> GitHub mirror: `https://github.com/NBTPXX/idm-documents.git` (auto-synced from Gitee)
+# GitHub (mirror, auto-synced)
+git clone https://github.com/NBTPXX/idm-documents.git
+```
 
 ## One-Click Install
 

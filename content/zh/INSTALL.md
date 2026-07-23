@@ -9,11 +9,12 @@
 ## 获取源码
 
 ```bash
-cd ~
+# Gitee（主仓库）
 git clone https://gitee.com/NBTP/idm-documents.git
-```
 
-> GitHub 镜像：`https://github.com/NBTPXX/idm-documents.git`（与 Gitee 自动同步）
+# GitHub（镜像，自动同步）
+git clone https://github.com/NBTPXX/idm-documents.git
+```
 
 ## 一键安装
 
