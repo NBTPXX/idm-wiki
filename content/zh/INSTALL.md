@@ -13,6 +13,8 @@ cd ~
 git clone https://gitee.com/NBTP/idm-documents.git
 ```
 
+> GitHub 镜像：`https://github.com/NBTPXX/idm-documents.git`（与 Gitee 自动同步）
+
 ## 一键安装
 
 ```bash

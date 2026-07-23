@@ -13,6 +13,8 @@ cd ~
 git clone https://gitee.com/NBTP/idm-documents.git
 ```
 
+> GitHub mirror: `https://github.com/NBTPXX/idm-documents.git` (auto-synced from Gitee)
+
 ## One-Click Install
 
 ```bash
