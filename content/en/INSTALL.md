@@ -6,6 +6,13 @@
 - Python 3.7+
 - pyserial (installed via pip or bundled with Klipper)
 
+## Get Source Code
+
+```bash
+cd ~
+git clone https://gitee.com/NBTP/idm-documents.git
+```
+
 ## One-Click Install
 
 ```bash
