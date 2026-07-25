@@ -32,18 +32,13 @@ speed: 50
 3. 在 `G28` 宏或归零后调用：
 
 ```gcode
-G28
-NOZZLE_OFFSET_APPLY
+NOZZLE_OFFSET_SET
 ```
 
-或在 `[safe_z_home]` 后自动执行（推荐）：
+或在需要时随时调用：
 
-```ini
-[gcode_macro G28]
-rename_existing: G28.1
-gcode:
-    G28.1 {rawparams}
-    NOZZLE_OFFSET_APPLY
+```gcode
+NOZZLE_OFFSET_SET
 ```
 
 ## 原理

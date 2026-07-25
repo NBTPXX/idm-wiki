@@ -208,14 +208,9 @@ speed: 50</code></pre>
 <ol>
 <li>Call after homing:</li>
 </ol>
-<pre><code class="language-gcode">G28
-NOZZLE_OFFSET_APPLY</code></pre>
-<p>Or override G28 (recommended):</p>
-<pre><code class="language-ini">[gcode_macro G28]
-rename_existing: G28.1
-gcode:
-    G28.1 {rawparams}
-    NOZZLE_OFFSET_APPLY</code></pre>
+<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
+<p>Call whenever needed:</p>
+<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
 <h2 id="how-it-works">How It Works</h2>
 <ol>
 <li><code>G1 X0 Y11</code> moves the effector to (0,11), placing the nozzle at (0,0)</li>

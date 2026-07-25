@@ -32,18 +32,13 @@ speed: 50
 3. Call after homing:
 
 ```gcode
-G28
-NOZZLE_OFFSET_APPLY
+NOZZLE_OFFSET_SET
 ```
 
-Or override G28 (recommended):
+Call whenever needed:
 
-```ini
-[gcode_macro G28]
-rename_existing: G28.1
-gcode:
-    G28.1 {rawparams}
-    NOZZLE_OFFSET_APPLY
+```gcode
+NOZZLE_OFFSET_SET
 ```
 
 ## How It Works

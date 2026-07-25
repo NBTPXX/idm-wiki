@@ -208,14 +208,9 @@ speed: 50</code></pre>
 <ol>
 <li>在 <code>G28</code> 宏或归零后调用：</li>
 </ol>
-<pre><code class="language-gcode">G28
-NOZZLE_OFFSET_APPLY</code></pre>
-<p>或在 <code>[safe_z_home]</code> 后自动执行（推荐）：</p>
-<pre><code class="language-ini">[gcode_macro G28]
-rename_existing: G28.1
-gcode:
-    G28.1 {rawparams}
-    NOZZLE_OFFSET_APPLY</code></pre>
+<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
+<p>或在需要时随时调用：</p>
+<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
 <h2 id="">原理</h2>
 <ol>
 <li><code>G1 X0 Y11</code> 把效应器移到 (0,11)，喷嘴物理到 (0,0)</li>
