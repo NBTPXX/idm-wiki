@@ -197,11 +197,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <ol>
 <li>把 <code>nozzle_offset.py</code> 复制到 Klipper 的 <code>klippy/extras/</code> 目录：</li>
 </ol>
-<pre><code class="language-bash">cp nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
+<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
 <ol>
 <li>在 <code>printer.cfg</code> 中添加：</li>
 </ol>
-<pre><code class="language-ini">[nozzle_offset]
+<pre><code class="language-ini">[delta_nozzle_offset]
 x_offset: 0
 y_offset: -11        # 喷嘴相对效应器中心的偏移
 speed: 50</code></pre>
@@ -209,7 +209,7 @@ speed: 50</code></pre>
 <li>配置后自动生效，每次执行 <code>G28</code> 归零后自动应用偏移补偿，无需额外命令。</li>
 </ol>
 <p>也可手动触发：</p>
-<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
+<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
 <h2 id="">原理</h2>
 <ol>
 <li><code>G1 X0 Y11</code> 把效应器移到 (0,11)，喷嘴物理到 (0,0)</li>

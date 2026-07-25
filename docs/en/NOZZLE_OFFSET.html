@@ -197,11 +197,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <ol>
 <li>Copy <code>nozzle_offset.py</code> to Klipper's <code>klippy/extras/</code>:</li>
 </ol>
-<pre><code class="language-bash">cp nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
+<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
 <ol>
 <li>Add to <code>printer.cfg</code>:</li>
 </ol>
-<pre><code class="language-ini">[nozzle_offset]
+<pre><code class="language-ini">[delta_nozzle_offset]
 x_offset: 0
 y_offset: -11        # Nozzle offset from effector center
 speed: 50</code></pre>
@@ -209,7 +209,7 @@ speed: 50</code></pre>
 <li>Auto-compensates after every <code>G28</code> homing. No extra command needed.</li>
 </ol>
 <p>Manual trigger also available:</p>
-<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
+<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
 <h2 id="how-it-works">How It Works</h2>
 <ol>
 <li><code>G1 X0 Y11</code> moves the effector to (0,11), placing the nozzle at (0,0)</li>

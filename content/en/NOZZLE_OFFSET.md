@@ -17,13 +17,13 @@ The `nozzle_offset.py` module automatically compensates after homing:
 1. Copy `nozzle_offset.py` to Klipper's `klippy/extras/`:
 
 ```bash
-cp nozzle_offset.py ~/klipper/klippy/extras/
+cp delta_nozzle_offset.py ~/klipper/klippy/extras/
 ```
 
 2. Add to `printer.cfg`:
 
 ```ini
-[nozzle_offset]
+[delta_nozzle_offset]
 x_offset: 0
 y_offset: -11        # Nozzle offset from effector center
 speed: 50
@@ -34,7 +34,7 @@ speed: 50
 Manual trigger also available:
 
 ```gcode
-NOZZLE_OFFSET_SET
+DELTA_NOZZLE_OFFSET
 ```
 
 ## How It Works

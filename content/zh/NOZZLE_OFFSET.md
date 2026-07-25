@@ -17,13 +17,13 @@ Delta 机型归零时，Klipper 以效应器中心为 (0,0)，但喷嘴偏心安
 1. 把 `nozzle_offset.py` 复制到 Klipper 的 `klippy/extras/` 目录：
 
 ```bash
-cp nozzle_offset.py ~/klipper/klippy/extras/
+cp delta_nozzle_offset.py ~/klipper/klippy/extras/
 ```
 
 2. 在 `printer.cfg` 中添加：
 
 ```ini
-[nozzle_offset]
+[delta_nozzle_offset]
 x_offset: 0
 y_offset: -11        # 喷嘴相对效应器中心的偏移
 speed: 50
@@ -34,7 +34,7 @@ speed: 50
 也可手动触发：
 
 ```gcode
-NOZZLE_OFFSET_SET
+DELTA_NOZZLE_OFFSET
 ```
 
 ## 原理
