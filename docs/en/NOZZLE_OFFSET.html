@@ -206,10 +206,9 @@ x_offset: 0
 y_offset: -11        # Nozzle offset from effector center
 speed: 50</code></pre>
 <ol>
-<li>Call after homing:</li>
+<li>Auto-compensates after every <code>G28</code> homing. No extra command needed.</li>
 </ol>
-<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
-<p>Call whenever needed:</p>
+<p>Manual trigger also available:</p>
 <pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
 <h2 id="how-it-works">How It Works</h2>
 <ol>

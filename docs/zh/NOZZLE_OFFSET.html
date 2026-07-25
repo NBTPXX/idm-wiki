@@ -206,10 +206,9 @@ x_offset: 0
 y_offset: -11        # 喷嘴相对效应器中心的偏移
 speed: 50</code></pre>
 <ol>
-<li>在 <code>G28</code> 宏或归零后调用：</li>
+<li>配置后自动生效，每次执行 <code>G28</code> 归零后自动应用偏移补偿，无需额外命令。</li>
 </ol>
-<pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
-<p>或在需要时随时调用：</p>
+<p>也可手动触发：</p>
 <pre><code class="language-gcode">NOZZLE_OFFSET_SET</code></pre>
 <h2 id="">原理</h2>
 <ol>
