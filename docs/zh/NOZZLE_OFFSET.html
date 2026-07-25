@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>安装与配置 - IDM Wiki</title>
+<title>三角洲喷嘴偏移补偿 - IDM Wiki</title>
 <style>
 
 :root {
@@ -164,10 +164,10 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 <nav class="sidebar">
   <h2>IDM Wiki</h2>
       <div class="sec-header">使用教程</div>
-      <a href="USAGE_SETUP.html" class="active">安装与配置</a>
+      <a href="USAGE_SETUP.html">安装与配置</a>
       <a href="USAGE_CALIBRATE.html">校准</a>
       <a href="USAGE_ADVANCED.html">高级功能</a>
-      <a href="NOZZLE_OFFSET.html">喷嘴偏移补偿</a>
+      <a href="NOZZLE_OFFSET.html" class="active">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html">概览</a>
       <a href="INSTALL.html">安装指南</a>
@@ -176,80 +176,80 @@ hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
       <a href="DFU_FLASH.html">DFU 模式刷写</a>
       <a href="MOONRAKER.html">Moonraker 集成</a>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_SETUP.html'">
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'NOZZLE_OFFSET.html'">
         <option value="zh" selected>中文</option>
         <option value="en">English</option>
     </select>
   </div>
 </nav>
 <main class="main">
-<h1 id="">安装与配置</h1>
-<h2 id="">简介</h2>
-<p>IDM（Integrated Distance Monitor）是非接触式 3D 打印机调平传感器，内置加速度计和温度传感器，通过 CAN 或 USB 与 Klipper 通信。</p>
-<h2 id="">软件安装</h2>
-<pre><code class="language-bash">cd ~
-git clone https://gitee.com/NBTP/IDM.git
-cd IDM
-~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-./install.sh</code></pre>
-<h2 id="">完整配置</h2>
-<pre><code class="language-ini">[scanner]
-mcu: idm
-sensor: idm
-calibration_method: touch             # touch / scan / second_probe
-speed: 40
-lift_speed: 5
-backlash_comp: 0.5
+<h1 id="">三角洲喷嘴偏移补偿</h1>
+<h2 id="">问题</h2>
+<p>Delta 机型归零时，Klipper 以效应器中心为 (0,0)，但喷嘴偏心安装（如 y_offset=11mm），导致喷嘴实际在 (0,-11)。打印时模型会偏移。</p>
+<h2 id="">解决方案</h2>
+<p>使用 <code>nozzle_offset.py</code> 模块，归零后自动补偿：</p>
+<ol>
+<li>物理移动喷嘴到 (0,0)</li>
+<li>重新解算 Delta 坐标系</li>
+<li>让 Klipper 认为喷嘴就在 (0,0)</li>
+</ol>
+<h2 id="">安装</h2>
+<ol>
+<li>把 <code>nozzle_offset.py</code> 复制到 Klipper 的 <code>klippy/extras/</code> 目录：</li>
+</ol>
+<pre><code class="language-bash">cp nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
+<ol>
+<li>在 <code>printer.cfg</code> 中添加：</li>
+</ol>
+<pre><code class="language-ini">[nozzle_offset]
 x_offset: 0
-y_offset: 21.1
-trigger_distance: 2
-trigger_dive_threshold: 1.5
-trigger_hysteresis: 0.006
-cal_nozzle_z: 0.1
-cal_floor: 0.1
-cal_ceil: 5
-cal_speed: 1.0
-cal_move_speed: 10
-default_model_name: default
-mesh_main_direction: x
-mesh_overscan: 3
-mesh_cluster_size: 1
-mesh_runs: 1
-
-# Touch 模式专用
-scanner_touch_max_temp: 180
-scanner_touch_speed: 5
-scanner_touch_accel: 100
-
-# 温度补偿
-temperature_compensation: True</code></pre>
-<h2 id="">必要配置项</h2>
-<p><strong>启用 force_move</strong>（必须）：</p>
-<pre><code class="language-ini">[force_move]
-enable_force_move: True</code></pre>
-<p><strong>修改 Z 限位</strong>：</p>
-<pre><code class="language-ini">[stepper_z]
-endstop_pin: probe:z_virtual_endstop</code></pre>
-<p><strong>安全归零</strong>：</p>
-<pre><code class="language-ini">[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5</code></pre>
-<p>删除原有的 <code>[probe]</code> 模块。CAN 版去掉 <code>serial:</code> 行，USB 版保留。</p>
-<h2 id="mcu-">MCU 配置</h2>
-<pre><code class="language-ini">[mcu idm]
-canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID
-
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100</code></pre>
-<h3 id="-can-uuid">获取 CAN UUID</h3>
-<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
-<h3 id="usb-">串口查询（USB 模式）</h3>
-<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+y_offset: -11        # 喷嘴相对效应器中心的偏移
+speed: 50</code></pre>
+<ol>
+<li>在 <code>G28</code> 宏或归零后调用：</li>
+</ol>
+<pre><code class="language-gcode">G28
+NOZZLE_OFFSET_APPLY</code></pre>
+<p>或在 <code>[safe_z_home]</code> 后自动执行（推荐）：</p>
+<pre><code class="language-ini">[gcode_macro G28]
+rename_existing: G28.1
+gcode:
+    G28.1 {rawparams}
+    NOZZLE_OFFSET_APPLY</code></pre>
+<h2 id="">原理</h2>
+<ol>
+<li><code>G1 X0 Y11</code> 把效应器移到 (0,11)，喷嘴物理到 (0,0)</li>
+<li>读取三塔步进位置，用 trilateration 解算真实坐标</li>
+<li><code>SET_KINEMATIC_POSITION</code> 设置新坐标，避免平面倾斜</li>
+</ol>
+<h2 id="">参数</h2>
+<table>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认</th>
+</tr>
+<tr>
+<td>x_offset</td>
+<td>喷嘴 X 方向偏移（mm）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>y_offset</td>
+<td>喷嘴 Y 方向偏移（mm）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>speed</td>
+<td>补偿移动速度（mm/s）</td>
+<td>50</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>是否启用</td>
+<td>True</td>
+</tr>
+</table>
 <hr>
 <p><a href="INDEX.html">← 返回首页</a></p>
 
