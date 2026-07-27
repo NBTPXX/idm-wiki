@@ -7,174 +7,206 @@
 <style>
 
 :root {
-  --bg: #0d1117;
-  --bg-sidebar: #161b22;
-  --text: #c9d1d9;
-  --text-muted: #8b949e;
-  --link: #58a6ff;
-  --link-hover: #79c0ff;
-  --border: #30363d;
-  --code-bg: #1c2128;
-  --accent: #f78166;
-  --heading: #f0f6fc;
-  --table-row-alt: #161b22;
+  --sidebar-bg: #1a237e;
+  --sidebar-text: #c5cae9;
+  --sidebar-hover: #ffffff;
+  --sidebar-active-bg: rgba(255,255,255,0.15);
+  --bg: #ffffff;
+  --text: #333333;
+  --text-muted: #666666;
+  --link: #1a73e8;
+  --link-hover: #1557b0;
+  --border: #e0e0e0;
+  --code-bg: #f5f5f5;
+  --code-border: #e0e0e0;
+  --accent: #1a237e;
+  --heading: #222222;
+  --table-row-alt: #fafafa;
+  --table-header-bg: #1a237e;
+  --table-header-text: #ffffff;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   display: flex;
   min-height: 100vh;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 15px;
 }
 .sidebar {
-  width: 260px;
-  min-width: 260px;
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border);
-  padding: 24px 16px;
+  width: 280px;
+  min-width: 280px;
+  background: var(--sidebar-bg);
+  padding: 0;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   overflow-y: auto;
+  z-index: 10;
 }
-.sidebar h2 {
-  color: var(--accent);
-  font-size: 16px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+.sidebar-header {
+  padding: 24px 20px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
-.sidebar a {
-  display: block;
-  color: var(--text-muted);
+.sidebar-header a {
+  color: #ffffff;
   text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 2px;
-  transition: all 0.15s;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
-.sidebar a:hover {
-  color: var(--text);
-  background: rgba(255,255,255,0.04);
+.sidebar-header span {
+  display: block;
+  color: #9fa8da;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 2px;
 }
-.sidebar a.active {
-  color: var(--link);
-  background: rgba(88,166,255,0.1);
-  font-weight: 600;
+.sidebar-nav {
+  padding: 12px 0;
 }
 .sidebar .sec-header {
-  color: var(--text-muted);
+  color: #7986cb;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 16px 12px 4px 12px;
-  margin-top: 4px;
+  letter-spacing: 1px;
+  padding: 16px 20px 6px 20px;
+}
+.sidebar a.nav-link {
+  display: block;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  padding: 6px 20px 6px 28px;
+  font-size: 14px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.sidebar a.nav-link:hover {
+  color: var(--sidebar-hover);
+  background: rgba(255,255,255,0.08);
+  border-left-color: rgba(255,255,255,0.3);
+}
+.sidebar a.nav-link.active {
+  color: #ffffff;
+  background: rgba(255,255,255,0.12);
+  border-left-color: #ffffff;
+  font-weight: 600;
 }
 .sidebar .lang {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 8px;
 }
 .sidebar .lang select {
   width: 100%;
-  padding: 6px 10px;
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 7px 10px;
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
   font-size: 13px;
   cursor: pointer;
 }
+.sidebar .lang select option {
+  color: #333;
+  background: #fff;
+}
 .main {
-  margin-left: 260px;
-  padding: 32px 48px;
-  max-width: 860px;
+  margin-left: 280px;
+  padding: 40px 56px;
+  max-width: 900px;
   width: 100%;
 }
-h1 { color: var(--heading); font-size: 28px; margin-bottom: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-h2 { color: var(--heading); font-size: 22px; margin-top: 32px; margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-h3 { color: var(--heading); font-size: 18px; margin-top: 24px; margin-bottom: 8px; font-weight: 600; }
-h4 { color: var(--heading); font-size: 16px; margin-top: 20px; margin-bottom: 6px; }
-p { margin-bottom: 16px; }
-ul, ol { margin-bottom: 16px; padding-left: 24px; }
-li { margin-bottom: 4px; }
+h1 { color: var(--heading); font-size: 30px; margin-bottom: 4px; font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+h2 { color: var(--heading); font-size: 22px; margin-top: 36px; margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { color: var(--heading); font-size: 18px; margin-top: 28px; margin-bottom: 10px; font-weight: 600; }
+h4 { color: var(--text); font-size: 16px; margin-top: 20px; margin-bottom: 8px; }
+p { margin-bottom: 18px; }
+ul, ol { margin-bottom: 18px; padding-left: 28px; }
+li { margin-bottom: 6px; }
 a { color: var(--link); text-decoration: none; }
 a:hover { color: var(--link-hover); text-decoration: underline; }
 code {
   background: var(--code-bg);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
   font-size: 13px;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  border: 1px solid var(--code-border);
 }
 pre {
   background: var(--code-bg);
-  padding: 16px;
-  border-radius: 8px;
+  padding: 16px 20px;
+  border-radius: 6px;
   overflow-x: auto;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   font-size: 13px;
-  line-height: 1.5;
-  border: 1px solid var(--border);
+  line-height: 1.55;
+  border: 1px solid var(--code-border);
 }
 pre code {
   background: none;
   padding: 0;
   border-radius: 0;
+  border: none;
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 th, td {
-  padding: 8px 12px;
+  padding: 10px 14px;
   text-align: left;
   border: 1px solid var(--border);
 }
 th {
-  background: var(--bg-sidebar);
+  background: var(--table-header-bg);
   font-weight: 600;
-  color: var(--heading);
+  color: var(--table-header-text);
+  font-size: 13px;
 }
 tr:nth-child(even) td {
   background: var(--table-row-alt);
 }
 strong { color: var(--heading); font-weight: 600; }
-em { color: var(--accent); font-style: italic; }
-img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin: 8px 0 16px 0; display: block; }
-hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+em { color: #555; font-style: italic; }
+img { max-width: 100%; border-radius: 6px; border: 1px solid var(--border); margin: 12px 0 20px 0; display: block; }
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 @media (max-width: 768px) {
   body { flex-direction: column; }
   .sidebar {
     position: relative; width: 100%; min-width: 100%;
-    padding: 16px; border-right: none; border-bottom: 1px solid var(--border);
   }
-  .main { margin-left: 0; padding: 20px; }
+  .main { margin-left: 0; padding: 24px; }
 }
 
 </style>
 </head>
 <body>
 <nav class="sidebar">
-  <h2>IDM Wiki</h2>
+  <div class="sidebar-header">
+    <a href="INDEX.html">IDM Wiki</a>
+    <span>Klipper Firmware Documentation</span>
+  </div>
+  <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
-      <a href="USAGE_SETUP.html">安装与配置</a>
-      <a href="USAGE_CALIBRATE.html">校准</a>
-      <a href="USAGE_ADVANCED.html">高级功能</a>
-      <a href="NOZZLE_OFFSET.html">喷嘴偏移补偿</a>
+      <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
+      <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
-      <a href="INDEX.html">概览</a>
-      <a href="INSTALL.html">安装指南</a>
-      <a href="CAN_FLASH.html" class="active">CAN 模式刷写</a>
-      <a href="USB_FLASH.html">USB 模式刷写</a>
-      <a href="DFU_FLASH.html">DFU 模式刷写</a>
-      <a href="MOONRAKER.html">Moonraker 集成</a>
+      <a href="INDEX.html" class="nav-link">概览</a>
+      <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="CAN_FLASH.html" class="nav-link active">CAN 模式刷写</a>
+      <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
+      <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
+  </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'CAN_FLASH.html'">
         <option value="zh" selected>中文</option>
