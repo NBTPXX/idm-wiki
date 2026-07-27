@@ -55,6 +55,7 @@ python3 - "$DIST_DIR" "$CONTENT_DIR" \
 import sys
 import re
 import os
+import json
 
 dist_dir = sys.argv[1]
 content_dir = sys.argv[2]
@@ -85,6 +86,14 @@ CSS = """
   --table-row-alt: #fafafa;
   --table-header-bg: #1a237e;
   --table-header-text: #ffffff;
+  --search-bg: rgba(255,255,255,0.12);
+  --search-focus: rgba(255,255,255,0.2);
+  --search-text: #ffffff;
+  --search-placeholder: #9fa8da;
+  --result-bg: #ffffff;
+  --result-text: #333;
+  --result-hover: #f0f5ff;
+  --result-border: #e0e0e0;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -125,6 +134,98 @@ body {
   font-size: 12px;
   font-weight: 400;
   margin-top: 2px;
+}
+.sidebar-search {
+  padding: 12px 16px;
+}
+.sidebar-search input {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  background: var(--search-bg);
+  color: var(--search-text);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s;
+}
+.sidebar-search input::placeholder {
+  color: var(--search-placeholder);
+}
+.sidebar-search input:focus {
+  background: var(--search-focus);
+  border-color: rgba(255,255,255,0.3);
+}
+.sidebar-search {
+  position: relative;
+}
+.sidebar-search::before {
+  content: "\\1F50D";
+  position: absolute;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+}
+.search-results {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 280px;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 100;
+}
+.search-results.show {
+  display: block;
+}
+.search-results-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  background: var(--result-bg);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  overflow-y: auto;
+  border-bottom: 1px solid var(--result-border);
+}
+.search-result-item {
+  display: block;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--result-border);
+  color: var(--result-text);
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.search-result-item:hover, .search-result-item.focus {
+  background: var(--result-hover);
+}
+.search-result-item .title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--accent);
+}
+.search-result-item .snippet {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.search-result-item mark {
+  background: #fff3cd;
+  color: #333;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+.search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
 }
 .sidebar-nav {
   padding: 12px 0;
@@ -244,6 +345,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     position: relative; width: 100%; min-width: 100%;
   }
   .main { margin-left: 0; padding: 24px; }
+  .search-results { left: 0; }
 }
 """
 
@@ -433,6 +535,9 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     <a href="INDEX.html">IDM Wiki</a>
     <span>Klipper Firmware Documentation</span>
   </div>
+  <div class="sidebar-search">
+    <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
+  </div>
   <div class="sidebar-nav">
 {chr(10).join(sidebar_items)}
   </div>
@@ -442,9 +547,115 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     </select>
   </div>
 </nav>
+<div class="search-results" id="search-results">
+  <div class="search-results-inner" id="search-results-inner"></div>
+</div>
 <main class="main">
 {md_to_html(md_content)}
 </main>
+<script>
+(function() {{
+  var idx = null;
+  var input = document.getElementById('search-input');
+  var results = document.getElementById('search-results');
+  var inner = document.getElementById('search-results-inner');
+  var focusIdx = -1;
+  var langDir = '{lang}';
+
+  function loadIndex() {{
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '../' + langDir + '/search_index.json', true);
+    xhr.onload = function() {{
+      if (xhr.status === 200) {{
+        idx = JSON.parse(xhr.responseText);
+      }}
+    }};
+    xhr.send();
+  }}
+
+  function escapeHtml(s) {{
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }}
+
+  function highlight(text, query) {{
+    var words = query.toLowerCase().split(/\\s+/).filter(function(w) {{ return w.length > 0; }});
+    var re = new RegExp('(' + words.map(function(w) {{ return w.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&'); }}).join('|') + ')', 'gi');
+    return escapeHtml(text).replace(re, '<mark>$1</mark>');
+  }}
+
+  function search() {{
+    var q = input.value.trim();
+    if (!q || !idx) {{
+      results.classList.remove('show');
+      return;
+    }}
+    var words = q.toLowerCase().split(/\\s+/).filter(function(w) {{ return w.length > 0; }});
+    var matches = [];
+    for (var i = 0; i < idx.length; i++) {{
+      var page = idx[i];
+      var score = 0;
+      var ti = page.t.toLowerCase();
+      var ci = page.c.toLowerCase();
+      for (var j = 0; j < words.length; j++) {{
+        if (ti.indexOf(words[j]) >= 0) score += 10;
+        if (ci.indexOf(words[j]) >= 0) score += 1;
+      }}
+      if (score > 0) {{
+        page._score = score;
+        matches.push(page);
+      }}
+    }}
+    matches.sort(function(a, b) {{ return b._score - a._score; }});
+    var html = '';
+    if (matches.length === 0) {{
+      html = '<div class="search-empty">No results found for "' + escapeHtml(q) + '"</div>';
+    }} else {{
+      for (var k = 0; k < Math.min(matches.length, 20); k++) {{
+        var m = matches[k];
+        var snippet = m.c.length > 200 ? m.c.substring(0, 200) + '...' : m.c;
+        html += '<a class="search-result-item" href="' + m.u + '">';
+        html += '<div class="title">' + highlight(m.t, q) + '</div>';
+        html += '<div class="snippet">' + highlight(snippet, q) + '</div>';
+        html += '</a>';
+      }}
+    }}
+    inner.innerHTML = html;
+    results.classList.add('show');
+    focusIdx = -1;
+  }}
+
+  input.addEventListener('input', search);
+  input.addEventListener('focus', function() {{ if (input.value.trim()) search(); }});
+  input.addEventListener('keydown', function(e) {{
+    var items = inner.querySelectorAll('.search-result-item');
+    if (e.key === 'ArrowDown') {{
+      e.preventDefault();
+      focusIdx = Math.min(focusIdx + 1, items.length - 1);
+      for (var i = 0; i < items.length; i++) items[i].classList.remove('focus');
+      if (items[focusIdx]) items[focusIdx].classList.add('focus');
+    }} else if (e.key === 'ArrowUp') {{
+      e.preventDefault();
+      focusIdx = Math.max(focusIdx - 1, 0);
+      for (var i = 0; i < items.length; i++) items[i].classList.remove('focus');
+      if (items[focusIdx]) items[focusIdx].classList.add('focus');
+    }} else if (e.key === 'Enter') {{
+      e.preventDefault();
+      if (items[focusIdx]) items[focusIdx].click();
+    }} else if (e.key === 'Escape') {{
+      results.classList.remove('show');
+    }}
+  }});
+  document.addEventListener('click', function(e) {{
+    if (!results.contains(e.target) && e.target !== input) {{
+      results.classList.remove('show');
+    }}
+  }});
+
+  loadIndex();
+}})();
+</script>
 </body>
 </html>"""
 
@@ -464,6 +675,9 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
     lang_dist = os.path.join(dist_dir, lang_dir_name)
     os.makedirs(lang_dist, exist_ok=True)
 
+    # Build search index for this language
+    search_index = []
+
     for page_name in nav_items:
         if page_name == "__SEC__":
             continue
@@ -482,6 +696,26 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(html)
         print(f"Generated: {html_file}")
+
+        # Extract content for search index (strip markdown syntax for plain text)
+        clean_content = re.sub(r'```.*?```', '', md_content, flags=re.DOTALL)
+        clean_content = re.sub(r'#{1,6}\s+', '', clean_content)
+        clean_content = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', clean_content)
+        clean_content = re.sub(r'[*`~_>|]', '', clean_content)
+        clean_content = re.sub(r'\n{3,}', '\n\n', clean_content)
+        clean_content = clean_content.strip()[:500]
+
+        title_clean = re.sub(r'^#\s+', '', page_title).strip()
+        search_index.append({
+            't': title_clean,
+            'c': clean_content,
+            'u': f'{page_name}.html'
+        })
+
+    index_file = os.path.join(lang_dist, 'search_index.json')
+    with open(index_file, 'w', encoding='utf-8') as f:
+        json.dump(search_index, f, ensure_ascii=False)
+    print(f"Generated search index: {index_file}")
 
 # Generate root index.html redirect
 index_html = """<!DOCTYPE html>
