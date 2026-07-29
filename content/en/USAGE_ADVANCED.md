@@ -75,19 +75,6 @@ algorithm: bicubic
 zero_reference_position: 150, 150      # Required for Touch mode
 ```
 
-Run:
-```gcode
-BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG
-```
-
-### Adaptive Mesh
-
-```gcode
-BED_MESH_CALIBRATE ADAPTIVE=1
-```
-
 ### High-Power Bed Macro
 
 For AC heated beds (500W+), disable heater during probing:
@@ -102,6 +89,20 @@ gcode:
     M140 S{TARGET_TEMP}
 ```
 
+### Calibrate the Mesh
+
+```gcode
+BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG
+```
+
+### Adaptive Mesh
+
+```gcode
+BED_MESH_CALIBRATE ADAPTIVE=1
+```
+
 ---
 
 ## Print Start G-code
@@ -112,25 +113,6 @@ Add to the end of `PRINT_START` macro:
 IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 BED_MESH_CALIBRATE ADAPTIVE=1
-```
-
----
-
-## Moonraker Auto Update
-
-```ini
-[update_manager idm]
-type: git_repo
-channel: dev
-path: ~/IDM
-origin: https://gitee.com/NBTP/IDM.git
-env: ~/klippy-env/bin/python
-requirements: requirements.txt
-install_script: install.sh
-is_system_service: False
-managed_services: klipper
-info_tags:
-  desc=idm
 ```
 
 ---

@@ -75,19 +75,6 @@ algorithm: bicubic
 zero_reference_position: 150, 150    # Touch 模式必须配置
 ```
 
-执行：
-```gcode
-BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG
-```
-
-### 自适应网格
-
-```gcode
-BED_MESH_CALIBRATE ADAPTIVE=1
-```
-
 ### 大功率热床宏
 
 交流热床（500W+）需在探测前关闭热床：
@@ -102,6 +89,20 @@ gcode:
     M140 S{TARGET_TEMP}
 ```
 
+### 校准网格
+
+```gcode
+BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG
+```
+
+### 自适应网格
+
+```gcode
+BED_MESH_CALIBRATE ADAPTIVE=1
+```
+
 ---
 
 ## 打印起始 G-code
@@ -112,25 +113,6 @@ gcode:
 IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 BED_MESH_CALIBRATE ADAPTIVE=1
-```
-
----
-
-## Moonraker 自动更新
-
-```ini
-[update_manager idm]
-type: git_repo
-channel: dev
-path: ~/IDM
-origin: https://gitee.com/NBTP/IDM.git
-env: ~/klippy-env/bin/python
-requirements: requirements.txt
-install_script: install.sh
-is_system_service: False
-managed_services: klipper
-info_tags:
-  desc=idm
 ```
 
 ---

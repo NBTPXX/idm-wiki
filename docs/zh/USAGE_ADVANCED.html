@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link active">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_ADVANCED.html'">
@@ -366,12 +366,6 @@ mesh_max: 235, 235
 probe_count: 5, 5
 algorithm: bicubic
 zero_reference_position: 150, 150    # Touch 模式必须配置</code></pre>
-<p>执行：</p>
-<pre><code class="language-gcode">BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG</code></pre>
-<h3 id="">自适应网格</h3>
-<pre><code class="language-gcode">BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
 <h3 id="">大功率热床宏</h3>
 <p>交流热床（500W+）需在探测前关闭热床：</p>
 <pre><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
@@ -381,26 +375,18 @@ gcode:
     M140 S0
     _BED_MESH_CALIBRATE {rawparams}
     M140 S{TARGET_TEMP}</code></pre>
+<h3 id="">校准网格</h3>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG</code></pre>
+<h3 id="">自适应网格</h3>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
 <hr>
 <h2 id="-g-code">打印起始 G-code</h2>
 <p>在 <code>PRINT_START</code> 宏末尾添加：</p>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
-<hr>
-<h2 id="moonraker-">Moonraker 自动更新</h2>
-<pre><code class="language-ini">[update_manager idm]
-type: git_repo
-channel: dev
-path: ~/IDM
-origin: https://gitee.com/NBTP/IDM.git
-env: ~/klippy-env/bin/python
-requirements: requirements.txt
-install_script: install.sh
-is_system_service: False
-managed_services: klipper
-info_tags:
-  desc=idm</code></pre>
 <hr>
 <h2 id="">故障排查</h2>
 <table>

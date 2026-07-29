@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link active">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'CAN_FLASH.html'">
@@ -358,26 +358,26 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li><strong>IDM 主固件 (main)</strong>：传感器正常运行固件</li>
 <li><strong>Bootloader 覆盖固件 (deployer)</strong>：首次部署时刷入，替换已有 bootloader</li>
 </ul>
-<h2 id="can-uuid">CAN UUID</h2>
+<h2 id="-bootloader">进入与退出 Bootloader</h2>
+<ul>
+<li><strong>Enter BL</strong>：通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0</li>
+<li><strong>Exit BL</strong>：发送清除节点→设置节点ID→CONNECT→COMPLETE 序列</li>
+</ul>
+<p><img src="../images/can-workflow.svg" alt="CAN 模式刷写界面"></p>
+<h2 id="-can-uuid">查询 CAN UUID</h2>
 <p>Flash 需要设备的 6 字节 UUID。点击「查询」按钮自动扫描 CAN 总线上的 Katapult 节点。</p>
 <p>前置条件：</p>
 <ul>
 <li>设备处于 Katapult bootloader 模式</li>
 <li>CAN 接口已配置并启用（如 <code>can0</code>）</li>
 </ul>
-<h2 id="-bootloader">进出 Bootloader</h2>
-<ul>
-<li><strong>Enter BL</strong>：通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0</li>
-<li><strong>Exit BL</strong>：发送清除节点→设置节点ID→CONNECT→COMPLETE 序列</li>
-</ul>
-<p><img src="../images/can-workflow.svg" alt="CAN 模式刷写界面"></p>
 <h2 id="">刷写流程</h2>
 <ol>
 <li>选择 CAN 模式</li>
 <li>选择频率和固件类型</li>
 <li>选择固件版本和文件</li>
+<li>必要时点击「Enter BL」使设备进入 Bootloader</li>
 <li>点击「查询」获取 CAN UUID</li>
-<li>必要时点击「Enter BL」</li>
 <li>点击「开始刷写」</li>
 <li>观察控制台输出，等待完成</li>
 </ol>

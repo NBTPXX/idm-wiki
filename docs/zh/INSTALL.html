@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link active">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'INSTALL.html'">
@@ -335,7 +335,8 @@ git clone https://gitee.com/NBTP/idm-documents.git
 
 # GitHub（镜像，自动同步）
 git clone https://github.com/NBTPXX/idm-documents.git</code></pre>
-<h2 id="">一键安装</h2>
+<h2 id="">安装方式</h2>
+<h3 id="">一键安装</h3>
 <pre><code class="language-bash">cd ~/idm-documents/flash_web
 ./install.sh</code></pre>
 <p>安装脚本会自动完成：</p>
@@ -346,7 +347,7 @@ git clone https://github.com/NBTPXX/idm-documents.git</code></pre>
 <li>安装 systemd 服务并设为开机自启</li>
 <li>启动 Web 服务（端口 8888）</li>
 </ol>
-<h2 id="">手动启动</h2>
+<h3 id="">临时手动启动</h3>
 <pre><code class="language-bash">cd ~/idm-documents/flash_web
 python3 server.py</code></pre>
 <h2 id="">验证安装</h2>

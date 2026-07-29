@@ -7,18 +7,10 @@ IDM Flash Web 是一个基于浏览器的固件刷写工具，用于给 IDM 3D �
 ## 目录
 
 - [安装指南](INSTALL.html)
+- [Moonraker 集成](MOONRAKER.html)
 - [CAN 模式刷写](CAN_FLASH.html)
 - [USB 模式刷写](USB_FLASH.html)
 - [DFU 模式刷写](DFU_FLASH.html)
-- [Moonraker 集成](MOONRAKER.html)
-
-## 快速开始
-
-1. 将打印机连接到上位机（CAN 或 USB）
-2. 打开 Web 界面：`http://<打印机IP>:8888`
-3. 选择连接模式（CAN / USB / DFU）
-4. 选择要刷写的固件文件
-5. 点击「开始刷写」
 
 ## 支持模式
 
@@ -27,6 +19,14 @@ IDM Flash Web 是一个基于浏览器的固件刷写工具，用于给 IDM 3D �
 | CAN | CAN 总线连接的设备 | CAN socket |
 | USB | USB 串口连接的设备 | Serial (Katapult) |
 | DFU | USB DFU 模式设备 | dfu-util |
+
+## 快速开始
+
+1. 按照[安装指南](INSTALL.html)启动 IDM Flash Web
+2. 根据设备连接方式选择 CAN、USB 或 DFU 模式
+3. 将打印机连接到上位机
+4. 打开 Web 界面：`http://<打印机IP>:8888`
+5. 选择要刷写的固件文件并点击「开始刷写」
 
 ---
 

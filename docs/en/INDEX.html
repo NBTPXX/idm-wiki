@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link active">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'INDEX.html'">
@@ -328,19 +328,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <h2 id="contents">Contents</h2>
 <ul>
 <li><a href="INSTALL.html">Installation Guide</a></li>
+<li><a href="MOONRAKER.html">Moonraker Integration</a></li>
 <li><a href="CAN_FLASH.html">CAN Mode Flashing</a></li>
 <li><a href="USB_FLASH.html">USB Mode Flashing</a></li>
 <li><a href="DFU_FLASH.html">DFU Mode Flashing</a></li>
-<li><a href="MOONRAKER.html">Moonraker Integration</a></li>
 </ul>
-<h2 id="quick-start">Quick Start</h2>
-<ol>
-<li>Connect the printer to the host (CAN or USB)</li>
-<li>Open the web interface: <code>http://<printer-ip>:8888</code></li>
-<li>Select connection mode (CAN / USB / DFU)</li>
-<li>Select the firmware file to flash</li>
-<li>Click "Start Flashing"</li>
-</ol>
 <h2 id="supported-modes">Supported Modes</h2>
 <table>
 <tr>
@@ -364,6 +356,14 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <td>dfu-util</td>
 </tr>
 </table>
+<h2 id="quick-start">Quick Start</h2>
+<ol>
+<li>Follow the <a href="INSTALL.html">Installation Guide</a> to start IDM Flash Web</li>
+<li>Select CAN, USB, or DFU based on the device connection</li>
+<li>Connect the printer to the host</li>
+<li>Open the web interface: <code>http://<printer-ip>:8888</code></li>
+<li>Select the firmware file and click "Start Flashing"</li>
+</ol>
 <hr>
 <p><a href="http://localhost:8888">IDM Flash Web Flashing Tool</a></p>
 

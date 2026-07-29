@@ -7,18 +7,10 @@ IDM Flash Web is a browser-based firmware flashing tool for IDM 3D printer senso
 ## Contents
 
 - [Installation Guide](INSTALL.html)
+- [Moonraker Integration](MOONRAKER.html)
 - [CAN Mode Flashing](CAN_FLASH.html)
 - [USB Mode Flashing](USB_FLASH.html)
 - [DFU Mode Flashing](DFU_FLASH.html)
-- [Moonraker Integration](MOONRAKER.html)
-
-## Quick Start
-
-1. Connect the printer to the host (CAN or USB)
-2. Open the web interface: `http://<printer-ip>:8888`
-3. Select connection mode (CAN / USB / DFU)
-4. Select the firmware file to flash
-5. Click "Start Flashing"
 
 ## Supported Modes
 
@@ -27,6 +19,14 @@ IDM Flash Web is a browser-based firmware flashing tool for IDM 3D printer senso
 | CAN | CAN bus connected devices | CAN socket |
 | USB | USB serial connected devices | Serial (Katapult) |
 | DFU | USB DFU mode devices | dfu-util |
+
+## Quick Start
+
+1. Follow the [Installation Guide](INSTALL.html) to start IDM Flash Web
+2. Select CAN, USB, or DFU based on the device connection
+3. Connect the printer to the host
+4. Open the web interface: `http://<printer-ip>:8888`
+5. Select the firmware file and click "Start Flashing"
 
 ---
 

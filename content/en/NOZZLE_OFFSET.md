@@ -12,6 +12,15 @@ The `nozzle_offset.py` module automatically compensates after homing:
 2. Re-solves the Delta coordinate system via trilateration
 3. Tells Klipper the nozzle is at (0,0)
 
+## Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| x_offset | Nozzle X offset (mm) | 0 |
+| y_offset | Nozzle Y offset (mm) | 0 |
+| speed | Compensation move speed (mm/s) | 50 |
+| enabled | Enable/disable | True |
+
 ## Installation
 
 1. Copy `nozzle_offset.py` to Klipper's `klippy/extras/`:
@@ -42,15 +51,6 @@ DELTA_NOZZLE_OFFSET
 1. `G1 X0 Y11` moves the effector to (0,11), placing the nozzle at (0,0)
 2. Reads stepper positions, solves true cartesian coordinates
 3. `SET_KINEMATIC_POSITION` sets the corrected origin without tilting the plane
-
-## Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| x_offset | Nozzle X offset (mm) | 0 |
-| y_offset | Nozzle Y offset (mm) | 0 |
-| speed | Compensation move speed (mm/s) | 50 |
-| enabled | Enable/disable | True |
 
 ---
 

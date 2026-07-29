@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link active">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'DFU_FLASH.html'">
@@ -329,6 +329,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>安装 dfu-util：<code>sudo apt install -y dfu-util</code></li>
 <li>先尝试无 sudo 模式，失败后自动回退到 <code>sudo -n</code></li>
 </ul>
+<h2 id="-dfu-">进入 DFU 模式</h2>
+<p>按住设备上的物理按钮（如 BOOT0）再上电，使设备进入 DFU 模式。</p>
 <h2 id="flash-address">Flash Address</h2>
 <table>
 <tr>
@@ -346,21 +348,15 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </table>
 <h2 id="-dfu-">检测 DFU 设备</h2>
 <p>点击「检测 DFU」按钮执行 <code>dfu-util -l</code> 扫描 DFU 设备。</p>
-<h2 id="">注意事项</h2>
-<ul>
-<li>DFU 模式通常需要按住设备上的物理按钮（如 BOOT0）再上电</li>
-<li>刷写完成后需要重新上电以退出 DFU 模式</li>
-</ul>
 <h2 id="">刷写流程</h2>
 <p><img src="../images/dfu-workflow.svg" alt="DFU 模式刷写界面"></p>
 <ol>
-<li>将设备置于 DFU 模式（按住 BOOT0 按钮上电）</li>
 <li>选择 DFU 模式</li>
 <li>选择正确的 Flash Address</li>
 <li>选择固件文件</li>
 <li>点击「检测 DFU」确认设备</li>
 <li>点击「开始刷写」</li>
-<li>刷写完成后重新上电</li>
+<li>刷写完成后重新上电，退出 DFU 模式</li>
 </ol>
 <hr>
 <p><a href="INDEX.html">← 返回首页</a></p>

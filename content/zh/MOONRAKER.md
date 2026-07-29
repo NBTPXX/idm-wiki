@@ -2,11 +2,19 @@
 
 IDM Flash Web 可以与 Klipper 生态系统的 Moonraker API 集成。
 
+## 功能
+
+- 在线更新：Fluidd/Mainsail Update Manager 中一键更新
+- 服务管理：Services 面板查看、启停服务
+- 状态查看：通过 Moonraker API 获取打印机连接状态
+
+![Fluidd Update Manager 中的 IDM Flash Web](../images/system-architecture.svg)
+
 ## 自动配置
 
 运行 install.sh 后自动配置：
 
-### update_manager (moonraker.conf)
+### IDM Flash Web 更新
 
 ```ini
 [update_manager idm_flash_web]
@@ -20,17 +28,26 @@ info_tags:
     desc=IDM Flash Web Tool
 ```
 
+### IDM Klipper 模块更新
+
+```ini
+[update_manager idm]
+type: git_repo
+channel: dev
+path: ~/IDM
+origin: https://gitee.com/NBTP/IDM.git
+env: ~/klippy-env/bin/python
+requirements: requirements.txt
+install_script: install.sh
+is_system_service: False
+managed_services: klipper
+info_tags:
+  desc=idm
+```
+
 ### moonraker.asvc
 
 在 ~/printer_data/moonraker.asvc 中添加 idm_flash_web。
-
-## 功能
-
-- 在线更新：Fluidd/Mainsail Update Manager 中一键更新
-- 服务管理：Services 面板查看、启停服务
-- 状态查看：通过 Moonraker API 获取打印机连接状态
-
-![Fluidd Update Manager 中的 IDM Flash Web](../images/system-architecture.svg)
 
 ## 手动配置
 

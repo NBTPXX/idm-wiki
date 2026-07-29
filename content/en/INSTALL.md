@@ -16,7 +16,9 @@ git clone https://gitee.com/NBTP/idm-documents.git
 git clone https://github.com/NBTPXX/idm-documents.git
 ```
 
-## One-Click Install
+## Installation Methods
+
+### One-Click Install
 
 ```bash
 cd ~/idm-documents/flash_web
@@ -31,7 +33,7 @@ The install script automatically:
 4. Installs systemd service with auto-start
 5. Starts the web service (port 8888)
 
-## Manual Start
+### Temporary Manual Start
 
 ```bash
 cd ~/idm-documents/flash_web

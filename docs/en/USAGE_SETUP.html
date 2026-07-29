@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link active">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_SETUP.html'">
@@ -331,7 +331,40 @@ git clone https://gitee.com/NBTP/IDM.git
 cd IDM
 ~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 ./install.sh</code></pre>
-<h2 id="complete-configuration">Complete Configuration</h2>
+<h2 id="get-the-device-identifier">Get the Device Identifier</h2>
+<p>Get the MCU identifier for your connection mode.</p>
+<h3 id="can-mode">CAN Mode</h3>
+<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
+<h3 id="usb-mode">USB Mode</h3>
+<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+<h2 id="mcu-configuration">MCU Configuration</h2>
+<p>CAN mode:</p>
+<pre><code class="language-ini">[mcu idm]
+canbus_uuid: 2ca7ad8c2899              # Replace with your device UUID</code></pre>
+<p>USB mode:</p>
+<pre><code class="language-ini">[mcu idm]
+serial: /dev/serial/by-id/<device-id>  # Replace with your device path</code></pre>
+<p>Add the MCU temperature sensor:</p>
+<pre><code class="language-ini">[temperature_sensor idm_temp]
+sensor_type: temperature_mcu
+sensor_mcu: idm
+min_temp: 0
+max_temp: 100</code></pre>
+<h2 id="required-settings">Required Settings</h2>
+<p><strong>Enable force_move (required)</strong>:</p>
+<pre><code class="language-ini">[force_move]
+enable_force_move: True</code></pre>
+<p><strong>Update Z endstop</strong>:</p>
+<pre><code class="language-ini">[stepper_z]
+endstop_pin: probe:z_virtual_endstop</code></pre>
+<p><strong>Safe Z homing</strong>:</p>
+<pre><code class="language-ini">[safe_z_home]
+home_xy_position: 150, 150
+speed: 50
+z_hop: 10
+z_hop_speed: 5</code></pre>
+<p>Remove the existing <code>[probe]</code> section. Omit <code>serial:</code> in CAN mode and use the device serial path in USB mode.</p>
+<h2 id="complete-scanner-configuration">Complete Scanner Configuration</h2>
 <pre><code class="language-ini">[scanner]
 mcu: idm
 sensor: idm
@@ -359,33 +392,6 @@ mesh_runs: 1
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
 scanner_touch_accel: 100</code></pre>
-<h2 id="required-settings">Required Settings</h2>
-<p><strong>Enable force_move (required)</strong>:</p>
-<pre><code class="language-ini">[force_move]
-enable_force_move: True</code></pre>
-<p><strong>Update Z endstop</strong>:</p>
-<pre><code class="language-ini">[stepper_z]
-endstop_pin: probe:z_virtual_endstop</code></pre>
-<p><strong>Safe Z homing</strong>:</p>
-<pre><code class="language-ini">[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5</code></pre>
-<p>Remove existing <code>[probe]</code> section. For CAN mode, remove any <code>serial:</code> line.</p>
-<h2 id="mcu-configuration">MCU Configuration</h2>
-<pre><code class="language-ini">[mcu idm]
-canbus_uuid: 2ca7ad8c2899
-
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100</code></pre>
-<h3 id="get-can-uuid">Get CAN UUID</h3>
-<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
-<h3 id="list-serial-ports-usb-mode">List Serial Ports (USB mode)</h3>
-<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 

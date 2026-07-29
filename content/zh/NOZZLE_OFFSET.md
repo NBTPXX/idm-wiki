@@ -12,6 +12,15 @@ Delta 机型归零时，Klipper 以效应器中心为 (0,0)，但喷嘴偏心安
 2. 重新解算 Delta 坐标系
 3. 让 Klipper 认为喷嘴就在 (0,0)
 
+## 参数
+
+| 参数 | 说明 | 默认 |
+|------|------|------|
+| x_offset | 喷嘴 X 方向偏移（mm） | 0 |
+| y_offset | 喷嘴 Y 方向偏移（mm） | 0 |
+| speed | 补偿移动速度（mm/s） | 50 |
+| enabled | 是否启用 | True |
+
 ## 安装
 
 1. 把 `nozzle_offset.py` 复制到 Klipper 的 `klippy/extras/` 目录：
@@ -42,15 +51,6 @@ DELTA_NOZZLE_OFFSET
 1. `G1 X0 Y11` 把效应器移到 (0,11)，喷嘴物理到 (0,0)
 2. 读取三塔步进位置，用 trilateration 解算真实坐标
 3. `SET_KINEMATIC_POSITION` 设置新坐标，避免平面倾斜
-
-## 参数
-
-| 参数 | 说明 | 默认 |
-|------|------|------|
-| x_offset | 喷嘴 X 方向偏移（mm） | 0 |
-| y_offset | 喷嘴 Y 方向偏移（mm） | 0 |
-| speed | 补偿移动速度（mm/s） | 50 |
-| enabled | 是否启用 | True |
 
 ---
 

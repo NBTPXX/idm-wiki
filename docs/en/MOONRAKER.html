@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link active">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link active">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'MOONRAKER.html'">
@@ -324,9 +324,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <main class="main">
 <h1 id="moonraker-integration">Moonraker Integration</h1>
 <p>IDM Flash Web can integrate with the Klipper ecosystem's Moonraker API.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Online updates: One-click update in Fluidd/Mainsail Update Manager</li>
+<li>Service management: View and start/stop services in the Services panel</li>
+<li>Status viewing: Get printer connection status via Moonraker API</li>
+</ul>
+<p><img src="../images/system-architecture.svg" alt="IDM Flash Web in Fluidd Update Manager"></p>
 <h2 id="automatic-configuration">Automatic Configuration</h2>
 <p>Automatically configured after running install.sh:</p>
-<h3 id="updatemanager-moonrakerconf">update_manager (moonraker.conf)</h3>
+<h3 id="idm-flash-web-updates">IDM Flash Web Updates</h3>
 <pre><code class="language-ini">[update_manager idm_flash_web]
 type: git_repo
 channel: dev
@@ -336,15 +343,21 @@ is_system_service: False
 managed_services: idm_flash_web
 info_tags:
     desc=IDM Flash Web Tool</code></pre>
+<h3 id="idm-klipper-module-updates">IDM Klipper Module Updates</h3>
+<pre><code class="language-ini">[update_manager idm]
+type: git_repo
+channel: dev
+path: ~/IDM
+origin: https://gitee.com/NBTP/IDM.git
+env: ~/klippy-env/bin/python
+requirements: requirements.txt
+install_script: install.sh
+is_system_service: False
+managed_services: klipper
+info_tags:
+  desc=idm</code></pre>
 <h3 id="moonrakerasvc">moonraker.asvc</h3>
 <p>Adds idm_flash_web to ~/printer_data/moonraker.asvc.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li>Online updates: One-click update in Fluidd/Mainsail Update Manager</li>
-<li>Service management: View and start/stop services in the Services panel</li>
-<li>Status viewing: Get printer connection status via Moonraker API</li>
-</ul>
-<p><img src="../images/system-architecture.svg" alt="IDM Flash Web in Fluidd Update Manager"></p>
 <h2 id="manual-configuration">Manual Configuration</h2>
 <p>If automatic configuration fails, you can manually add the above configuration.</p>
 <hr>

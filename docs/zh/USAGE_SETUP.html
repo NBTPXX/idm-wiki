@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link active">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_SETUP.html'">
@@ -331,7 +331,40 @@ git clone https://gitee.com/NBTP/IDM.git
 cd IDM
 ~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 ./install.sh</code></pre>
-<h2 id="">完整配置</h2>
+<h2 id="">获取设备标识</h2>
+<p>根据连接方式获取 MCU 标识。</p>
+<h3 id="can-">CAN 模式</h3>
+<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
+<h3 id="usb-">USB 模式</h3>
+<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+<h2 id="mcu-">MCU 配置</h2>
+<p>CAN 模式：</p>
+<pre><code class="language-ini">[mcu idm]
+canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID</code></pre>
+<p>USB 模式：</p>
+<pre><code class="language-ini">[mcu idm]
+serial: /dev/serial/by-id/<device-id>  # 替换为你的设备路径</code></pre>
+<p>添加 MCU 温度传感器：</p>
+<pre><code class="language-ini">[temperature_sensor idm_temp]
+sensor_type: temperature_mcu
+sensor_mcu: idm
+min_temp: 0
+max_temp: 100</code></pre>
+<h2 id="">必要配置项</h2>
+<p><strong>启用 force_move</strong>（必须）：</p>
+<pre><code class="language-ini">[force_move]
+enable_force_move: True</code></pre>
+<p><strong>修改 Z 限位</strong>：</p>
+<pre><code class="language-ini">[stepper_z]
+endstop_pin: probe:z_virtual_endstop</code></pre>
+<p><strong>安全归零</strong>：</p>
+<pre><code class="language-ini">[safe_z_home]
+home_xy_position: 150, 150
+speed: 50
+z_hop: 10
+z_hop_speed: 5</code></pre>
+<p>删除原有的 <code>[probe]</code> 模块。CAN 版不配置 <code>serial:</code>，USB 版使用设备串口路径。</p>
+<h2 id="scanner-">Scanner 完整配置</h2>
 <pre><code class="language-ini">[scanner]
 mcu: idm
 sensor: idm
@@ -359,33 +392,6 @@ mesh_runs: 1
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
 scanner_touch_accel: 100</code></pre>
-<h2 id="">必要配置项</h2>
-<p><strong>启用 force_move</strong>（必须）：</p>
-<pre><code class="language-ini">[force_move]
-enable_force_move: True</code></pre>
-<p><strong>修改 Z 限位</strong>：</p>
-<pre><code class="language-ini">[stepper_z]
-endstop_pin: probe:z_virtual_endstop</code></pre>
-<p><strong>安全归零</strong>：</p>
-<pre><code class="language-ini">[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5</code></pre>
-<p>删除原有的 <code>[probe]</code> 模块。CAN 版去掉 <code>serial:</code> 行，USB 版保留。</p>
-<h2 id="mcu-">MCU 配置</h2>
-<pre><code class="language-ini">[mcu idm]
-canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID
-
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100</code></pre>
-<h3 id="-can-uuid">获取 CAN UUID</h3>
-<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
-<h3 id="usb-">串口查询（USB 模式）</h3>
-<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
 <hr>
 <p><a href="INDEX.html">← 返回首页</a></p>
 

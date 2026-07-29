@@ -1,6 +1,10 @@
 # Calibration
 
-## Initialize Z Position
+## Manual Calibration (Scan Mode)
+
+The initialization steps below apply only to Scan mode.
+
+### Initialize Z Position
 
 Before calibration, set the initial Z position:
 
@@ -10,7 +14,7 @@ Before calibration, set the initial Z position:
 4. Manually lower nozzle until touching the bed (use a sheet of paper)
 5. Run `SET_KINEMATIC_POSITION z=0`
 
-## Manual Calibration (scan mode)
+### Run Calibration
 
 ```gcode
 IDM_CALIBRATE
@@ -50,7 +54,7 @@ SAVE_CONFIG
 SAVE_TOUCH_OFFSET
 ```
 
-> Add auto-calibration to print start G-code — see Advanced Features page.
+> Add auto-calibration to the print start G-code. See [Advanced Features](USAGE_ADVANCED.html).
 
 ## Second Probe Mode
 

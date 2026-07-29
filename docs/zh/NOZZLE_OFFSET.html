@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link active">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link active">喷嘴偏移补偿</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
       <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
       <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'NOZZLE_OFFSET.html'">
@@ -331,29 +331,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>物理移动喷嘴到 (0,0)</li>
 <li>重新解算 Delta 坐标系</li>
 <li>让 Klipper 认为喷嘴就在 (0,0)</li>
-</ol>
-<h2 id="">安装</h2>
-<ol>
-<li>把 <code>nozzle_offset.py</code> 复制到 Klipper 的 <code>klippy/extras/</code> 目录：</li>
-</ol>
-<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
-<ol>
-<li>在 <code>printer.cfg</code> 中添加：</li>
-</ol>
-<pre><code class="language-ini">[delta_nozzle_offset]
-x_offset: 0
-y_offset: -11        # 喷嘴相对效应器中心的偏移
-speed: 50</code></pre>
-<ol>
-<li>配置后自动生效，每次执行 <code>G28</code> 归零后自动应用偏移补偿，无需额外命令。</li>
-</ol>
-<p>也可手动触发：</p>
-<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
-<h2 id="">原理</h2>
-<ol>
-<li><code>G1 X0 Y11</code> 把效应器移到 (0,11)，喷嘴物理到 (0,0)</li>
-<li>读取三塔步进位置，用 trilateration 解算真实坐标</li>
-<li><code>SET_KINEMATIC_POSITION</code> 设置新坐标，避免平面倾斜</li>
 </ol>
 <h2 id="">参数</h2>
 <table>
@@ -383,6 +360,29 @@ speed: 50</code></pre>
 <td>True</td>
 </tr>
 </table>
+<h2 id="">安装</h2>
+<ol>
+<li>把 <code>nozzle_offset.py</code> 复制到 Klipper 的 <code>klippy/extras/</code> 目录：</li>
+</ol>
+<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
+<ol>
+<li>在 <code>printer.cfg</code> 中添加：</li>
+</ol>
+<pre><code class="language-ini">[delta_nozzle_offset]
+x_offset: 0
+y_offset: -11        # 喷嘴相对效应器中心的偏移
+speed: 50</code></pre>
+<ol>
+<li>配置后自动生效，每次执行 <code>G28</code> 归零后自动应用偏移补偿，无需额外命令。</li>
+</ol>
+<p>也可手动触发：</p>
+<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
+<h2 id="">原理</h2>
+<ol>
+<li><code>G1 X0 Y11</code> 把效应器移到 (0,11)，喷嘴物理到 (0,0)</li>
+<li>读取三塔步进位置，用 trilateration 解算真实坐标</li>
+<li><code>SET_KINEMATIC_POSITION</code> 设置新坐标，避免平面倾斜</li>
+</ol>
 <hr>
 <p><a href="INDEX.html">← 返回首页</a></p>
 

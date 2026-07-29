@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link active">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link active">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'NOZZLE_OFFSET.html'">
@@ -331,29 +331,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>Physically moves the nozzle to (0,0)</li>
 <li>Re-solves the Delta coordinate system via trilateration</li>
 <li>Tells Klipper the nozzle is at (0,0)</li>
-</ol>
-<h2 id="installation">Installation</h2>
-<ol>
-<li>Copy <code>nozzle_offset.py</code> to Klipper's <code>klippy/extras/</code>:</li>
-</ol>
-<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
-<ol>
-<li>Add to <code>printer.cfg</code>:</li>
-</ol>
-<pre><code class="language-ini">[delta_nozzle_offset]
-x_offset: 0
-y_offset: -11        # Nozzle offset from effector center
-speed: 50</code></pre>
-<ol>
-<li>Auto-compensates after every <code>G28</code> homing. No extra command needed.</li>
-</ol>
-<p>Manual trigger also available:</p>
-<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
-<h2 id="how-it-works">How It Works</h2>
-<ol>
-<li><code>G1 X0 Y11</code> moves the effector to (0,11), placing the nozzle at (0,0)</li>
-<li>Reads stepper positions, solves true cartesian coordinates</li>
-<li><code>SET_KINEMATIC_POSITION</code> sets the corrected origin without tilting the plane</li>
 </ol>
 <h2 id="parameters">Parameters</h2>
 <table>
@@ -383,6 +360,29 @@ speed: 50</code></pre>
 <td>True</td>
 </tr>
 </table>
+<h2 id="installation">Installation</h2>
+<ol>
+<li>Copy <code>nozzle_offset.py</code> to Klipper's <code>klippy/extras/</code>:</li>
+</ol>
+<pre><code class="language-bash">cp delta_nozzle_offset.py ~/klipper/klippy/extras/</code></pre>
+<ol>
+<li>Add to <code>printer.cfg</code>:</li>
+</ol>
+<pre><code class="language-ini">[delta_nozzle_offset]
+x_offset: 0
+y_offset: -11        # Nozzle offset from effector center
+speed: 50</code></pre>
+<ol>
+<li>Auto-compensates after every <code>G28</code> homing. No extra command needed.</li>
+</ol>
+<p>Manual trigger also available:</p>
+<pre><code class="language-gcode">DELTA_NOZZLE_OFFSET</code></pre>
+<h2 id="how-it-works">How It Works</h2>
+<ol>
+<li><code>G1 X0 Y11</code> moves the effector to (0,11), placing the nozzle at (0,0)</li>
+<li>Reads stepper positions, solves true cartesian coordinates</li>
+<li><code>SET_KINEMATIC_POSITION</code> sets the corrected origin without tilting the plane</li>
+</ol>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 

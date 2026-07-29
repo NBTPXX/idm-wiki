@@ -14,7 +14,77 @@ cd IDM
 ./install.sh
 ```
 
-## Complete Configuration
+## Get the Device Identifier
+
+Get the MCU identifier for your connection mode.
+
+### CAN Mode
+
+```bash
+~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
+```
+
+### USB Mode
+
+```bash
+ls /dev/serial/by-id/*
+```
+
+## MCU Configuration
+
+CAN mode:
+
+```ini
+[mcu idm]
+canbus_uuid: 2ca7ad8c2899              # Replace with your device UUID
+```
+
+USB mode:
+
+```ini
+[mcu idm]
+serial: /dev/serial/by-id/<device-id>  # Replace with your device path
+```
+
+Add the MCU temperature sensor:
+
+```ini
+[temperature_sensor idm_temp]
+sensor_type: temperature_mcu
+sensor_mcu: idm
+min_temp: 0
+max_temp: 100
+```
+
+## Required Settings
+
+**Enable force_move (required)**:
+
+```ini
+[force_move]
+enable_force_move: True
+```
+
+**Update Z endstop**:
+
+```ini
+[stepper_z]
+endstop_pin: probe:z_virtual_endstop
+```
+
+**Safe Z homing**:
+
+```ini
+[safe_z_home]
+home_xy_position: 150, 150
+speed: 50
+z_hop: 10
+z_hop_speed: 5
+```
+
+Remove the existing `[probe]` section. Omit `serial:` in CAN mode and use the device serial path in USB mode.
+
+## Complete Scanner Configuration
 
 ```ini
 [scanner]
@@ -44,59 +114,6 @@ mesh_runs: 1
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
 scanner_touch_accel: 100
-```
-
-## Required Settings
-
-**Enable force_move (required)**:
-
-```ini
-[force_move]
-enable_force_move: True
-```
-
-**Update Z endstop**:
-
-```ini
-[stepper_z]
-endstop_pin: probe:z_virtual_endstop
-```
-
-**Safe Z homing**:
-
-```ini
-[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5
-```
-
-Remove existing `[probe]` section. For CAN mode, remove any `serial:` line.
-
-## MCU Configuration
-
-```ini
-[mcu idm]
-canbus_uuid: 2ca7ad8c2899
-
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100
-```
-
-### Get CAN UUID
-
-```bash
-~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
-```
-
-### List Serial Ports (USB mode)
-
-```bash
-ls /dev/serial/by-id/*
 ```
 
 ---

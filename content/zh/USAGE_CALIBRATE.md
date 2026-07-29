@@ -1,6 +1,10 @@
 # 校准
 
-## 初始化 Z 位置
+## 手动校准（Scan 模式）
+
+以下初始化步骤仅用于 Scan 模式。
+
+### 初始化 Z 位置
 
 校准前先设置 Z 轴初始位置：
 
@@ -10,7 +14,7 @@
 4. 手动降低喷嘴至贴床（垫 A4 纸），感到轻微阻力即可
 5. 执行 `SET_KINEMATIC_POSITION z=0`
 
-## 手动校准（scan 模式）
+### 执行校准
 
 ```gcode
 IDM_CALIBRATE
@@ -50,7 +54,7 @@ SAVE_CONFIG
 SAVE_TOUCH_OFFSET
 ```
 
-> 打印起始 G-code 中需加入自动校准，见高级功能页。
+> 打印起始 G-code 中需加入自动校准，参见[高级功能](USAGE_ADVANCED.html)。
 
 ## Second Probe 模式
 

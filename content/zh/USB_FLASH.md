@@ -2,6 +2,8 @@
 
 USB 模式通过串口与设备通信，适用于使用 USB 串口连接的 IDM 传感器。
 
+![USB 模式刷写界面](../images/usb-workflow.svg)
+
 ## 串口选择
 
 - **串口端口**：选择设备的常规串口（如 `/dev/serial/by-id/usb-IDM_*`）
@@ -28,13 +30,13 @@ USB 模式下会显示所有可用固件文件，不做频率筛选。
 
 ## 刷写流程
 
-![USB 模式刷写界面](../images/usb-workflow.svg)
-
 1. 选择 USB 模式
 2. 选择串口（或填写 bootloader 串口）
 3. 选择固件类型、版本和文件
 4. 若非 bootloader 模式，点击「Enter BL」
-5. 点击「开始刷写」
+5. 点击「检测 BL」确认 Bootloader 串口
+6. 点击「开始刷写」
+7. 观察控制台输出，等待完成
 
 ---
 

@@ -14,7 +14,77 @@ cd IDM
 ./install.sh
 ```
 
-## 完整配置
+## 获取设备标识
+
+根据连接方式获取 MCU 标识。
+
+### CAN 模式
+
+```bash
+~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
+```
+
+### USB 模式
+
+```bash
+ls /dev/serial/by-id/*
+```
+
+## MCU 配置
+
+CAN 模式：
+
+```ini
+[mcu idm]
+canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID
+```
+
+USB 模式：
+
+```ini
+[mcu idm]
+serial: /dev/serial/by-id/<device-id>  # 替换为你的设备路径
+```
+
+添加 MCU 温度传感器：
+
+```ini
+[temperature_sensor idm_temp]
+sensor_type: temperature_mcu
+sensor_mcu: idm
+min_temp: 0
+max_temp: 100
+```
+
+## 必要配置项
+
+**启用 force_move**（必须）：
+
+```ini
+[force_move]
+enable_force_move: True
+```
+
+**修改 Z 限位**：
+
+```ini
+[stepper_z]
+endstop_pin: probe:z_virtual_endstop
+```
+
+**安全归零**：
+
+```ini
+[safe_z_home]
+home_xy_position: 150, 150
+speed: 50
+z_hop: 10
+z_hop_speed: 5
+```
+
+删除原有的 `[probe]` 模块。CAN 版不配置 `serial:`，USB 版使用设备串口路径。
+
+## Scanner 完整配置
 
 ```ini
 [scanner]
@@ -44,59 +114,6 @@ mesh_runs: 1
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
 scanner_touch_accel: 100
-```
-
-## 必要配置项
-
-**启用 force_move**（必须）：
-
-```ini
-[force_move]
-enable_force_move: True
-```
-
-**修改 Z 限位**：
-
-```ini
-[stepper_z]
-endstop_pin: probe:z_virtual_endstop
-```
-
-**安全归零**：
-
-```ini
-[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5
-```
-
-删除原有的 `[probe]` 模块。CAN 版去掉 `serial:` 行，USB 版保留。
-
-## MCU 配置
-
-```ini
-[mcu idm]
-canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID
-
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100
-```
-
-### 获取 CAN UUID
-
-```bash
-~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
-```
-
-### 串口查询（USB 模式）
-
-```bash
-ls /dev/serial/by-id/*
 ```
 
 ---

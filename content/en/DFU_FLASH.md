@@ -7,6 +7,10 @@ DFU mode uses the dfu-util tool, applicable when the device is in USB DFU mode.
 - Install dfu-util: `sudo apt install -y dfu-util`
 - Attempts without sudo first; falls back to `sudo -n` if that fails
 
+## Enter DFU Mode
+
+Hold the device's physical button, such as BOOT0, while powering on to enter DFU mode.
+
 ## Flash Address
 
 | Address | Description |
@@ -18,22 +22,16 @@ DFU mode uses the dfu-util tool, applicable when the device is in USB DFU mode.
 
 Click "Detect DFU" to run `dfu-util -l` and scan for DFU devices.
 
-## Notes
-
-- DFU mode usually requires holding a physical button (e.g., BOOT0) while powering on
-- After flashing, power cycle the device to exit DFU mode
-
 ![DFU Mode Flash Interface](../images/dfu-workflow.svg)
 
 ## Flashing Procedure
 
-1. Put the device in DFU mode (hold BOOT0 button while powering on)
-2. Select DFU mode
-3. Select the correct Flash Address
-4. Select the firmware file
-5. Click "Detect DFU" to confirm the device
-6. Click "Start Flashing"
-7. Power cycle after flashing completes
+1. Select DFU mode
+2. Select the correct Flash Address
+3. Select the firmware file
+4. Click "Detect DFU" to confirm the device
+5. Click "Start Flashing"
+6. Power cycle after flashing completes to exit DFU mode
 
 ---
 

@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link active">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'DFU_FLASH.html'">
@@ -329,6 +329,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>Install dfu-util: <code>sudo apt install -y dfu-util</code></li>
 <li>Attempts without sudo first; falls back to <code>sudo -n</code> if that fails</li>
 </ul>
+<h2 id="enter-dfu-mode">Enter DFU Mode</h2>
+<p>Hold the device's physical button, such as BOOT0, while powering on to enter DFU mode.</p>
 <h2 id="flash-address">Flash Address</h2>
 <table>
 <tr>
@@ -346,21 +348,15 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </table>
 <h2 id="detect-dfu-device">Detect DFU Device</h2>
 <p>Click "Detect DFU" to run <code>dfu-util -l</code> and scan for DFU devices.</p>
-<h2 id="notes">Notes</h2>
-<ul>
-<li>DFU mode usually requires holding a physical button (e.g., BOOT0) while powering on</li>
-<li>After flashing, power cycle the device to exit DFU mode</li>
-</ul>
 <p><img src="../images/dfu-workflow.svg" alt="DFU Mode Flash Interface"></p>
 <h2 id="flashing-procedure">Flashing Procedure</h2>
 <ol>
-<li>Put the device in DFU mode (hold BOOT0 button while powering on)</li>
 <li>Select DFU mode</li>
 <li>Select the correct Flash Address</li>
 <li>Select the firmware file</li>
 <li>Click "Detect DFU" to confirm the device</li>
 <li>Click "Start Flashing"</li>
-<li>Power cycle after flashing completes</li>
+<li>Power cycle after flashing completes to exit DFU mode</li>
 </ol>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>

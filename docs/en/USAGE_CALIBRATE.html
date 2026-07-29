@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link active">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_CALIBRATE.html'">
@@ -323,7 +323,9 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </div>
 <main class="main">
 <h1 id="calibration">Calibration</h1>
-<h2 id="initialize-z-position">Initialize Z Position</h2>
+<h2 id="manual-calibration-scan-mode">Manual Calibration (Scan Mode)</h2>
+<p>The initialization steps below apply only to Scan mode.</p>
+<h3 id="initialize-z-position">Initialize Z Position</h3>
 <p>Before calibration, set the initial Z position:</p>
 <ol>
 <li>Run <code>G28 X Y</code> (home XY only, do NOT home Z)</li>
@@ -332,7 +334,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>Manually lower nozzle until touching the bed (use a sheet of paper)</li>
 <li>Run <code>SET_KINEMATIC_POSITION z=0</code></li>
 </ol>
-<h2 id="manual-calibration-scan-mode">Manual Calibration (scan mode)</h2>
+<h3 id="run-calibration">Run Calibration</h3>
 <pre><code class="language-gcode">IDM_CALIBRATE
 # Adjust Z offset using paper method
 ACCEPT
@@ -353,7 +355,7 @@ SAVE_CONFIG</code></pre>
 SAVE_CONFIG</code></pre>
 <p><strong>Step 4: Save Fixed Offset</strong></p>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
-<p>> Add auto-calibration to print start G-code — see Advanced Features page.</p>
+<p>> Add auto-calibration to the print start G-code. See <a href="USAGE_ADVANCED.html">Advanced Features</a>.</p>
 <h2 id="second-probe-mode">Second Probe Mode</h2>
 <p>Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-offset calibration. It is intended for setups using an external contact trigger.</p>
 <h3 id="configuration">Configuration</h3>

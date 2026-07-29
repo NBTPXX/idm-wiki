@@ -18,7 +18,14 @@ Select the CAN frequency from the dropdown based on the firmware build:
 - **IDM Main Firmware (main)**: Standard sensor operating firmware
 - **Bootloader Override Firmware (deployer)**: Flashed during initial deployment to replace the existing bootloader
 
-## CAN UUID
+## Enter and Exit Bootloader
+
+- **Enter BL**: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0
+- **Exit BL**: Runs the clear node → set node ID → CONNECT → COMPLETE sequence
+
+![CAN Mode Flash Interface](../images/can-workflow.svg)
+
+## Query the CAN UUID
 
 Flashing requires the device's 6-byte UUID. Click "Query" to automatically scan for Katapult nodes on the CAN bus.
 
@@ -26,20 +33,13 @@ Prerequisites:
 - Device is in Katapult bootloader mode
 - CAN interface is configured and enabled (e.g., `can0`)
 
-## Enter/Exit Bootloader
-
-- **Enter BL**: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0
-- **Exit BL**: Runs the clear node → set node ID → CONNECT → COMPLETE sequence
-
-![CAN Mode Flash Interface](../images/can-workflow.svg)
-
 ## Flashing Procedure
 
 1. Select CAN mode
 2. Choose frequency and firmware type
 3. Select firmware version and file
-4. Click "Query" to get CAN UUID
-5. Click "Enter BL" if needed
+4. Click "Enter BL" if needed to put the device in bootloader mode
+5. Click "Query" to get the CAN UUID
 6. Click "Start Flashing"
 7. Watch console output and wait for completion
 

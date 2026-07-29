@@ -2,6 +2,8 @@
 
 USB mode communicates with devices via serial port, suitable for IDM sensors connected via USB serial.
 
+![USB Mode Flash Interface](../images/usb-workflow.svg)
+
 ## Serial Port Selection
 
 - **Serial Port**: Select the device's regular serial port (e.g., `/dev/serial/by-id/usb-IDM_*`)
@@ -26,15 +28,15 @@ Click "Detect BL" to automatically scan for bootloader devices:
 
 If the device is already in bootloader mode, filling in the boot-serial field can skip detection and flash directly.
 
-![USB Mode Flash Interface](../images/usb-workflow.svg)
-
 ## Flashing Procedure
 
 1. Select USB mode
 2. Select serial port (or fill in bootloader serial)
 3. Select firmware type, version, and file
 4. If not in bootloader mode, click "Enter BL"
-5. Click "Start Flashing"
+5. Click "Detect BL" to confirm the bootloader serial port
+6. Click "Start Flashing"
+7. Watch console output and wait for completion
 
 ---
 

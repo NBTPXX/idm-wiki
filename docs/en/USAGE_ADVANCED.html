@@ -300,16 +300,16 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
+      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link active">Advanced Features</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
       <a href="INSTALL.html" class="nav-link">Installation Guide</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
       <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
       <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
       <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
   </div>
   <div class="lang">
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_ADVANCED.html'">
@@ -366,12 +366,6 @@ mesh_max: 235, 235
 probe_count: 5, 5
 algorithm: bicubic
 zero_reference_position: 150, 150      # Required for Touch mode</code></pre>
-<p>Run:</p>
-<pre><code class="language-gcode">BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG</code></pre>
-<h3 id="adaptive-mesh">Adaptive Mesh</h3>
-<pre><code class="language-gcode">BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
 <h3 id="high-power-bed-macro">High-Power Bed Macro</h3>
 <p>For AC heated beds (500W+), disable heater during probing:</p>
 <pre><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
@@ -381,26 +375,18 @@ gcode:
     M140 S0
     _BED_MESH_CALIBRATE {rawparams}
     M140 S{TARGET_TEMP}</code></pre>
+<h3 id="calibrate-the-mesh">Calibrate the Mesh</h3>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE
+BED_MESH_PROFILE SAVE=default
+SAVE_CONFIG</code></pre>
+<h3 id="adaptive-mesh">Adaptive Mesh</h3>
+<pre><code class="language-gcode">BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
 <hr>
 <h2 id="print-start-g-code">Print Start G-code</h2>
 <p>Add to the end of <code>PRINT_START</code> macro:</p>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 BED_MESH_CALIBRATE ADAPTIVE=1</code></pre>
-<hr>
-<h2 id="moonraker-auto-update">Moonraker Auto Update</h2>
-<pre><code class="language-ini">[update_manager idm]
-type: git_repo
-channel: dev
-path: ~/IDM
-origin: https://gitee.com/NBTP/IDM.git
-env: ~/klippy-env/bin/python
-requirements: requirements.txt
-install_script: install.sh
-is_system_service: False
-managed_services: klipper
-info_tags:
-  desc=idm</code></pre>
 <hr>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <table>

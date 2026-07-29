@@ -16,7 +16,9 @@ git clone https://gitee.com/NBTP/idm-documents.git
 git clone https://github.com/NBTPXX/idm-documents.git
 ```
 
-## 一键安装
+## 安装方式
+
+### 一键安装
 
 ```bash
 cd ~/idm-documents/flash_web
@@ -31,7 +33,7 @@ cd ~/idm-documents/flash_web
 4. 安装 systemd 服务并设为开机自启
 5. 启动 Web 服务（端口 8888）
 
-## 手动启动
+### 临时手动启动
 
 ```bash
 cd ~/idm-documents/flash_web
