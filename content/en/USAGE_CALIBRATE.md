@@ -54,19 +54,64 @@ SAVE_TOUCH_OFFSET
 
 ## Second Probe Mode
 
-For TAP or mechanical endstop as a second probe:
+Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-offset calibration. It is intended for setups using an external contact trigger.
+
+### Configuration
+
+Add the following options to `[scanner]`:
 
 ```ini
 [scanner]
 calibration_method: second_probe
-z_offset: 0.5
-probe_speed: 1
-probe_pin: ...
+z_offset: 0
+probe_speed: 10
+probe_pin: ^PA1
 ```
 
-Calibration command:
+| Option | Description |
+|--------|-------------|
+| `calibration_method` | Set to `second_probe` to enable the second-probe trigger method |
+| `z_offset` | Fixed trigger-height offset relative to the nozzle; measure the actual value when using TAP |
+| `probe_speed` | Z-axis movement speed during calibration; 15 mm/s or less is recommended |
+| `probe_pin` | Actual trigger pin for the TAP or mechanical endstop; replace the example `^PA1` with the wired pin |
+
+Save the configuration, restart Klipper, and verify that the second probe triggers correctly.
+
+### Initial Calibration
+
+1. Home the X and Y axes:
+
+```gcode
+G28 X Y
+```
+
+2. Use the second probe for Z homing and automatic IDM model calibration:
+
 ```gcode
 IDM_TOUCH CALIBRATE=1
+```
+
+3. Measure the Z offset automatically:
+
+```gcode
+PROBE_CALIBRATE METHOD=AUTO
+```
+
+4. Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:
+
+```gcode
+SAVE_TOUCH_OFFSET
+```
+
+TAP and similar trigger mechanisms may introduce a small amount of compression. Measure and save the fixed compensation again after replacing the nozzle, hotend components, or second probe.
+
+### Daily Use
+
+After the initial calibration, add the following sequence to the print start G-code:
+
+```gcode
+IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO
 ```
 
 ## Multi-Model Management

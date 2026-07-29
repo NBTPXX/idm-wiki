@@ -355,14 +355,59 @@ SAVE_CONFIG</code></pre>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <p>> Add auto-calibration to print start G-code — see Advanced Features page.</p>
 <h2 id="second-probe-mode">Second Probe Mode</h2>
-<p>For TAP or mechanical endstop as a second probe:</p>
+<p>Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-offset calibration. It is intended for setups using an external contact trigger.</p>
+<h3 id="configuration">Configuration</h3>
+<p>Add the following options to <code>[scanner]</code>:</p>
 <pre><code class="language-ini">[scanner]
 calibration_method: second_probe
-z_offset: 0.5
-probe_speed: 1
-probe_pin: ...</code></pre>
-<p>Calibration command:</p>
+z_offset: 0
+probe_speed: 10
+probe_pin: ^PA1</code></pre>
+<table>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>calibration_method</code></td>
+<td>Set to <code>second_probe</code> to enable the second-probe trigger method</td>
+</tr>
+<tr>
+<td><code>z_offset</code></td>
+<td>Fixed trigger-height offset relative to the nozzle; measure the actual value when using TAP</td>
+</tr>
+<tr>
+<td><code>probe_speed</code></td>
+<td>Z-axis movement speed during calibration; 15 mm/s or less is recommended</td>
+</tr>
+<tr>
+<td><code>probe_pin</code></td>
+<td>Actual trigger pin for the TAP or mechanical endstop; replace the example <code>^PA1</code> with the wired pin</td>
+</tr>
+</table>
+<p>Save the configuration, restart Klipper, and verify that the second probe triggers correctly.</p>
+<h3 id="initial-calibration">Initial Calibration</h3>
+<ol>
+<li>Home the X and Y axes:</li>
+</ol>
+<pre><code class="language-gcode">G28 X Y</code></pre>
+<ol>
+<li>Use the second probe for Z homing and automatic IDM model calibration:</li>
+</ol>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<ol>
+<li>Measure the Z offset automatically:</li>
+</ol>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<ol>
+<li>Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:</li>
+</ol>
+<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<p>TAP and similar trigger mechanisms may introduce a small amount of compression. Measure and save the fixed compensation again after replacing the nozzle, hotend components, or second probe.</p>
+<h3 id="daily-use">Daily Use</h3>
+<p>After the initial calibration, add the following sequence to the print start G-code:</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h2 id="multi-model-management">Multi-Model Management</h2>
 <p>Save and switch calibrations for different PEI sheets:</p>
 <table>

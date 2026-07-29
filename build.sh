@@ -703,7 +703,7 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
         clean_content = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', clean_content)
         clean_content = re.sub(r'[*`~_>|]', '', clean_content)
         clean_content = re.sub(r'\n{3,}', '\n\n', clean_content)
-        clean_content = clean_content.strip()[:500]
+        clean_content = clean_content.strip()
 
         title_clean = re.sub(r'^#\s+', '', page_title).strip()
         search_index.append({

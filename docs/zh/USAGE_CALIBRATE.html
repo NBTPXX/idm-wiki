@@ -355,14 +355,59 @@ SAVE_CONFIG</code></pre>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <p>> 打印起始 G-code 中需加入自动校准，见高级功能页。</p>
 <h2 id="second-probe-">Second Probe 模式</h2>
-<p>使用 TAP 或机械限位开关作为第二探针：</p>
+<p>Second Probe 模式使用 TAP 或机械限位开关触发 Z 归零和自动 Z 偏移校准，适用于使用外部接触触发器的设备。</p>
+<h3 id="">配置</h3>
+<p>在 <code>[scanner]</code> 中添加：</p>
 <pre><code class="language-ini">[scanner]
 calibration_method: second_probe
-z_offset: 0.5                          # 第二探针触发高度与喷嘴的偏移
-probe_speed: 1
-probe_pin: ...</code></pre>
-<p>校准命令：</p>
+z_offset: 0
+probe_speed: 10
+probe_pin: ^PA1</code></pre>
+<table>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+<tr>
+<td><code>calibration_method</code></td>
+<td>设置为 <code>second_probe</code>，启用第二探针触发方式</td>
+</tr>
+<tr>
+<td><code>z_offset</code></td>
+<td>第二探针触发高度相对于喷嘴的固定偏移；TAP 需测量实际值</td>
+</tr>
+<tr>
+<td><code>probe_speed</code></td>
+<td>校准时的 Z 轴移动速度，建议不超过 15 mm/s</td>
+</tr>
+<tr>
+<td><code>probe_pin</code></td>
+<td>TAP 或机械限位开关的实际触发引脚；将示例 <code>^PA1</code> 替换为实际接线引脚</td>
+</tr>
+</table>
+<p>保存配置并重启 Klipper，然后确认第二探针能够正常触发。</p>
+<h3 id="">首次校准</h3>
+<ol>
+<li>先归零 X、Y 轴：</li>
+</ol>
+<pre><code class="language-gcode">G28 X Y</code></pre>
+<ol>
+<li>使用第二探针完成 Z 归零并自动校准 IDM 模型：</li>
+</ol>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<ol>
+<li>自动测量 Z 偏移：</li>
+</ol>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<ol>
+<li>在网页界面中微调 Z 偏移，喷嘴高度合适后保存固定补偿：</li>
+</ol>
+<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<p>TAP 等触发机构可能产生轻微压缩量。更换喷嘴、热端组件或第二探针后，应重新测定并保存固定补偿。</p>
+<h3 id="">日常使用</h3>
+<p>完成首次校准后，可在打印起始 G-code 中使用：</p>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h2 id="">多模型管理</h2>
 <p>针对不同 PEI 板保存独立校准：</p>
 <table>
