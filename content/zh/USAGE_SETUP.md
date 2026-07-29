@@ -44,9 +44,6 @@ mesh_runs: 1
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
 scanner_touch_accel: 100
-
-# 温度补偿
-temperature_compensation: True
 ```
 
 ## 必要配置项
