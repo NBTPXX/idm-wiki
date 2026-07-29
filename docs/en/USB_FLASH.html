@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
       <div class="sec-header">Flashing Guide</div>
@@ -327,7 +326,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p><img src="../images/usb-workflow.svg" alt="USB Mode Flash Interface"></p>
 <h2 id="serial-port-selection">Serial Port Selection</h2>
 <ul>
-<li><strong>Serial Port</strong>: Select the device's regular serial port (e.g., <code>/dev/serial/by-id/usb-IDM_*</code>)</li>
+<li><strong>Serial Port</strong>: Select the device's regular serial port (e.g., <code>/dev/serial/by-id/usb-idm_idm_...</code>)</li>
 <li><strong>Bootloader Serial</strong>: The serial port after the device enters bootloader. If already in BL mode, fill in this field directly</li>
 </ul>
 <p>Device list is automatically filtered to show only devices containing "IDM".</p>
@@ -335,7 +334,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p>All available firmware files are shown in USB mode without frequency filtering.</p>
 <h2 id="enterexit-bootloader">Enter/Exit Bootloader</h2>
 <ul>
-<li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via Katapult serial protocol</li>
+<li><strong>Enter BL</strong>: Requests the device to reboot into the bootloader</li>
 <li><strong>Exit BL</strong>: Uses prime + CONNECT + COMPLETE sequence without relying on DTR toggle</li>
 </ul>
 <h2 id="auto-detect-bootloader">Auto-Detect Bootloader</h2>

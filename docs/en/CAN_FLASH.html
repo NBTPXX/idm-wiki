@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
       <div class="sec-header">Flashing Guide</div>
@@ -360,7 +359,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </ul>
 <h2 id="enter-and-exit-bootloader">Enter and Exit Bootloader</h2>
 <ul>
-<li><strong>Enter BL</strong>: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0</li>
+<li><strong>Enter BL</strong>: Enter a known UUID in the CAN UUID field, then send KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0</li>
 <li><strong>Exit BL</strong>: Runs the clear node → set node ID → CONNECT → COMPLETE sequence</li>
 </ul>
 <p><img src="../images/can-workflow.svg" alt="CAN Mode Flash Interface"></p>
@@ -376,7 +375,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>Select CAN mode</li>
 <li>Choose frequency and firmware type</li>
 <li>Select firmware version and file</li>
-<li>Click "Enter BL" if needed to put the device in bootloader mode</li>
+<li>If the device is running and its UUID is known, enter the UUID and click "Enter BL"; skip this step when it is already in bootloader mode</li>
 <li>Click "Query" to get the CAN UUID</li>
 <li>Click "Start Flashing"</li>
 <li>Watch console output and wait for completion</li>

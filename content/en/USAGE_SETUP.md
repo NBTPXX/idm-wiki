@@ -21,7 +21,7 @@ Get the MCU identifier for your connection mode.
 ### CAN Mode
 
 ```bash
-~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
+~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q
 ```
 
 ### USB Mode
@@ -43,17 +43,7 @@ USB mode:
 
 ```ini
 [mcu idm]
-serial: /dev/serial/by-id/<device-id>  # Replace with your device path
-```
-
-Add the MCU temperature sensor:
-
-```ini
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100
+serial: /dev/serial/by-id/usb-idm_idm_...  # Replace with your device path
 ```
 
 ## Required Settings
@@ -76,10 +66,8 @@ endstop_pin: probe:z_virtual_endstop
 
 ```ini
 [safe_z_home]
-home_xy_position: 150, 150
-speed: 50
+home_xy_position: <your_x_center_coordinate>, <your_y_center_coordinate>
 z_hop: 10
-z_hop_speed: 5
 ```
 
 Remove the existing `[probe]` section. Omit `serial:` in CAN mode and use the device serial path in USB mode.
@@ -106,7 +94,7 @@ cal_speed: 1.0
 cal_move_speed: 10
 default_model_name: default
 mesh_main_direction: x
-mesh_overscan: 3
+# mesh_overscan: -1
 mesh_cluster_size: 1
 mesh_runs: 1
 

@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link active">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
       <div class="sec-header">Flashing Guide</div>
@@ -323,9 +322,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </div>
 <main class="main">
 <h1 id="calibration">Calibration</h1>
-<h2 id="manual-calibration-scan-mode">Manual Calibration (Scan Mode)</h2>
-<p>The initialization steps below apply only to Scan mode.</p>
-<h3 id="initialize-z-position">Initialize Z Position</h3>
+<h2 id="initialize-z-position">Initialize Z Position</h2>
 <p>Before calibration, set the initial Z position:</p>
 <ol>
 <li>Run <code>G28 X Y</code> (home XY only, do NOT home Z)</li>
@@ -334,37 +331,33 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>Manually lower nozzle until touching the bed (use a sheet of paper)</li>
 <li>Run <code>SET_KINEMATIC_POSITION z=0</code></li>
 </ol>
-<h3 id="run-calibration">Run Calibration</h3>
-<pre><code class="language-gcode">IDM_CALIBRATE
-# Adjust Z offset using paper method
-ACCEPT
-SAVE_CONFIG</code></pre>
+<h2 id="manual-calibration-scan-mode">Manual Calibration (Scan Mode)</h2>
+<pre><code class="language-gcode">IDM_CALIBRATE</code></pre>
 <h2 id="touch-mode">Touch Mode</h2>
 <p>Touch mode uses nozzle-bed contact for calibration, suitable for any bed surface.</p>
-<p><strong>Full workflow</strong>:</p>
-<p><strong>Step 1: Manual Touch</strong></p>
-<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL
-# Adjust nozzle until just touching the bed
-ACCEPT
-SAVE_CONFIG</code></pre>
-<p><strong>Step 2: Touch Threshold Calibration</strong> (after homing)</p>
-<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500
-SAVE_CONFIG</code></pre>
-<p><strong>Step 3: Auto Z Offset Measurement</strong></p>
-<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO
-SAVE_CONFIG</code></pre>
-<p><strong>Step 4: Save Fixed Offset</strong></p>
+<h3 id="step-1-initial-manual-calibration">Step 1: Initial Manual Calibration</h3>
+<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL</code></pre>
+<p>In the offset control dialog, lower the printhead until the nozzle touches the bed, then click the -0.1 offset control and confirm.</p>
+<h3 id="step-2-home-the-printer">Step 2: Home the Printer</h3>
+<pre><code class="language-gcode">G28</code></pre>
+<h3 id="step-3-calibrate-the-touch-threshold">Step 3: Calibrate the Touch Threshold</h3>
+<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500</code></pre>
+<h3 id="step-4-save-the-fixed-z-offset">Step 4: Save the Fixed Z Offset</h3>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
-<p>> Add auto-calibration to the print start G-code. See <a href="USAGE_ADVANCED.html">Advanced Features</a>.</p>
+<h3 id="step-5-measure-the-z-offset-automatically">Step 5: Measure the Z Offset Automatically</h3>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<h3 id="step-6-configure-the-print-start-g-code">Step 6: Configure the Print Start G-code</h3>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<p>See <a href="USAGE_ADVANCED.html">Advanced Features</a> for the complete workflow.</p>
 <h2 id="second-probe-mode">Second Probe Mode</h2>
 <p>Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-offset calibration. It is intended for setups using an external contact trigger.</p>
 <h3 id="configuration">Configuration</h3>
 <p>Add the following options to <code>[scanner]</code>:</p>
-<pre><code class="language-ini">[scanner]
-calibration_method: second_probe
+<pre><code class="language-ini">calibration_method: second_probe
 z_offset: 0
 probe_speed: 10
-probe_pin: ^PA1</code></pre>
+probe_pin:</code></pre>
 <table>
 <tr>
 <th>Option</th>
@@ -384,32 +377,18 @@ probe_pin: ^PA1</code></pre>
 </tr>
 <tr>
 <td><code>probe_pin</code></td>
-<td>Actual trigger pin for the TAP or mechanical endstop; replace the example <code>^PA1</code> with the wired pin</td>
+<td>Actual trigger pin for the TAP or mechanical endstop</td>
 </tr>
 </table>
 <p>Save the configuration, restart Klipper, and verify that the second probe triggers correctly.</p>
-<h3 id="initial-calibration">Initial Calibration</h3>
-<ol>
-<li>Home the X and Y axes:</li>
-</ol>
-<pre><code class="language-gcode">G28 X Y</code></pre>
-<ol>
-<li>Use the second probe for Z homing and automatic IDM model calibration:</li>
-</ol>
+<h3 id="run-calibration">Run Calibration</h3>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
-<ol>
-<li>Measure the Z offset automatically:</li>
-</ol>
+<h3 id="calibrate-the-z-offset">Calibrate the Z Offset</h3>
 <pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
-<ol>
-<li>Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:</li>
-</ol>
+<h3 id="save-the-fixed-z-offset">Save the Fixed Z Offset</h3>
+<p>Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:</p>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <p>TAP and similar trigger mechanisms may introduce a small amount of compression. Measure and save the fixed compensation again after replacing the nozzle, hotend components, or second probe.</p>
-<h3 id="daily-use">Daily Use</h3>
-<p>After the initial calibration, add the following sequence to the print start G-code:</p>
-<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h2 id="multi-model-management">Multi-Model Management</h2>
 <p>Save and switch calibrations for different PEI sheets:</p>
 <table>
@@ -432,33 +411,6 @@ PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <tr>
 <td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
 <td>Delete a calibration</td>
-</tr>
-</table>
-<h2 id="common-commands">Common Commands</h2>
-<table>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-<tr>
-<td><code>QUERY_PROBE</code></td>
-<td>Query current probe value</td>
-</tr>
-<tr>
-<td><code>PROBE</code></td>
-<td>Perform single probe</td>
-</tr>
-<tr>
-<td><code>PROBE_ACCURACY</code></td>
-<td>Probe accuracy test (10 reps)</td>
-</tr>
-<tr>
-<td><code>PROBE_CALIBRATE METHOD=AUTO</code></td>
-<td>Auto Z offset measurement</td>
-</tr>
-<tr>
-<td><code>IDM_CALIBRATE</code></td>
-<td>Manual sensor calibration</td>
 </tr>
 </table>
 <hr>

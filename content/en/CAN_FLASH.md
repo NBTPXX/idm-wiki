@@ -20,7 +20,7 @@ Select the CAN frequency from the dropdown based on the firmware build:
 
 ## Enter and Exit Bootloader
 
-- **Enter BL**: Sends KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0
+- **Enter BL**: Enter a known UUID in the CAN UUID field, then send KLIPPER_REBOOT_CMD via CAN to management ID 0x3f0
 - **Exit BL**: Runs the clear node → set node ID → CONNECT → COMPLETE sequence
 
 ![CAN Mode Flash Interface](../images/can-workflow.svg)
@@ -38,7 +38,7 @@ Prerequisites:
 1. Select CAN mode
 2. Choose frequency and firmware type
 3. Select firmware version and file
-4. Click "Enter BL" if needed to put the device in bootloader mode
+4. If the device is running and its UUID is known, enter the UUID and click "Enter BL"; skip this step when it is already in bootloader mode
 5. Click "Query" to get the CAN UUID
 6. Click "Start Flashing"
 7. Watch console output and wait for completion

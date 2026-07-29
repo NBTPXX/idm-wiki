@@ -14,12 +14,11 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("__SEC__" "USAGE_SETUP" "NOZZLE_OFFSET" "USAGE_CALIBRATE" "USAGE_ADVANCED" "__SEC__" "INDEX" "INSTALL" "MOONRAKER" "CAN_FLASH" "USB_FLASH" "DFU_FLASH")
+NAV_ITEMS=("__SEC__" "USAGE_SETUP" "USAGE_CALIBRATE" "USAGE_ADVANCED" "__SEC__" "INDEX" "INSTALL" "MOONRAKER" "CAN_FLASH" "USB_FLASH" "DFU_FLASH")
 
 NAV_LABELS_ZH=(
   "使用教程"
   "安装与配置"
-  "喷嘴偏移补偿"
   "校准"
   "高级功能"
   "刷写指南"
@@ -34,7 +33,6 @@ NAV_LABELS_ZH=(
 NAV_LABELS_EN=(
   "Usage Tutorial"
   "Setup & Config"
-  "Nozzle Offset"
   "Calibration"
   "Advanced Features"
   "Flashing Guide"

@@ -1,10 +1,6 @@
 # Calibration
 
-## Manual Calibration (Scan Mode)
-
-The initialization steps below apply only to Scan mode.
-
-### Initialize Z Position
+## Initialize Z Position
 
 Before calibration, set the initial Z position:
 
@@ -14,47 +10,56 @@ Before calibration, set the initial Z position:
 4. Manually lower nozzle until touching the bed (use a sheet of paper)
 5. Run `SET_KINEMATIC_POSITION z=0`
 
-### Run Calibration
+## Manual Calibration (Scan Mode)
 
 ```gcode
 IDM_CALIBRATE
-# Adjust Z offset using paper method
-ACCEPT
-SAVE_CONFIG
 ```
 
 ## Touch Mode
 
 Touch mode uses nozzle-bed contact for calibration, suitable for any bed surface.
 
-**Full workflow**:
+### Step 1: Initial Manual Calibration
 
-**Step 1: Manual Touch**
 ```gcode
 IDM_TOUCH METHOD=MANUAL
-# Adjust nozzle until just touching the bed
-ACCEPT
-SAVE_CONFIG
 ```
 
-**Step 2: Touch Threshold Calibration** (after homing)
+In the offset control dialog, lower the printhead until the nozzle touches the bed, then click the -0.1 offset control and confirm.
+
+### Step 2: Home the Printer
+
+```gcode
+G28
+```
+
+### Step 3: Calibrate the Touch Threshold
+
 ```gcode
 IDM_THRESHOLD_SCAN MIN=500
-SAVE_CONFIG
 ```
 
-**Step 3: Auto Z Offset Measurement**
-```gcode
-PROBE_CALIBRATE METHOD=AUTO
-SAVE_CONFIG
-```
+### Step 4: Save the Fixed Z Offset
 
-**Step 4: Save Fixed Offset**
 ```gcode
 SAVE_TOUCH_OFFSET
 ```
 
-> Add auto-calibration to the print start G-code. See [Advanced Features](USAGE_ADVANCED.html).
+### Step 5: Measure the Z Offset Automatically
+
+```gcode
+PROBE_CALIBRATE METHOD=AUTO
+```
+
+### Step 6: Configure the Print Start G-code
+
+```gcode
+IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO
+```
+
+See [Advanced Features](USAGE_ADVANCED.html) for the complete workflow.
 
 ## Second Probe Mode
 
@@ -65,11 +70,10 @@ Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-
 Add the following options to `[scanner]`:
 
 ```ini
-[scanner]
 calibration_method: second_probe
 z_offset: 0
 probe_speed: 10
-probe_pin: ^PA1
+probe_pin:
 ```
 
 | Option | Description |
@@ -77,46 +81,31 @@ probe_pin: ^PA1
 | `calibration_method` | Set to `second_probe` to enable the second-probe trigger method |
 | `z_offset` | Fixed trigger-height offset relative to the nozzle; measure the actual value when using TAP |
 | `probe_speed` | Z-axis movement speed during calibration; 15 mm/s or less is recommended |
-| `probe_pin` | Actual trigger pin for the TAP or mechanical endstop; replace the example `^PA1` with the wired pin |
+| `probe_pin` | Actual trigger pin for the TAP or mechanical endstop |
 
 Save the configuration, restart Klipper, and verify that the second probe triggers correctly.
 
-### Initial Calibration
-
-1. Home the X and Y axes:
-
-```gcode
-G28 X Y
-```
-
-2. Use the second probe for Z homing and automatic IDM model calibration:
+### Run Calibration
 
 ```gcode
 IDM_TOUCH CALIBRATE=1
 ```
 
-3. Measure the Z offset automatically:
+### Calibrate the Z Offset
 
 ```gcode
 PROBE_CALIBRATE METHOD=AUTO
 ```
 
-4. Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:
+### Save the Fixed Z Offset
+
+Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:
 
 ```gcode
 SAVE_TOUCH_OFFSET
 ```
 
 TAP and similar trigger mechanisms may introduce a small amount of compression. Measure and save the fixed compensation again after replacing the nozzle, hotend components, or second probe.
-
-### Daily Use
-
-After the initial calibration, add the following sequence to the print start G-code:
-
-```gcode
-IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO
-```
 
 ## Multi-Model Management
 
@@ -128,16 +117,6 @@ Save and switch calibrations for different PEI sheets:
 | `IDM_MODEL_SELECT NAME=<name>` | Load a saved calibration |
 | `IDM_MODEL_LIST` | List all calibrations |
 | `IDM_MODEL_REMOVE NAME=<name>` | Delete a calibration |
-
-## Common Commands
-
-| Command | Description |
-|---------|-------------|
-| `QUERY_PROBE` | Query current probe value |
-| `PROBE` | Perform single probe |
-| `PROBE_ACCURACY` | Probe accuracy test (10 reps) |
-| `PROBE_CALIBRATE METHOD=AUTO` | Auto Z offset measurement |
-| `IDM_CALIBRATE` | Manual sensor calibration |
 
 ---
 

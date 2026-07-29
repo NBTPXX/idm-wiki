@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
       <div class="sec-header">刷写指南</div>
@@ -327,7 +326,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p><img src="../images/usb-workflow.svg" alt="USB 模式刷写界面"></p>
 <h2 id="">串口选择</h2>
 <ul>
-<li><strong>串口端口</strong>：选择设备的常规串口（如 <code>/dev/serial/by-id/usb-IDM_*</code>）</li>
+<li><strong>串口端口</strong>：选择设备的常规串口（如 <code>/dev/serial/by-id/usb-idm_idm_...</code>）</li>
 <li><strong>Bootloader 串口</strong>：设备进入 bootloader 后的串口。若设备已在 BL 模式，可直接填写此字段</li>
 </ul>
 <p>设备列表自动过滤，仅显示包含 "IDM" 的设备。</p>
@@ -335,7 +334,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p>USB 模式下会显示所有可用固件文件，不做频率筛选。</p>
 <h2 id="-bootloader">进出 Bootloader</h2>
 <ul>
-<li><strong>Enter BL</strong>：通过 Katapult 串口协议发送 KLIPPER_REBOOT_CMD</li>
+<li><strong>Enter BL</strong>：请求设备重启并进入 Bootloader</li>
 <li><strong>Exit BL</strong>：使用 prime + CONNECT + COMPLETE 序列退出，不依赖 DTR 切换</li>
 </ul>
 <h2 id="-bootloader">自动检测 Bootloader</h2>

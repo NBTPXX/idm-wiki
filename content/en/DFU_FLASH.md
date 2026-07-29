@@ -9,7 +9,7 @@ DFU mode uses the dfu-util tool, applicable when the device is in USB DFU mode.
 
 ## Enter DFU Mode
 
-Hold the device's physical button, such as BOOT0, while powering on to enter DFU mode.
+Short BOOT0, then power on the device to enter DFU mode.
 
 ## Flash Address
 
@@ -31,7 +31,7 @@ Click "Detect DFU" to run `dfu-util -l` and scan for DFU devices.
 3. Select the firmware file
 4. Click "Detect DFU" to confirm the device
 5. Click "Start Flashing"
-6. Power cycle after flashing completes to exit DFU mode
+6. Wait for the device to reset automatically and exit DFU mode
 
 ---
 

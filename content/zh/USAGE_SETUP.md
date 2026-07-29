@@ -21,7 +21,7 @@ cd IDM
 ### CAN 模式
 
 ```bash
-~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
+~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q
 ```
 
 ### USB 模式
@@ -43,17 +43,7 @@ USB 模式：
 
 ```ini
 [mcu idm]
-serial: /dev/serial/by-id/<device-id>  # 替换为你的设备路径
-```
-
-添加 MCU 温度传感器：
-
-```ini
-[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100
+serial: /dev/serial/by-id/usb-idm_idm_...  # 替换为你的设备路径
 ```
 
 ## 必要配置项
@@ -76,10 +66,8 @@ endstop_pin: probe:z_virtual_endstop
 
 ```ini
 [safe_z_home]
-home_xy_position: 150, 150
-speed: 50
+home_xy_position: <你的X轴中心坐标>, <你的Y轴中心坐标>
 z_hop: 10
-z_hop_speed: 5
 ```
 
 删除原有的 `[probe]` 模块。CAN 版不配置 `serial:`，USB 版使用设备串口路径。
@@ -106,7 +94,7 @@ cal_speed: 1.0
 cal_move_speed: 10
 default_model_name: default
 mesh_main_direction: x
-mesh_overscan: 3
+# mesh_overscan: -1
 mesh_cluster_size: 1
 mesh_runs: 1
 

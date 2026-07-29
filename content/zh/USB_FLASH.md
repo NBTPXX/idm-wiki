@@ -6,7 +6,7 @@ USB 模式通过串口与设备通信，适用于使用 USB 串口连接的 IDM 
 
 ## 串口选择
 
-- **串口端口**：选择设备的常规串口（如 `/dev/serial/by-id/usb-IDM_*`）
+- **串口端口**：选择设备的常规串口（如 `/dev/serial/by-id/usb-idm_idm_...`）
 - **Bootloader 串口**：设备进入 bootloader 后的串口。若设备已在 BL 模式，可直接填写此字段
 
 设备列表自动过滤，仅显示包含 "IDM" 的设备。
@@ -17,7 +17,7 @@ USB 模式下会显示所有可用固件文件，不做频率筛选。
 
 ## 进出 Bootloader
 
-- **Enter BL**：通过 Katapult 串口协议发送 KLIPPER_REBOOT_CMD
+- **Enter BL**：请求设备重启并进入 Bootloader
 - **Exit BL**：使用 prime + CONNECT + COMPLETE 序列退出，不依赖 DTR 切换
 
 ## 自动检测 Bootloader

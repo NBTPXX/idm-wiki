@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link active">Setup & Config</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">Nozzle Offset</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
       <div class="sec-header">Flashing Guide</div>
@@ -334,7 +333,7 @@ cd IDM
 <h2 id="get-the-device-identifier">Get the Device Identifier</h2>
 <p>Get the MCU identifier for your connection mode.</p>
 <h3 id="can-mode">CAN Mode</h3>
-<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0</code></pre>
+<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q</code></pre>
 <h3 id="usb-mode">USB Mode</h3>
 <pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
 <h2 id="mcu-configuration">MCU Configuration</h2>
@@ -343,13 +342,7 @@ cd IDM
 canbus_uuid: 2ca7ad8c2899              # Replace with your device UUID</code></pre>
 <p>USB mode:</p>
 <pre><code class="language-ini">[mcu idm]
-serial: /dev/serial/by-id/<device-id>  # Replace with your device path</code></pre>
-<p>Add the MCU temperature sensor:</p>
-<pre><code class="language-ini">[temperature_sensor idm_temp]
-sensor_type: temperature_mcu
-sensor_mcu: idm
-min_temp: 0
-max_temp: 100</code></pre>
+serial: /dev/serial/by-id/usb-idm_idm_...  # Replace with your device path</code></pre>
 <h2 id="required-settings">Required Settings</h2>
 <p><strong>Enable force_move (required)</strong>:</p>
 <pre><code class="language-ini">[force_move]
@@ -359,10 +352,8 @@ enable_force_move: True</code></pre>
 endstop_pin: probe:z_virtual_endstop</code></pre>
 <p><strong>Safe Z homing</strong>:</p>
 <pre><code class="language-ini">[safe_z_home]
-home_xy_position: 150, 150
-speed: 50
-z_hop: 10
-z_hop_speed: 5</code></pre>
+home_xy_position: <your_x_center_coordinate>, <your_y_center_coordinate>
+z_hop: 10</code></pre>
 <p>Remove the existing <code>[probe]</code> section. Omit <code>serial:</code> in CAN mode and use the device serial path in USB mode.</p>
 <h2 id="complete-scanner-configuration">Complete Scanner Configuration</h2>
 <pre><code class="language-ini">[scanner]
@@ -384,7 +375,7 @@ cal_speed: 1.0
 cal_move_speed: 10
 default_model_name: default
 mesh_main_direction: x
-mesh_overscan: 3
+# mesh_overscan: -1
 mesh_cluster_size: 1
 mesh_runs: 1
 

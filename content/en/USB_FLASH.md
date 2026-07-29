@@ -6,7 +6,7 @@ USB mode communicates with devices via serial port, suitable for IDM sensors con
 
 ## Serial Port Selection
 
-- **Serial Port**: Select the device's regular serial port (e.g., `/dev/serial/by-id/usb-IDM_*`)
+- **Serial Port**: Select the device's regular serial port (e.g., `/dev/serial/by-id/usb-idm_idm_...`)
 - **Bootloader Serial**: The serial port after the device enters bootloader. If already in BL mode, fill in this field directly
 
 Device list is automatically filtered to show only devices containing "IDM".
@@ -17,7 +17,7 @@ All available firmware files are shown in USB mode without frequency filtering.
 
 ## Enter/Exit Bootloader
 
-- **Enter BL**: Sends KLIPPER_REBOOT_CMD via Katapult serial protocol
+- **Enter BL**: Requests the device to reboot into the bootloader
 - **Exit BL**: Uses prime + CONNECT + COMPLETE sequence without relying on DTR toggle
 
 ## Auto-Detect Bootloader

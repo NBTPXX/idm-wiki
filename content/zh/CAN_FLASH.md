@@ -20,7 +20,7 @@ CAN 模式通过 SocketCAN 与设备通信，适用于使用 CAN 总线连接的
 
 ## 进入与退出 Bootloader
 
-- **Enter BL**：通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0
+- **Enter BL**：在 CAN UUID 字段填入已知 UUID 后，通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0
 - **Exit BL**：发送清除节点→设置节点ID→CONNECT→COMPLETE 序列
 
 ![CAN 模式刷写界面](../images/can-workflow.svg)
@@ -38,7 +38,7 @@ Flash 需要设备的 6 字节 UUID。点击「查询」按钮自动扫描 CAN �
 1. 选择 CAN 模式
 2. 选择频率和固件类型
 3. 选择固件版本和文件
-4. 必要时点击「Enter BL」使设备进入 Bootloader
+4. 设备处于正常运行状态且 UUID 已知时，填入 UUID 并点击「Enter BL」；设备已在 Bootloader 时跳过
 5. 点击「查询」获取 CAN UUID
 6. 点击「开始刷写」
 7. 观察控制台输出，等待完成

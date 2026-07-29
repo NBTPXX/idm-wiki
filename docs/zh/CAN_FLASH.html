@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
       <div class="sec-header">刷写指南</div>
@@ -360,7 +359,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </ul>
 <h2 id="-bootloader">进入与退出 Bootloader</h2>
 <ul>
-<li><strong>Enter BL</strong>：通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0</li>
+<li><strong>Enter BL</strong>：在 CAN UUID 字段填入已知 UUID 后，通过 CAN 发送 KLIPPER_REBOOT_CMD 到管理 ID 0x3f0</li>
 <li><strong>Exit BL</strong>：发送清除节点→设置节点ID→CONNECT→COMPLETE 序列</li>
 </ul>
 <p><img src="../images/can-workflow.svg" alt="CAN 模式刷写界面"></p>
@@ -376,7 +375,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>选择 CAN 模式</li>
 <li>选择频率和固件类型</li>
 <li>选择固件版本和文件</li>
-<li>必要时点击「Enter BL」使设备进入 Bootloader</li>
+<li>设备处于正常运行状态且 UUID 已知时，填入 UUID 并点击「Enter BL」；设备已在 Bootloader 时跳过</li>
 <li>点击「查询」获取 CAN UUID</li>
 <li>点击「开始刷写」</li>
 <li>观察控制台输出，等待完成</li>

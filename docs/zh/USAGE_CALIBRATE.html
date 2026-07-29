@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link active">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
       <div class="sec-header">刷写指南</div>
@@ -323,9 +322,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 </div>
 <main class="main">
 <h1 id="">校准</h1>
-<h2 id="scan-">手动校准（Scan 模式）</h2>
-<p>以下初始化步骤仅用于 Scan 模式。</p>
-<h3 id="-z-">初始化 Z 位置</h3>
+<h2 id="-z-">初始化 Z 位置</h2>
 <p>校准前先设置 Z 轴初始位置：</p>
 <ol>
 <li>执行 <code>G28 X Y</code>（仅归零 XY，不要归零 Z）</li>
@@ -334,37 +331,33 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>手动降低喷嘴至贴床（垫 A4 纸），感到轻微阻力即可</li>
 <li>执行 <code>SET_KINEMATIC_POSITION z=0</code></li>
 </ol>
-<h3 id="">执行校准</h3>
-<pre><code class="language-gcode">IDM_CALIBRATE
-# 参照纸片法调整 Z 偏移
-ACCEPT
-SAVE_CONFIG</code></pre>
+<h2 id="scan-">手动校准（Scan 模式）</h2>
+<pre><code class="language-gcode">IDM_CALIBRATE</code></pre>
 <h2 id="touch-">Touch 模式</h2>
 <p>Touch 模式利用喷嘴接触热床来校准，适用于各种热床表面。</p>
-<p><strong>完整工作流</strong>：</p>
-<p><strong>第 1 步：手动 Touch</strong></p>
-<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL
-# 调整喷嘴刚好贴床
-ACCEPT
-SAVE_CONFIG</code></pre>
-<p><strong>第 2 步：Touch 阈值校准</strong>（归零后执行）</p>
-<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500
-SAVE_CONFIG</code></pre>
-<p><strong>第 3 步：自动 Z 偏移测量</strong></p>
-<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO
-SAVE_CONFIG</code></pre>
-<p><strong>第 4 步：保存固定偏移补偿</strong></p>
+<h3 id="-1-">第 1 步：初次手动校准</h3>
+<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL</code></pre>
+<p>在弹出的偏移控制框中，将喷头降到喷嘴贴热床，然后点击 -0.1 偏移并确认。</p>
+<h3 id="-2-">第 2 步：归零</h3>
+<pre><code class="language-gcode">G28</code></pre>
+<h3 id="-3-touch-">第 3 步：Touch 阈值校准</h3>
+<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500</code></pre>
+<h3 id="-4--z-">第 4 步：保存固定 Z 偏移补偿</h3>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
-<p>> 打印起始 G-code 中需加入自动校准，参见<a href="USAGE_ADVANCED.html">高级功能</a>。</p>
+<h3 id="-5--z-">第 5 步：自动 Z 偏移测量</h3>
+<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<h3 id="-6--g-code">第 6 步：配置打印起始 G-code</h3>
+<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<p>完整流程参见<a href="USAGE_ADVANCED.html">高级功能</a>。</p>
 <h2 id="second-probe-">Second Probe 模式</h2>
 <p>Second Probe 模式使用 TAP 或机械限位开关触发 Z 归零和自动 Z 偏移校准，适用于使用外部接触触发器的设备。</p>
 <h3 id="">配置</h3>
 <p>在 <code>[scanner]</code> 中添加：</p>
-<pre><code class="language-ini">[scanner]
-calibration_method: second_probe
+<pre><code class="language-ini">calibration_method: second_probe
 z_offset: 0
 probe_speed: 10
-probe_pin: ^PA1</code></pre>
+probe_pin:</code></pre>
 <table>
 <tr>
 <th>参数</th>
@@ -384,32 +377,18 @@ probe_pin: ^PA1</code></pre>
 </tr>
 <tr>
 <td><code>probe_pin</code></td>
-<td>TAP 或机械限位开关的实际触发引脚；将示例 <code>^PA1</code> 替换为实际接线引脚</td>
+<td>TAP 或机械限位开关的实际触发引脚</td>
 </tr>
 </table>
 <p>保存配置并重启 Klipper，然后确认第二探针能够正常触发。</p>
-<h3 id="">首次校准</h3>
-<ol>
-<li>先归零 X、Y 轴：</li>
-</ol>
-<pre><code class="language-gcode">G28 X Y</code></pre>
-<ol>
-<li>使用第二探针完成 Z 归零并自动校准 IDM 模型：</li>
-</ol>
+<h3 id="">执行校准</h3>
 <pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
-<ol>
-<li>自动测量 Z 偏移：</li>
-</ol>
+<h3 id="z-">Z 偏移校准</h3>
 <pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
-<ol>
-<li>在网页界面中微调 Z 偏移，喷嘴高度合适后保存固定补偿：</li>
-</ol>
+<h3 id="-z-">固定 Z 偏移补偿</h3>
+<p>在网页界面中微调 Z 偏移，喷嘴高度合适后保存固定补偿：</p>
 <pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <p>TAP 等触发机构可能产生轻微压缩量。更换喷嘴、热端组件或第二探针后，应重新测定并保存固定补偿。</p>
-<h3 id="">日常使用</h3>
-<p>完成首次校准后，可在打印起始 G-code 中使用：</p>
-<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h2 id="">多模型管理</h2>
 <p>针对不同 PEI 板保存独立校准：</p>
 <table>
@@ -432,33 +411,6 @@ PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <tr>
 <td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
 <td>删除校准</td>
-</tr>
-</table>
-<h2 id="">常用命令</h2>
-<table>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-<tr>
-<td><code>QUERY_PROBE</code></td>
-<td>查询当前探测值</td>
-</tr>
-<tr>
-<td><code>PROBE</code></td>
-<td>执行单次探测</td>
-</tr>
-<tr>
-<td><code>PROBE_ACCURACY</code></td>
-<td>探测精度测试（重复 10 次）</td>
-</tr>
-<tr>
-<td><code>PROBE_CALIBRATE METHOD=AUTO</code></td>
-<td>自动 Z 偏移测量</td>
-</tr>
-<tr>
-<td><code>IDM_CALIBRATE</code></td>
-<td>手动传感器校准</td>
 </tr>
 </table>
 <hr>

@@ -300,7 +300,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
-      <a href="NOZZLE_OFFSET.html" class="nav-link">喷嘴偏移补偿</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
       <div class="sec-header">刷写指南</div>
@@ -330,7 +329,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>先尝试无 sudo 模式，失败后自动回退到 <code>sudo -n</code></li>
 </ul>
 <h2 id="-dfu-">进入 DFU 模式</h2>
-<p>按住设备上的物理按钮（如 BOOT0）再上电，使设备进入 DFU 模式。</p>
+<p>短接 BOOT0 后再上电，使设备进入 DFU 模式。</p>
 <h2 id="flash-address">Flash Address</h2>
 <table>
 <tr>
@@ -356,7 +355,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>选择固件文件</li>
 <li>点击「检测 DFU」确认设备</li>
 <li>点击「开始刷写」</li>
-<li>刷写完成后重新上电，退出 DFU 模式</li>
+<li>等待设备自动复位并退出 DFU 模式</li>
 </ol>
 <hr>
 <p><a href="INDEX.html">← 返回首页</a></p>

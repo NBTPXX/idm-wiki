@@ -6,7 +6,59 @@ IDM has built-in temperature compensation. Parameters can be optimized through d
 
 ### Data Collection
 
-Ensure `[temperature_sensor IDM_coil]` is in `printer.cfg`, then run:
+Add this macro to `printer.cfg`:
+
+```ini
+[gcode_macro DATA_SAMPLE]
+gcode:
+  {% set bed_temp = params.BED_TEMP|default(90)|int %}
+  {% set nozzle_temp = params.NOZZLE_TEMP|default(250)|int %}
+  {% set min_temp = params.MIN_TEMP|default(40)|int %}
+  {% set max_temp = params.MAX_TEMP|default(70)|int %}
+  M106 S255
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MAXIMUM={min_temp}
+  M106 S0
+  G28
+  G0 Z1
+  M104 S{nozzle_temp}
+  M140 S{bed_temp}
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MINIMUM={min_temp}
+  IDM_STREAM FILENAME=/tmp/data1
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MINIMUM={max_temp}
+  IDM_STREAM FILENAME=/tmp/data1
+  M104 S0
+  M140 S0
+  M106 S255
+  G0 Z80
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MAXIMUM={min_temp}
+  M106 S0
+  G28 Z0
+  G0 Z2
+  M104 S{nozzle_temp}
+  M140 S{bed_temp}
+  G4 P1000
+  IDM_STREAM FILENAME=/tmp/data2
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MINIMUM={max_temp}
+  IDM_STREAM FILENAME=/tmp/data2
+  M104 S0
+  M140 S0
+  M106 S255
+  G0 Z80
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MAXIMUM={min_temp}
+  M106 S0
+  G28 Z0
+  G0 Z3
+  M104 S{nozzle_temp}
+  M140 S{bed_temp}
+  G4 P1000
+  IDM_STREAM FILENAME=/tmp/data3
+  TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MINIMUM={max_temp}
+  IDM_STREAM FILENAME=/tmp/data3
+  M104 S0
+  M140 S0
+```
+
+Run:
 
 ```gcode
 DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70
@@ -16,11 +68,14 @@ Data files are generated at `/tmp/data1`, `/tmp/data2`, `/tmp/data3`.
 
 ### Calculate Parameters
 
+Move the three data files to `~/IDM`, then run:
+
 ```bash
-~/klippy-env/bin/python ~/IDM/arg_fit.py
+cd ~/IDM
+~/klippy-env/bin/python arg_fit.py
 ```
 
-Check `fit_result.png` — compensated data should be close to horizontal.
+Check `fit_result.png` and confirm that the compensated offsets stay within three digits.
 
 ---
 
@@ -32,32 +87,29 @@ IDM includes a built-in accelerometer for resonance compensation.
 
 ```ini
 [lis2dw]
-cs_pin: idm:PA15
+cs_pin: idm:PA3
 spi_bus: spi1
 
 [resonance_tester]
 accel_chip: lis2dw
-probe_points: 150,150,20
+probe_points: 125,125,20
 ```
 
 **adxl345 (rectangular chip)**:
 
 ```ini
 [adxl345]
-cs_pin: idm:PA15
+cs_pin: idm:PA3
 spi_bus: spi1
-axes_map: x,y,z
 
 [resonance_tester]
 accel_chip: adxl345
-probe_points: 150,150,20
+probe_points: 125,125,20
 ```
 
 Run resonance measurement:
 ```gcode
-SHAPER_CALIBRATE AXIS=X
-SHAPER_CALIBRATE AXIS=Y
-SAVE_CONFIG
+SHAPER_CALIBRATE
 ```
 
 ---
@@ -66,13 +118,7 @@ SAVE_CONFIG
 
 ```ini
 [bed_mesh]
-speed: 120
-horizontal_move_z: 5
-mesh_min: 15, 15
-mesh_max: 235, 235
-probe_count: 5, 5
-algorithm: bicubic
-zero_reference_position: 150, 150      # Required for Touch mode
+zero_reference_position: 125, 125      # Set this to the center of the bed
 ```
 
 ### High-Power Bed Macro
@@ -89,20 +135,6 @@ gcode:
     M140 S{TARGET_TEMP}
 ```
 
-### Calibrate the Mesh
-
-```gcode
-BED_MESH_CALIBRATE
-BED_MESH_PROFILE SAVE=default
-SAVE_CONFIG
-```
-
-### Adaptive Mesh
-
-```gcode
-BED_MESH_CALIBRATE ADAPTIVE=1
-```
-
 ---
 
 ## Print Start G-code
@@ -112,7 +144,6 @@ Add to the end of `PRINT_START` macro:
 ```gcode
 IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
-BED_MESH_CALIBRATE ADAPTIVE=1
 ```
 
 ---
@@ -121,13 +152,11 @@ BED_MESH_CALIBRATE ADAPTIVE=1
 
 | Issue | Possible Cause | Solution |
 |-------|---------------|----------|
-| Probe failed | Dirty sensor lens | Clean lens with alcohol wipe |
 | Z offset drift | Temperature variation | Calibrate at print temp; configure temp compensation |
-| "IDM model convergence" error | model_offset too large | `IDM_MODEL REMOVE=default` then re-calibrate |
+| "IDM model convergence" error | model_offset too large | Set `model_offset` to `0`, then adjust the Z offset again |
 | "no model" homing error | Config format error | Check indentation and section name syntax |
 | Bed mesh anomalies | Bed heater EMI | Configure bed-off macro; check sensor mounting |
-| CAN timeout | Frequency mismatch / loose wiring | Check frequency and termination; ensure no serial line |
-| Cannot get UUID | Device not in BL mode | Send reboot via CAN or power cycle |
+| CAN communication failure | Incorrect frequency or UUID | Check firmware frequency, query the UUID again, and ensure `serial:` is absent |
 
 ---
 
