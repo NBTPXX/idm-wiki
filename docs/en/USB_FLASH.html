@@ -108,6 +108,16 @@ body {
   pointer-events: none;
   z-index: 1;
 }
+.search-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 5;
+}
+.search-backdrop.show {
+  display: block;
+}
 .search-results {
   display: none;
   position: fixed;
@@ -115,18 +125,9 @@ body {
   left: 280px;
   right: 0;
   bottom: 0;
-  pointer-events: none;
+  z-index: 11;
 }
-.search-results::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 5;
-}
-.search-results.show {
-  display: block;
-}
+.search-results.show { display: block; }
 .search-results-inner {
   position: absolute;
   top: 0;
@@ -137,8 +138,6 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.15);
   overflow-y: auto;
   border-bottom: 1px solid var(--result-border);
-  pointer-events: auto;
-  z-index: 11;
 }
 .search-result-item {
   display: block;
@@ -366,6 +365,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     </select>
   </div>
 </nav>
+<div class="search-backdrop" id="search-backdrop"></div>
 <div class="search-results" id="search-results">
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
@@ -411,6 +411,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 (function() {
   var idx = null;
   var input = document.getElementById('search-input');
+  var backdrop = document.getElementById('search-backdrop');
   var results = document.getElementById('search-results');
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
@@ -478,7 +479,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   function search() {
     var q = input.value.trim();
     if (!q || !idx) {
-      results.classList.remove('show');
+      closeResults();
       return;
     }
     var words = q.toLowerCase().split(/\s+/).filter(function(w) { return w.length > 0; });
@@ -512,8 +513,14 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
       }
     }
     inner.innerHTML = html;
+    backdrop.classList.add('show');
     results.classList.add('show');
     focusIdx = -1;
+  }
+
+  function closeResults() {
+    backdrop.classList.remove('show');
+    results.classList.remove('show');
   }
 
   input.addEventListener('input', search);
@@ -534,12 +541,13 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
       e.preventDefault();
       if (items[focusIdx]) items[focusIdx].click();
     } else if (e.key === 'Escape') {
-      results.classList.remove('show');
+      closeResults();
     }
   });
+  backdrop.addEventListener('click', closeResults);
   document.addEventListener('click', function(e) {
     if (!results.contains(e.target) && e.target !== input) {
-      results.classList.remove('show');
+      closeResults();
     }
   });
 

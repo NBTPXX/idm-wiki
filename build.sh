@@ -172,6 +172,16 @@ body {
   pointer-events: none;
   z-index: 1;
 }
+.search-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 5;
+}
+.search-backdrop.show {
+  display: block;
+}
 .search-results {
   display: none;
   position: fixed;
@@ -179,18 +189,9 @@ body {
   left: 280px;
   right: 0;
   bottom: 0;
-  pointer-events: none;
+  z-index: 11;
 }
-.search-results::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 5;
-}
-.search-results.show {
-  display: block;
-}
+.search-results.show { display: block; }
 .search-results-inner {
   position: absolute;
   top: 0;
@@ -201,8 +202,6 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.15);
   overflow-y: auto;
   border-bottom: 1px solid var(--result-border);
-  pointer-events: auto;
-  z-index: 11;
 }
 .search-result-item {
   display: block;
@@ -597,6 +596,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     </select>
   </div>
 </nav>
+<div class="search-backdrop" id="search-backdrop"></div>
 <div class="search-results" id="search-results">
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
@@ -607,6 +607,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 (function() {{
   var idx = null;
   var input = document.getElementById('search-input');
+  var backdrop = document.getElementById('search-backdrop');
   var results = document.getElementById('search-results');
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
@@ -674,7 +675,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   function search() {{
     var q = input.value.trim();
     if (!q || !idx) {{
-      results.classList.remove('show');
+      closeResults();
       return;
     }}
     var words = q.toLowerCase().split(/\\s+/).filter(function(w) {{ return w.length > 0; }});
@@ -708,8 +709,14 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
       }}
     }}
     inner.innerHTML = html;
+    backdrop.classList.add('show');
     results.classList.add('show');
     focusIdx = -1;
+  }}
+
+  function closeResults() {{
+    backdrop.classList.remove('show');
+    results.classList.remove('show');
   }}
 
   input.addEventListener('input', search);
@@ -730,12 +737,13 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
       e.preventDefault();
       if (items[focusIdx]) items[focusIdx].click();
     }} else if (e.key === 'Escape') {{
-      results.classList.remove('show');
+      closeResults();
     }}
   }});
+  backdrop.addEventListener('click', closeResults);
   document.addEventListener('click', function(e) {{
     if (!results.contains(e.target) && e.target !== input) {{
-      results.classList.remove('show');
+      closeResults();
     }}
   }});
 
