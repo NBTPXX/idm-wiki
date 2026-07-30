@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calibration - IDM Wiki</title>
+<title>多 Z 轴调平 - IDM Wiki</title>
 <style>
 
 :root {
@@ -338,31 +338,31 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="INDEX.html">IDM Wiki</a>
-    <span>IDM User Guide</span>
+    <span>IDM 使用文档</span>
   </div>
   <div class="sidebar-search">
     <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
   </div>
   <div class="sidebar-nav">
-      <div class="sec-header">Usage Tutorial</div>
-      <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
-      <a href="IDM_UPDATE.html" class="nav-link">Auto-Update</a>
-      <a href="USAGE_CALIBRATE.html" class="nav-link active">Calibration</a>
-      <a href="ACCELEROMETER.html" class="nav-link">Accelerometer</a>
-      <a href="MULTI_Z_LEVELING.html" class="nav-link">Multi-Z Leveling</a>
-      <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <div class="sec-header">Flashing Guide</div>
-      <a href="INDEX.html" class="nav-link">Overview</a>
-      <a href="INSTALL.html" class="nav-link">Installation Guide</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
-      <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
-      <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
-      <a href="DFU_FLASH.html" class="nav-link">DFU Mode Flashing</a>
+      <div class="sec-header">使用教程</div>
+      <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="IDM_UPDATE.html" class="nav-link">自动更新配置</a>
+      <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
+      <a href="ACCELEROMETER.html" class="nav-link">加速度计</a>
+      <a href="MULTI_Z_LEVELING.html" class="nav-link active">多 Z 轴调平</a>
+      <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
+      <div class="sec-header">刷写指南</div>
+      <a href="INDEX.html" class="nav-link">概览</a>
+      <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
+      <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
+      <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
+      <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
   </div>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_CALIBRATE.html'">
-        <option value="zh">中文</option>
-        <option value="en" selected>English</option>
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'MULTI_Z_LEVELING.html'">
+        <option value="zh" selected>中文</option>
+        <option value="en">English</option>
     </select>
   </div>
 </nav>
@@ -371,100 +371,31 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
- <h1 id="calibration">Calibration</h1>
-<h2 id="initialize-z-position">Initialize Z Position</h2>
-<p>Before calibration, set the initial Z position:</p>
-<ol>
-<li>Run <code>G28 X Y</code> (home XY only, do NOT home Z)</li>
-<li>Move nozzle to bed center</li>
-<li>Run <code>SET_KINEMATIC_POSITION z=80</code></li>
-<li>Manually lower nozzle until touching the bed (use a sheet of paper)</li>
-<li>Run <code>SET_KINEMATIC_POSITION z=0</code></li>
-</ol>
-<h2 id="manual-calibration-scan-mode">Manual Calibration (Scan Mode)</h2>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_CALIBRATE</code></pre></div>
-<h2 id="touch-mode">Touch Mode</h2>
-<p>Touch mode uses nozzle-bed contact for calibration, suitable for any bed surface.</p>
-<h3 id="step-1-initial-manual-calibration">Step 1: Initial Manual Calibration</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL</code></pre></div>
-<p>In the offset control dialog, lower the printhead until the nozzle touches the bed, then click the -0.1 offset control and confirm.</p>
-<h3 id="step-2-home-the-printer">Step 2: Home the Printer</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">G28</code></pre></div>
-<h3 id="step-3-calibrate-the-touch-threshold">Step 3: Calibrate the Touch Threshold</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500</code></pre></div>
-<h3 id="step-4-save-the-fixed-z-offset">Step 4: Save the Fixed Z Offset</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre></div>
-<h3 id="step-5-measure-the-z-offset-automatically">Step 5: Measure the Z Offset Automatically</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
-<h3 id="step-6-configure-the-print-start-g-code">Step 6: Configure the Print Start G-code</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
-<p>See <a href="USAGE_ADVANCED.html">Advanced Features</a> for the complete workflow.</p>
-<h2 id="second-probe-mode">Second Probe Mode</h2>
-<p>Second Probe mode uses a TAP or mechanical endstop for Z homing and automatic Z-offset calibration. It is intended for setups using an external contact trigger.</p>
-<h3 id="configuration">Configuration</h3>
-<p>Add the following options to <code>[scanner]</code>:</p>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">calibration_method: second_probe
-z_offset: 0
-probe_speed: 10
-probe_pin:</code></pre></div>
-<table>
-<tr>
-<th>Option</th>
-<th>Description</th>
-</tr>
-<tr>
-<td><code>calibration_method</code></td>
-<td>Set to <code>second_probe</code> to enable the second-probe trigger method</td>
-</tr>
-<tr>
-<td><code>z_offset</code></td>
-<td>Fixed trigger-height offset relative to the nozzle; measure the actual value when using TAP</td>
-</tr>
-<tr>
-<td><code>probe_speed</code></td>
-<td>Z-axis movement speed during calibration; 15 mm/s or less is recommended</td>
-</tr>
-<tr>
-<td><code>probe_pin</code></td>
-<td>Actual trigger pin for the TAP or mechanical endstop</td>
-</tr>
-</table>
-<p>Save the configuration, restart Klipper, and verify that the second probe triggers correctly.</p>
-<h3 id="run-calibration">Run Calibration</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre></div>
-<h3 id="calibrate-the-z-offset">Calibrate the Z Offset</h3>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
-<h3 id="save-the-fixed-z-offset">Save the Fixed Z Offset</h3>
-<p>Fine-tune the Z offset in the web interface. Once the nozzle height is correct, save the fixed compensation:</p>
-<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre></div>
-<p>TAP and similar trigger mechanisms may introduce a small amount of compression. Measure and save the fixed compensation again after replacing the nozzle, hotend components, or second probe.</p>
-<h2 id="multi-model-management">Multi-Model Management</h2>
-<p>Save and switch calibrations for different PEI sheets:</p>
-<table>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-<tr>
-<td><code>IDM_MODEL_SAVE NAME=<name></code></td>
-<td>Save current calibration</td>
-</tr>
-<tr>
-<td><code>IDM_MODEL_SELECT NAME=<name></code></td>
-<td>Load a saved calibration</td>
-</tr>
-<tr>
-<td><code>IDM_MODEL_LIST</code></td>
-<td>List all calibrations</td>
-</tr>
-<tr>
-<td><code>IDM_MODEL_REMOVE NAME=<name></code></td>
-<td>Delete a calibration</td>
-</tr>
-</table>
+ <h1 id="-z-">多 Z 轴调平</h1>
+<h2 id="voron-24--4z-qgl">VORON 2.4 等 4Z 机器（QGL）</h2>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro QUAD_GANTRY_LEVEL]
+rename_existing: _QUAD_GANTRY_LEVEL
+gcode:
+    SAVE_GCODE_STATE NAME=STATE_QGL
+    BED_MESH_CLEAR
+    {% if not printer.quad_gantry_level.applied %}
+      _QUAD_GANTRY_LEVEL horizontal_move_z=10 retry_tolerance=1
+    {% endif %}
+    _QUAD_GANTRY_LEVEL horizontal_move_z=2
+    RESTORE_GCODE_STATE NAME=STATE_QGL</code></pre></div>
+<h2 id="voron-trident--3z-ztilt">VORON Trident 等 3Z 机器（Z_TILT）</h2>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro Z_TILT_ADJUST]
+rename_existing: _Z_TILT_ADJUST
+gcode:
+    SAVE_GCODE_STATE NAME=STATE_Z_TILT
+    BED_MESH_CLEAR
+    {% if not printer.z_tilt.applied %}
+      _Z_TILT_ADJUST horizontal_move_z=10 retry_tolerance=1
+    {% endif %}
+    _Z_TILT_ADJUST horizontal_move_z=2
+    RESTORE_GCODE_STATE NAME=STATE_Z_TILT</code></pre></div>
 <hr>
-<p><a href="INDEX.html">← Back to Home</a></p>
+<p><a href="INDEX.html">← 返回首页</a></p>
 
 </main>
 <script>
@@ -475,9 +406,9 @@ probe_pin:</code></pre></div>
   var results = document.getElementById('search-results');
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
-  var langDir = 'en';
-  var copyLabel = 'Copy';
-  var copiedLabel = 'Copied';
+  var langDir = 'zh';
+  var copyLabel = '复制';
+  var copiedLabel = '已复制';
   var copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg>';
   var copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>';
 

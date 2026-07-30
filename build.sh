@@ -14,7 +14,7 @@ if [[ -d "$IMAGES_DIR" ]]; then
   echo "Copied images to docs/images/"
 fi
 
-NAV_ITEMS=("__SEC__" "USAGE_SETUP" "IDM_UPDATE" "USAGE_CALIBRATE" "ACCELEROMETER" "USAGE_ADVANCED" "__SEC__" "INDEX" "INSTALL" "MOONRAKER" "CAN_FLASH" "USB_FLASH" "DFU_FLASH")
+NAV_ITEMS=("__SEC__" "USAGE_SETUP" "IDM_UPDATE" "USAGE_CALIBRATE" "ACCELEROMETER" "MULTI_Z_LEVELING" "USAGE_ADVANCED" "__SEC__" "INDEX" "INSTALL" "MOONRAKER" "CAN_FLASH" "USB_FLASH" "DFU_FLASH")
 
 NAV_LABELS_ZH=(
   "使用教程"
@@ -22,6 +22,7 @@ NAV_LABELS_ZH=(
   "自动更新配置"
   "校准"
   "加速度计"
+  "多 Z 轴调平"
   "高级功能"
   "刷写指南"
   "概览"
@@ -38,6 +39,7 @@ NAV_LABELS_EN=(
   "Auto-Update"
   "Calibration"
   "Accelerometer"
+  "Multi-Z Leveling"
   "Advanced Features"
   "Flashing Guide"
   "Overview"

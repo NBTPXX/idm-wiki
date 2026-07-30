@@ -349,6 +349,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
       <a href="IDM_UPDATE.html" class="nav-link">自动更新配置</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
       <a href="ACCELEROMETER.html" class="nav-link">加速度计</a>
+      <a href="MULTI_Z_LEVELING.html" class="nav-link">多 Z 轴调平</a>
       <a href="USAGE_ADVANCED.html" class="nav-link active">高级功能</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
@@ -443,30 +444,6 @@ gcode:
     M140 S0
     _BED_MESH_CALIBRATE {rawparams}
     M140 S{TARGET_TEMP}</code></pre></div>
-<hr>
-<h2 id="-z-">多 Z 轴机器调平</h2>
-<h3 id="voron-24--4z-qgl">VORON 2.4 等 4Z 机器（QGL）</h3>
-<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro QUAD_GANTRY_LEVEL]
-rename_existing: _QUAD_GANTRY_LEVEL
-gcode:
-    SAVE_GCODE_STATE NAME=STATE_QGL
-    BED_MESH_CLEAR
-    {% if not printer.quad_gantry_level.applied %}
-      _QUAD_GANTRY_LEVEL horizontal_move_z=10 retry_tolerance=1
-    {% endif %}
-    _QUAD_GANTRY_LEVEL horizontal_move_z=2
-    RESTORE_GCODE_STATE NAME=STATE_QGL</code></pre></div>
-<h3 id="voron-trident--3z-ztilt">VORON Trident 等 3Z 机器（Z_TILT）</h3>
-<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro Z_TILT_ADJUST]
-rename_existing: _Z_TILT_ADJUST
-gcode:
-    SAVE_GCODE_STATE NAME=STATE_Z_TILT
-    BED_MESH_CLEAR
-    {% if not printer.z_tilt.applied %}
-      _Z_TILT_ADJUST horizontal_move_z=10 retry_tolerance=1
-    {% endif %}
-    _Z_TILT_ADJUST horizontal_move_z=2
-    RESTORE_GCODE_STATE NAME=STATE_Z_TILT</code></pre></div>
 <hr>
 <h2 id="-g-code">打印起始 G-code</h2>
 <p>在 <code>PRINT_START</code> 宏末尾添加：</p>
