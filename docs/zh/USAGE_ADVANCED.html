@@ -238,13 +238,16 @@ code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   border: 1px solid var(--code-border);
 }
+.code-block {
+  position: relative;
+  margin-bottom: 20px;
+}
 pre {
   background: var(--code-bg);
-  position: relative;
   padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   font-size: 13px;
   line-height: 1.55;
   border: 1px solid var(--code-border);
@@ -363,7 +366,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p>IDM 内置温度补偿，可通过数据采集优化参数（耗时约 1 小时）。</p>
 <h3 id="">数据采集</h3>
 <p>将以下宏添加到 <code>printer.cfg</code>：</p>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[gcode_macro DATA_SAMPLE]
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro DATA_SAMPLE]
 gcode:
   {% set bed_temp = params.BED_TEMP|default(90)|int %}
   {% set nozzle_temp = params.NOZZLE_TEMP|default(250)|int %}
@@ -409,33 +412,33 @@ gcode:
   TEMPERATURE_WAIT SENSOR='temperature_sensor IDM_coil' MINIMUM={max_temp}
   IDM_STREAM FILENAME=/tmp/data3
   M104 S0
-  M140 S0</code></pre>
+  M140 S0</code></pre></div>
 <p>执行：</p>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre></div>
 <p>数据文件生成于 <code>/tmp/data1</code>、<code>/tmp/data2</code>、<code>/tmp/data3</code>。</p>
 <h3 id="">计算参数</h3>
 <p>将三个数据文件移动到 <code>~/IDM</code>，然后执行：</p>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-bash">cd ~/IDM
-~/klippy-env/bin/python arg_fit.py</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-bash">cd ~/IDM
+~/klippy-env/bin/python arg_fit.py</code></pre></div>
 <p>查看 <code>fit_result.png</code>，确认补偿后的偏移量控制在三位数以内。</p>
 <hr>
 <h2 id="">热床网格</h2>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[bed_mesh]
-zero_reference_position: 125, 125    # 设置为热床正中心坐标</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[bed_mesh]
+zero_reference_position: 125, 125    # 设置为热床正中心坐标</code></pre></div>
 <h3 id="">大功率热床宏</h3>
 <p>交流热床（500W+）需在探测前关闭热床：</p>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
 rename_existing: _BED_MESH_CALIBRATE
 gcode:
     {% set TARGET_TEMP = printer.heater_bed.target %}
     M140 S0
     _BED_MESH_CALIBRATE {rawparams}
-    M140 S{TARGET_TEMP}</code></pre>
+    M140 S{TARGET_TEMP}</code></pre></div>
 <hr>
 <h2 id="-g-code">打印起始 G-code</h2>
 <p>在 <code>PRINT_START</code> 宏末尾添加：</p>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-gcode">IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
 <hr>
 <h2 id="">故障排查</h2>
 <table>

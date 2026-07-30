@@ -302,13 +302,16 @@ code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   border: 1px solid var(--code-border);
 }
+.code-block {
+  position: relative;
+  margin-bottom: 20px;
+}
 pre {
   background: var(--code-bg);
-  position: relative;
   padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   font-size: 13px;
   line-height: 1.55;
   border: 1px solid var(--code-border);
@@ -449,7 +452,7 @@ def md_to_html(text, copy_label):
             else:
                 lang_attr = f' class="language-{code_lang}"' if code_lang else ''
                 joined = "\n".join(code_lines)
-                result.append(f'<pre><button class="copy-code" type="button" title="{copy_label}" aria-label="{copy_label}"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code{lang_attr}>{joined}</code></pre>')
+                result.append(f'<div class="code-block"><button class="copy-code" type="button" title="{copy_label}" aria-label="{copy_label}"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code{lang_attr}>{joined}</code></pre></div>')
                 in_code_block = False
                 code_lang = ""
                 code_lines = []
@@ -795,11 +798,11 @@ index_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=zh/INDEX.html">
+<meta http-equiv="refresh" content="0;url=zh/USAGE_SETUP.html">
 <title>IDM Wiki</title>
 </head>
 <body>
-<p>Redirecting to <a href="zh/INDEX.html">IDM Wiki</a>...</p>
+<p>Redirecting to <a href="zh/USAGE_SETUP.html">IDM Wiki</a>...</p>
 </body>
 </html>"""
 with open(os.path.join(dist_dir, 'index.html'), 'w', encoding='utf-8') as f:

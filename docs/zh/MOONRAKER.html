@@ -238,13 +238,16 @@ code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   border: 1px solid var(--code-border);
 }
+.code-block {
+  position: relative;
+  margin-bottom: 20px;
+}
 pre {
   background: var(--code-bg);
-  position: relative;
   padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   font-size: 13px;
   line-height: 1.55;
   border: 1px solid var(--code-border);
@@ -370,7 +373,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <h2 id="">自动配置</h2>
 <p>运行 install.sh 后自动配置：</p>
 <h3 id="idm-flash-web-">IDM Flash Web 更新</h3>
-<pre><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[update_manager idm_flash_web]
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[update_manager idm_flash_web]
 type: git_repo
 channel: dev
 path: ~/idm-documents
@@ -378,7 +381,7 @@ origin: https://gitee.com/NBTP/idm-documents.git
 is_system_service: False
 managed_services: idm_flash_web
 info_tags:
-    desc=IDM Flash Web Tool</code></pre>
+    desc=IDM Flash Web Tool</code></pre></div>
 <h3 id="moonrakerasvc">moonraker.asvc</h3>
 <p>在 ~/printer_data/moonraker.asvc 中添加 idm_flash_web。</p>
 <h2 id="">手动配置</h2>

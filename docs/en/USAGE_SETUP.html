@@ -238,13 +238,16 @@ code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   border: 1px solid var(--code-border);
 }
+.code-block {
+  position: relative;
+  margin-bottom: 20px;
+}
 pre {
   background: var(--code-bg);
-  position: relative;
   padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   font-size: 13px;
   line-height: 1.55;
   border: 1px solid var(--code-border);
@@ -362,38 +365,38 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <h2 id="overview">Overview</h2>
 <p>IDM (Integrated Distance Monitor) is a contactless bed leveling sensor for 3D printers, featuring built-in accelerometer and temperature sensor. Communicates with Klipper via CAN or USB.</p>
 <h2 id="software-installation">Software Installation</h2>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-bash">cd ~
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-bash">cd ~
 git clone https://gitee.com/NBTP/IDM.git
 cd IDM
 ~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-./install.sh</code></pre>
+./install.sh</code></pre></div>
 <h2 id="get-the-device-identifier">Get the Device Identifier</h2>
 <p>Get the MCU identifier for your connection mode.</p>
 <h3 id="can-mode">CAN Mode</h3>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-bash">~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q</code></pre></div>
 <h3 id="usb-mode">USB Mode</h3>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre></div>
 <h2 id="mcu-configuration">MCU Configuration</h2>
 <p>CAN mode:</p>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[mcu idm]
-canbus_uuid: 2ca7ad8c2899              # Replace with your device UUID</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[mcu idm]
+canbus_uuid: 2ca7ad8c2899              # Replace with your device UUID</code></pre></div>
 <p>USB mode:</p>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[mcu idm]
-serial: /dev/serial/by-id/usb-idm_idm_...  # Replace with your device path</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[mcu idm]
+serial: /dev/serial/by-id/usb-idm_idm_...  # Replace with your device path</code></pre></div>
 <h2 id="required-settings">Required Settings</h2>
 <p><strong>Enable force_move (required)</strong>:</p>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[force_move]
-enable_force_move: True</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[force_move]
+enable_force_move: True</code></pre></div>
 <p><strong>Update Z endstop</strong>:</p>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[stepper_z]
-endstop_pin: probe:z_virtual_endstop</code></pre>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[stepper_z]
+endstop_pin: probe:z_virtual_endstop</code></pre></div>
 <p><strong>Safe Z homing</strong>:</p>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[safe_z_home]
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[safe_z_home]
 home_xy_position: <your_x_center_coordinate>, <your_y_center_coordinate>
-z_hop: 10</code></pre>
+z_hop: 10</code></pre></div>
 <p>Remove the existing <code>[probe]</code> section. Omit <code>serial:</code> in CAN mode and use the device serial path in USB mode.</p>
 <h2 id="complete-scanner-configuration">Complete Scanner Configuration</h2>
-<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[scanner]
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[scanner]
 mcu: idm
 sensor: idm
 calibration_method: touch             # touch / scan / second_probe
@@ -419,7 +422,7 @@ mesh_runs: 1
 # Touch mode settings
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
-scanner_touch_accel: 100</code></pre>
+scanner_touch_accel: 100</code></pre></div>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 
