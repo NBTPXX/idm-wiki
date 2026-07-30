@@ -573,7 +573,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="INDEX.html">IDM Wiki</a>
-    <span>Firmware Flashing Tool</span>
+    <span>IDM 使用文档</span>
   </div>
   <div class="sidebar-search">
     <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
