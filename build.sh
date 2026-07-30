@@ -674,6 +674,20 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     return escapeHtml(text).replace(re, '<mark>$1</mark>');
   }}
 
+  function scrollToSearchMatch() {{
+    var query = new URLSearchParams(window.location.search).get('q');
+    if (!query) return;
+    var words = query.toLowerCase().split(/\s+/).filter(function(w) {{ return w.length > 0; }});
+    var targets = document.querySelectorAll('.main h1, .main h2, .main h3, .main h4, .main p, .main li, .main pre, .main td, .main th');
+    for (var i = 0; i < targets.length; i++) {{
+      var text = targets[i].textContent.toLowerCase();
+      if (words.every(function(word) {{ return text.indexOf(word) >= 0; }})) {{
+        targets[i].scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+        return;
+      }}
+    }}
+  }}
+
   function search() {{
     var q = input.value.trim();
     if (!q || !idx) {{
@@ -704,7 +718,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
       for (var k = 0; k < Math.min(matches.length, 20); k++) {{
         var m = matches[k];
         var snippet = m.c.length > 200 ? m.c.substring(0, 200) + '...' : m.c;
-        html += '<a class="search-result-item" href="' + m.u + '">';
+        html += '<a class="search-result-item" href="' + m.u + '?q=' + encodeURIComponent(q) + '">';
         html += '<div class="title">' + highlight(m.t, q) + '</div>';
         html += '<div class="snippet">' + highlight(snippet, q) + '</div>';
         html += '</a>';
@@ -753,6 +767,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   }});
 
   loadIndex();
+  window.requestAnimationFrame(scrollToSearchMatch);
 }})();
 </script>
 </body>
