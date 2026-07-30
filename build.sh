@@ -798,11 +798,20 @@ index_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=zh/USAGE_SETUP.html">
 <title>IDM Wiki</title>
 </head>
 <body>
-<p>Redirecting to <a href="zh/USAGE_SETUP.html">IDM Wiki</a>...</p>
+<p>Redirecting to <a id="redirect-link" href="zh/USAGE_SETUP.html">IDM Wiki</a>...</p>
+<script>
+(function() {
+  var path = window.location.pathname;
+  var base = path.endsWith('/index.html') ? path.slice(0, -10) : path;
+  if (!base.endsWith('/')) base += '/';
+  var target = base + 'zh/USAGE_SETUP.html';
+  document.getElementById('redirect-link').href = target;
+  window.location.replace(target);
+})();
+</script>
 </body>
 </html>"""
 with open(os.path.join(dist_dir, 'index.html'), 'w', encoding='utf-8') as f:
