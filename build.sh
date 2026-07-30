@@ -796,11 +796,11 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
             f.write(html)
         print(f"Generated: {html_file}")
 
-        # Extract content for search index (strip markdown syntax for plain text)
-        clean_content = re.sub(r'```.*?```', '', md_content, flags=re.DOTALL)
+        # Preserve code block content so commands and configuration keys are searchable.
+        clean_content = re.sub(r'^```[^\n]*\n?', '', md_content, flags=re.MULTILINE)
         clean_content = re.sub(r'#{1,6}\s+', '', clean_content)
         clean_content = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', clean_content)
-        clean_content = re.sub(r'[*`~_>|]', '', clean_content)
+        clean_content = re.sub(r'[*`~>|]', '', clean_content)
         clean_content = re.sub(r'\n{3,}', '\n\n', clean_content)
         clean_content = clean_content.strip()
 
