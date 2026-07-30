@@ -179,8 +179,14 @@ body {
   left: 280px;
   right: 0;
   bottom: 0;
+  pointer-events: none;
+}
+.search-results::before {
+  content: "";
+  position: fixed;
+  inset: 0;
   background: rgba(0,0,0,0.3);
-  z-index: 100;
+  z-index: 5;
 }
 .search-results.show {
   display: block;
@@ -195,6 +201,8 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.15);
   overflow-y: auto;
   border-bottom: 1px solid var(--result-border);
+  pointer-events: auto;
+  z-index: 11;
 }
 .search-result-item {
   display: block;
@@ -386,6 +394,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   }
   .main { margin-left: 0; padding: 24px; }
   .search-results { left: 0; }
+  .search-results-inner { top: 128px; }
 }
 """
 
