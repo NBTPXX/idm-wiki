@@ -393,7 +393,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   }
   .main { margin-left: 0; padding: 24px; }
   .search-results { left: 0; }
-  .search-results-inner { top: 128px; }
+  .search-results-inner { top: var(--search-results-top, 144px); }
 }
 """
 
@@ -709,6 +709,9 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
       }}
     }}
     inner.innerHTML = html;
+    if (window.matchMedia('(max-width: 768px)').matches) {{
+      results.style.setProperty('--search-results-top', input.getBoundingClientRect().bottom + 'px');
+    }}
     backdrop.classList.add('show');
     results.classList.add('show');
     focusIdx = -1;
