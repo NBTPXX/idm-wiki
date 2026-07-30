@@ -558,6 +558,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
         lang_opts.append(f'        <option value="{lc}"{sel}>{lname}</option>')
 
     raw_title = page_title.strip('#').strip()
+    subtitle = 'IDM 使用文档' if lang == 'zh' else 'IDM User Guide'
 
     return f"""<!DOCTYPE html>
 <html lang="{lang_attr}">
@@ -573,7 +574,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="INDEX.html">IDM Wiki</a>
-    <span>IDM 使用文档</span>
+    <span>{subtitle}</span>
   </div>
   <div class="sidebar-search">
     <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
