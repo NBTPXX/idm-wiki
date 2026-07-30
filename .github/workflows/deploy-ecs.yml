@@ -1,0 +1,34 @@
+name: Deploy Wiki to ECS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          ECS_KNOWN_HOSTS: ${{ secrets.ECS_KNOWN_HOSTS }}
+          ECS_SSH_PRIVATE_KEY: ${{ secrets.ECS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$ECS_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          printf '%s\n' "$ECS_SSH_PRIVATE_KEY" > "$HOME/.ssh/id_ed25519"
+          chmod 600 "$HOME/.ssh/id_ed25519"
+
+      - name: Deploy static Wiki
+        env:
+          ECS_HOST: idm.chimera3d.top
+          ECS_USER: root
+          ECS_DEPLOY_DIR: /opt/idm-wiki
+          ECS_SSH_KEY_PATH: ${{ runner.home }}/.ssh/id_ed25519
+        run: bash scripts/deploy-ecs.sh
