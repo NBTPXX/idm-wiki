@@ -9,7 +9,8 @@ IMAGES_DIR="$SCRIPT_DIR/images"
 mkdir -p "$DIST_DIR"
 
 if [[ -d "$IMAGES_DIR" ]]; then
-  cp -r "$IMAGES_DIR" "$DIST_DIR/images"
+  mkdir -p "$DIST_DIR/images"
+  cp -r "$IMAGES_DIR"/. "$DIST_DIR/images/"
   echo "Copied images to docs/images/"
 fi
 
