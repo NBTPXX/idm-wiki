@@ -435,6 +435,30 @@ gcode:
     _BED_MESH_CALIBRATE {rawparams}
     M140 S{TARGET_TEMP}</code></pre></div>
 <hr>
+<h2 id="multi-z-machine-leveling">Multi-Z Machine Leveling</h2>
+<h3 id="voron-24-and-other-4z-machines-qgl">VORON 2.4 and Other 4Z Machines (QGL)</h3>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro QUAD_GANTRY_LEVEL]
+rename_existing: _QUAD_GANTRY_LEVEL
+gcode:
+    SAVE_GCODE_STATE NAME=STATE_QGL
+    BED_MESH_CLEAR
+    {% if not printer.quad_gantry_level.applied %}
+      _QUAD_GANTRY_LEVEL horizontal_move_z=10 retry_tolerance=1
+    {% endif %}
+    _QUAD_GANTRY_LEVEL horizontal_move_z=2
+    RESTORE_GCODE_STATE NAME=STATE_QGL</code></pre></div>
+<h3 id="voron-trident-and-other-3z-machines-ztilt">VORON Trident and Other 3Z Machines (Z_TILT)</h3>
+<div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-ini">[gcode_macro Z_TILT_ADJUST]
+rename_existing: _Z_TILT_ADJUST
+gcode:
+    SAVE_GCODE_STATE NAME=STATE_Z_TILT
+    BED_MESH_CLEAR
+    {% if not printer.z_tilt.applied %}
+      _Z_TILT_ADJUST horizontal_move_z=10 retry_tolerance=1
+    {% endif %}
+    _Z_TILT_ADJUST horizontal_move_z=2
+    RESTORE_GCODE_STATE NAME=STATE_Z_TILT</code></pre></div>
+<hr>
 <h2 id="print-start-g-code">Print Start G-code</h2>
 <p>Add to the end of <code>PRINT_START</code> macro:</p>
 <div class="code-block"><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
