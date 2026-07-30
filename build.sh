@@ -84,10 +84,10 @@ nav_labels_ru = [
     "Прошивка через USB", "Прошивка в режиме DFU",
 ]
 language_meta = {
-    "zh": {"name": "中文", "subtitle": "IDM 使用文档", "search": "搜索文档...", "empty_before": "未找到与 \"", "empty_after": "\" 匹配的结果", "copy": "复制", "copied": "已复制"},
-    "en": {"name": "English", "subtitle": "IDM User Guide", "search": "Search docs...", "empty_before": "No results found for \"", "empty_after": "\"", "copy": "Copy", "copied": "Copied"},
-    "ja": {"name": "日本語", "subtitle": "IDM ユーザーガイド", "search": "ドキュメントを検索...", "empty_before": "\"", "empty_after": "\" に一致する結果はありません", "copy": "コピー", "copied": "コピーしました"},
-    "ru": {"name": "Русский", "subtitle": "Руководство пользователя IDM", "search": "Поиск по документации...", "empty_before": "По запросу \"", "empty_after": "\" ничего не найдено", "copy": "Копировать", "copied": "Скопировано"},
+    "zh": {"name": "中文", "subtitle": "IDM 使用文档", "search": "搜索文档...", "empty_before": "未找到与 \"", "empty_after": "\" 匹配的结果", "copy": "复制", "copied": "已复制", "top": "回到顶部"},
+    "en": {"name": "English", "subtitle": "IDM User Guide", "search": "Search docs...", "empty_before": "No results found for \"", "empty_after": "\"", "copy": "Copy", "copied": "Copied", "top": "Back to top"},
+    "ja": {"name": "日本語", "subtitle": "IDM ユーザーガイド", "search": "ドキュメントを検索...", "empty_before": "\"", "empty_after": "\" に一致する結果はありません", "copy": "コピー", "copied": "コピーしました", "top": "ページ上部へ"},
+    "ru": {"name": "Русский", "subtitle": "Руководство пользователя IDM", "search": "Поиск по документации...", "empty_before": "По запросу \"", "empty_after": "\" ничего не найдено", "copy": "Копировать", "copied": "Скопировано", "top": "Наверх"},
 }
 
 CSS = """
@@ -384,6 +384,48 @@ pre code {
   border-color: var(--link);
   outline: none;
 }
+.back-to-top {
+  position: fixed;
+  right: 32px;
+  bottom: 28px;
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #ffffff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(26,35,126,0.28);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.18s, transform 0.18s, background 0.18s;
+}
+.back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.back-to-top svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  background: var(--link-hover);
+  border-color: var(--link-hover);
+  outline: none;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -415,10 +457,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   .main { margin-left: 0; padding: 24px; }
   .search-results { left: 0; }
   .search-results-inner { top: var(--search-results-top, 144px); }
+  .back-to-top { right: 20px; bottom: 20px; }
 }
 """
 
-def md_to_html(text, copy_label):
+def md_to_html(text, copy_label, top_label):
     lines = text.split('\n')
     result = []
     i = 0
@@ -463,6 +506,7 @@ def md_to_html(text, copy_label):
 
     def inline_md(text):
         text = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1">', text)
+        text = re.sub(r'\[[^\]]+\]\(INDEX\.html\)', f'<button class="back-to-top" type="button" title="{top_label}" aria-label="{top_label}"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"></path><path d="M12 9v11"></path></svg></button>', text)
         text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
         text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
@@ -622,7 +666,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
- {md_to_html(md_content, meta["copy"])}
+ {md_to_html(md_content, meta["copy"], meta["top"])}
 </main>
 <script>
 (function() {{
@@ -668,6 +712,19 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
         }}, 1600);
       }});
     }});
+  }});
+
+  document.querySelectorAll('.back-to-top').forEach(function(button) {{
+    function updateVisibility() {{
+      button.classList.toggle('is-visible', window.scrollY > 240);
+    }}
+
+    button.addEventListener('click', function() {{
+      window.scrollTo({{ top: 0, behavior: 'smooth' }});
+    }});
+
+    window.addEventListener('scroll', updateVisibility, {{ passive: true }});
+    updateVisibility();
   }});
 
   function loadIndex() {{
