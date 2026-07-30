@@ -240,7 +240,8 @@ code {
 }
 pre {
   background: var(--code-bg);
-  padding: 16px 20px;
+  position: relative;
+  padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 20px;
@@ -253,6 +254,26 @@ pre code {
   padding: 0;
   border-radius: 0;
   border: none;
+}
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-code:hover,
+.copy-code:focus-visible {
+  color: var(--link);
+  border-color: var(--link);
+  outline: none;
 }
 table {
   width: 100%;
@@ -323,12 +344,12 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-<h1 id="advanced-features">Advanced Features</h1>
+ <h1 id="advanced-features">Advanced Features</h1>
 <h2 id="temperature-compensation-optimization">Temperature Compensation Optimization</h2>
 <p>IDM has built-in temperature compensation. Parameters can be optimized through data collection (~1 hour).</p>
 <h3 id="data-collection">Data Collection</h3>
 <p>Add this macro to <code>printer.cfg</code>:</p>
-<pre><code class="language-ini">[gcode_macro DATA_SAMPLE]
+<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[gcode_macro DATA_SAMPLE]
 gcode:
   {% set bed_temp = params.BED_TEMP|default(90)|int %}
   {% set nozzle_temp = params.NOZZLE_TEMP|default(250)|int %}
@@ -376,20 +397,20 @@ gcode:
   M104 S0
   M140 S0</code></pre>
 <p>Run:</p>
-<pre><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
+<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
 <p>Data files are generated at <code>/tmp/data1</code>, <code>/tmp/data2</code>, <code>/tmp/data3</code>.</p>
 <h3 id="calculate-parameters">Calculate Parameters</h3>
 <p>Move the three data files to <code>~/IDM</code>, then run:</p>
-<pre><code class="language-bash">cd ~/IDM
+<pre><button class="copy-code" type="button">Copy</button><code class="language-bash">cd ~/IDM
 ~/klippy-env/bin/python arg_fit.py</code></pre>
 <p>Check <code>fit_result.png</code> and confirm that the compensated offsets stay within three digits.</p>
 <hr>
 <h2 id="bed-mesh">Bed Mesh</h2>
-<pre><code class="language-ini">[bed_mesh]
+<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[bed_mesh]
 zero_reference_position: 125, 125      # Set this to the center of the bed</code></pre>
 <h3 id="high-power-bed-macro">High-Power Bed Macro</h3>
 <p>For AC heated beds (500W+), disable heater during probing:</p>
-<pre><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
+<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
 rename_existing: _BED_MESH_CALIBRATE
 gcode:
     {% set TARGET_TEMP = printer.heater_bed.target %}
@@ -399,7 +420,7 @@ gcode:
 <hr>
 <h2 id="print-start-g-code">Print Start G-code</h2>
 <p>Add to the end of <code>PRINT_START</code> macro:</p>
-<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <hr>
 <h2 id="troubleshooting">Troubleshooting</h2>
@@ -447,6 +468,34 @@ PROBE_CALIBRATE METHOD=AUTO</code></pre>
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = 'en';
+  var copyLabel = 'Copy';
+  var copiedLabel = 'Copied';
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('.copy-code').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var code = button.parentElement.querySelector('code');
+      copyText(code.textContent).then(function() {
+        button.textContent = copiedLabel;
+        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+      });
+    });
+  });
 
   function loadIndex() {
     var xhr = new XMLHttpRequest();

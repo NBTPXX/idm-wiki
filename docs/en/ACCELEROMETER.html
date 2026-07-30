@@ -240,7 +240,8 @@ code {
 }
 pre {
   background: var(--code-bg);
-  padding: 16px 20px;
+  position: relative;
+  padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 20px;
@@ -253,6 +254,26 @@ pre code {
   padding: 0;
   border-radius: 0;
   border: none;
+}
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-code:hover,
+.copy-code:focus-visible {
+  color: var(--link);
+  border-color: var(--link);
+  outline: none;
 }
 table {
   width: 100%;
@@ -323,10 +344,10 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-<h1 id="accelerometer">Accelerometer</h1>
+ <h1 id="accelerometer">Accelerometer</h1>
 <p>IDM includes a built-in accelerometer for resonance measurement. Place the accelerometer configuration after the IDM configuration.</p>
 <h2 id="lis2dw-version-square-chip">lis2dw Version (Square Chip)</h2>
-<pre><code class="language-ini">[lis2dw]
+<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[lis2dw]
 cs_pin: idm:PA3
 spi_bus: spi1
 
@@ -335,7 +356,7 @@ accel_chip: lis2dw
 probe_points:
     125, 125, 20  # Set this to the printhead coordinates used for resonance measurement</code></pre>
 <h2 id="adxl345-version-rectangular-chip">adxl345 Version (Rectangular Chip)</h2>
-<pre><code class="language-ini">[adxl345]
+<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[adxl345]
 cs_pin: idm:PA3
 spi_bus: spi1
 
@@ -345,7 +366,7 @@ probe_points:
     125, 125, 20  # Set this to the printhead coordinates used for resonance measurement</code></pre>
 <h2 id="resonance-measurement">Resonance Measurement</h2>
 <p>After configuration, run:</p>
-<pre><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
+<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 
@@ -358,6 +379,34 @@ probe_points:
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = 'en';
+  var copyLabel = 'Copy';
+  var copiedLabel = 'Copied';
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('.copy-code').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var code = button.parentElement.querySelector('code');
+      copyText(code.textContent).then(function() {
+        button.textContent = copiedLabel;
+        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+      });
+    });
+  });
 
   function loadIndex() {
     var xhr = new XMLHttpRequest();

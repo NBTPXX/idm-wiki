@@ -240,7 +240,8 @@ code {
 }
 pre {
   background: var(--code-bg);
-  padding: 16px 20px;
+  position: relative;
+  padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 20px;
@@ -253,6 +254,26 @@ pre code {
   padding: 0;
   border-radius: 0;
   border: none;
+}
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-code:hover,
+.copy-code:focus-visible {
+  color: var(--link);
+  border-color: var(--link);
+  outline: none;
 }
 table {
   width: 100%;
@@ -323,7 +344,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-<h1 id="">校准</h1>
+ <h1 id="">校准</h1>
 <h2 id="-z-">初始化 Z 位置</h2>
 <p>校准前先设置 Z 轴初始位置：</p>
 <ol>
@@ -334,29 +355,29 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <li>执行 <code>SET_KINEMATIC_POSITION z=0</code></li>
 </ol>
 <h2 id="scan-">手动校准（Scan 模式）</h2>
-<pre><code class="language-gcode">IDM_CALIBRATE</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">IDM_CALIBRATE</code></pre>
 <h2 id="touch-">Touch 模式</h2>
 <p>Touch 模式利用喷嘴接触热床来校准，适用于各种热床表面。</p>
 <h3 id="-1-">第 1 步：初次手动校准</h3>
-<pre><code class="language-gcode">IDM_TOUCH METHOD=MANUAL</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">IDM_TOUCH METHOD=MANUAL</code></pre>
 <p>在弹出的偏移控制框中，将喷头降到喷嘴贴热床，然后点击 -0.1 偏移并确认。</p>
 <h3 id="-2-">第 2 步：归零</h3>
-<pre><code class="language-gcode">G28</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">G28</code></pre>
 <h3 id="-3-touch-">第 3 步：Touch 阈值校准</h3>
-<pre><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">IDM_THRESHOLD_SCAN MIN=500</code></pre>
 <h3 id="-4--z-">第 4 步：保存固定 Z 偏移补偿</h3>
-<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <h3 id="-5--z-">第 5 步：自动 Z 偏移测量</h3>
-<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h3 id="-6--g-code">第 6 步：配置打印起始 G-code</h3>
-<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <p>完整流程参见<a href="USAGE_ADVANCED.html">高级功能</a>。</p>
 <h2 id="second-probe-">Second Probe 模式</h2>
 <p>Second Probe 模式使用 TAP 或机械限位开关触发 Z 归零和自动 Z 偏移校准，适用于使用外部接触触发器的设备。</p>
 <h3 id="">配置</h3>
 <p>在 <code>[scanner]</code> 中添加：</p>
-<pre><code class="language-ini">calibration_method: second_probe
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">calibration_method: second_probe
 z_offset: 0
 probe_speed: 10
 probe_pin:</code></pre>
@@ -384,12 +405,12 @@ probe_pin:</code></pre>
 </table>
 <p>保存配置并重启 Klipper，然后确认第二探针能够正常触发。</p>
 <h3 id="">执行校准</h3>
-<pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">IDM_TOUCH CALIBRATE=1</code></pre>
 <h3 id="z-">Z 偏移校准</h3>
-<pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <h3 id="-z-">固定 Z 偏移补偿</h3>
 <p>在网页界面中微调 Z 偏移，喷嘴高度合适后保存固定补偿：</p>
-<pre><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-gcode">SAVE_TOUCH_OFFSET</code></pre>
 <p>TAP 等触发机构可能产生轻微压缩量。更换喷嘴、热端组件或第二探针后，应重新测定并保存固定补偿。</p>
 <h2 id="">多模型管理</h2>
 <p>针对不同 PEI 板保存独立校准：</p>
@@ -427,6 +448,34 @@ probe_pin:</code></pre>
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = 'zh';
+  var copyLabel = '复制';
+  var copiedLabel = '已复制';
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('.copy-code').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var code = button.parentElement.querySelector('code');
+      copyText(code.textContent).then(function() {
+        button.textContent = copiedLabel;
+        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+      });
+    });
+  });
 
   function loadIndex() {
     var xhr = new XMLHttpRequest();

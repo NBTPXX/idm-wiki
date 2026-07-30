@@ -304,7 +304,8 @@ code {
 }
 pre {
   background: var(--code-bg);
-  padding: 16px 20px;
+  position: relative;
+  padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 20px;
@@ -317,6 +318,26 @@ pre code {
   padding: 0;
   border-radius: 0;
   border: none;
+}
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-code:hover,
+.copy-code:focus-visible {
+  color: var(--link);
+  border-color: var(--link);
+  outline: none;
 }
 table {
   width: 100%;
@@ -351,7 +372,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 }
 """
 
-def md_to_html(text):
+def md_to_html(text, copy_label):
     lines = text.split('\n')
     result = []
     i = 0
@@ -414,7 +435,7 @@ def md_to_html(text):
             else:
                 lang_attr = f' class="language-{code_lang}"' if code_lang else ''
                 joined = "\n".join(code_lines)
-                result.append(f'<pre><code{lang_attr}>{joined}</code></pre>')
+                result.append(f'<pre><button class="copy-code" type="button">{copy_label}</button><code{lang_attr}>{joined}</code></pre>')
                 in_code_block = False
                 code_lang = ""
                 code_lines = []
@@ -553,7 +574,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-{md_to_html(md_content)}
+ {md_to_html(md_content, "复制" if lang == "zh" else "Copy")}
 </main>
 <script>
 (function() {{
@@ -563,6 +584,34 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = '{lang}';
+  var copyLabel = '{"复制" if lang == "zh" else "Copy"}';
+  var copiedLabel = '{"已复制" if lang == "zh" else "Copied"}';
+
+  function copyText(text) {{
+    if (navigator.clipboard && navigator.clipboard.writeText) {{
+      return navigator.clipboard.writeText(text);
+    }}
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }}
+
+  document.querySelectorAll('.copy-code').forEach(function(button) {{
+    button.addEventListener('click', function() {{
+      var code = button.parentElement.querySelector('code');
+      copyText(code.textContent).then(function() {{
+        button.textContent = copiedLabel;
+        window.setTimeout(function() {{ button.textContent = copyLabel; }}, 1600);
+      }});
+    }});
+  }});
 
   function loadIndex() {{
     var xhr = new XMLHttpRequest();

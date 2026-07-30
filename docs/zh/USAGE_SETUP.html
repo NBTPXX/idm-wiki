@@ -240,7 +240,8 @@ code {
 }
 pre {
   background: var(--code-bg);
-  padding: 16px 20px;
+  position: relative;
+  padding: 48px 20px 16px;
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 20px;
@@ -253,6 +254,26 @@ pre code {
   padding: 0;
   border-radius: 0;
   border: none;
+}
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.copy-code:hover,
+.copy-code:focus-visible {
+  color: var(--link);
+  border-color: var(--link);
+  outline: none;
 }
 table {
   width: 100%;
@@ -323,11 +344,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-<h1 id="">安装与配置</h1>
+ <h1 id="">安装与配置</h1>
 <h2 id="">简介</h2>
 <p>IDM（Integrated Distance Monitor）是非接触式 3D 打印机调平传感器，内置加速度计和温度传感器，通过 CAN 或 USB 与 Klipper 通信。</p>
 <h2 id="">软件安装</h2>
-<pre><code class="language-bash">cd ~
+<pre><button class="copy-code" type="button">复制</button><code class="language-bash">cd ~
 git clone https://gitee.com/NBTP/IDM.git
 cd IDM
 ~/klippy-env/bin/pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
@@ -335,30 +356,30 @@ cd IDM
 <h2 id="">获取设备标识</h2>
 <p>根据连接方式获取 MCU 标识。</p>
 <h3 id="can-">CAN 模式</h3>
-<pre><code class="language-bash">~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-bash">~/klippy-env/bin/python ~/klipper/lib/katapult/flashtool.py -i can0 -q</code></pre>
 <h3 id="usb-">USB 模式</h3>
-<pre><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
+<pre><button class="copy-code" type="button">复制</button><code class="language-bash">ls /dev/serial/by-id/*</code></pre>
 <h2 id="mcu-">MCU 配置</h2>
 <p>CAN 模式：</p>
-<pre><code class="language-ini">[mcu idm]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[mcu idm]
 canbus_uuid: 2ca7ad8c2899              # 替换为你的设备 UUID</code></pre>
 <p>USB 模式：</p>
-<pre><code class="language-ini">[mcu idm]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[mcu idm]
 serial: /dev/serial/by-id/usb-idm_idm_...  # 替换为你的设备路径</code></pre>
 <h2 id="">必要配置项</h2>
 <p><strong>启用 force_move</strong>（必须）：</p>
-<pre><code class="language-ini">[force_move]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[force_move]
 enable_force_move: True</code></pre>
 <p><strong>修改 Z 限位</strong>：</p>
-<pre><code class="language-ini">[stepper_z]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[stepper_z]
 endstop_pin: probe:z_virtual_endstop</code></pre>
 <p><strong>安全归零</strong>：</p>
-<pre><code class="language-ini">[safe_z_home]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[safe_z_home]
 home_xy_position: <你的X轴中心坐标>, <你的Y轴中心坐标>
 z_hop: 10</code></pre>
 <p>删除原有的 <code>[probe]</code> 模块。CAN 版不配置 <code>serial:</code>，USB 版使用设备串口路径。</p>
 <h2 id="scanner-">Scanner 完整配置</h2>
-<pre><code class="language-ini">[scanner]
+<pre><button class="copy-code" type="button">复制</button><code class="language-ini">[scanner]
 mcu: idm
 sensor: idm
 calibration_method: touch             # touch / scan / second_probe
@@ -397,6 +418,34 @@ scanner_touch_accel: 100</code></pre>
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = 'zh';
+  var copyLabel = '复制';
+  var copiedLabel = '已复制';
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('.copy-code').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var code = button.parentElement.querySelector('code');
+      copyText(code.textContent).then(function() {
+        button.textContent = copiedLabel;
+        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+      });
+    });
+  });
 
   function loadIndex() {
     var xhr = new XMLHttpRequest();
