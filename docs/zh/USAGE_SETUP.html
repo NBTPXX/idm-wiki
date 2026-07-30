@@ -341,7 +341,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     <span>IDM 使用文档</span>
   </div>
   <div class="sidebar-search">
-    <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
+    <input type="text" id="search-input" placeholder="搜索文档..." autocomplete="off">
   </div>
   <div class="sidebar-nav">
       <div class="sec-header">使用教程</div>
@@ -363,6 +363,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'USAGE_SETUP.html'">
         <option value="zh" selected>中文</option>
         <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="ru">Русский</option>
     </select>
   </div>
 </nav>
@@ -545,7 +547,7 @@ scanner_touch_accel: 100</code></pre></div>
     matches.sort(function(a, b) { return b._score - a._score; });
     var html = '';
     if (matches.length === 0) {
-      html = '<div class="search-empty">No results found for "' + escapeHtml(q) + '"</div>';
+      html = '<div class="search-empty">未找到与 "' + escapeHtml(q) + '" 匹配的结果</div>';
     } else {
       for (var k = 0; k < Math.min(matches.length, 20); k++) {
         var m = matches[k];

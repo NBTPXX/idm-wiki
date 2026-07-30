@@ -6,7 +6,6 @@ DIST_DIR="$SCRIPT_DIR/docs"
 CONTENT_DIR="$SCRIPT_DIR/content"
 IMAGES_DIR="$SCRIPT_DIR/images"
 
-rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
 
 if [[ -d "$IMAGES_DIR" ]]; then
@@ -70,6 +69,25 @@ rest = sys.argv[separator_idx+1:]
 sep2 = rest.index("|||")
 nav_labels_zh = rest[:sep2]
 nav_labels_en = rest[sep2+1:]
+nav_labels_ja = [
+    "使用ガイド", "セットアップと設定", "自動更新", "キャリブレーション",
+    "加速度計", "マルチ Z 軸レベリング", "高度な機能", "書き込みガイド",
+    "概要", "インストールガイド", "Moonraker 連携", "CAN モード書き込み",
+    "USB モード書き込み", "DFU モード書き込み",
+]
+nav_labels_ru = [
+    "Руководство по использованию", "Настройка и конфигурация", "Автообновление",
+    "Калибровка", "Акселерометр", "Выравнивание по нескольким осям Z",
+    "Расширенные функции", "Руководство по прошивке", "Обзор",
+    "Руководство по установке", "Интеграция с Moonraker", "Прошивка через CAN",
+    "Прошивка через USB", "Прошивка в режиме DFU",
+]
+language_meta = {
+    "zh": {"name": "中文", "subtitle": "IDM 使用文档", "search": "搜索文档...", "empty_before": "未找到与 \"", "empty_after": "\" 匹配的结果", "copy": "复制", "copied": "已复制"},
+    "en": {"name": "English", "subtitle": "IDM User Guide", "search": "Search docs...", "empty_before": "No results found for \"", "empty_after": "\"", "copy": "Copy", "copied": "Copied"},
+    "ja": {"name": "日本語", "subtitle": "IDM ユーザーガイド", "search": "ドキュメントを検索...", "empty_before": "\"", "empty_after": "\" に一致する結果はありません", "copy": "コピー", "copied": "コピーしました"},
+    "ru": {"name": "Русский", "subtitle": "Руководство пользователя IDM", "search": "Поиск по документации...", "empty_before": "По запросу \"", "empty_after": "\" ничего не найдено", "copy": "Копировать", "copied": "Скопировано"},
+}
 
 CSS = """
 :root {
@@ -563,12 +581,12 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
             sidebar_items.append(f'      <a href="{href}" class="nav-link{active}">{label}</a>')
 
     lang_opts = []
-    for lc, lname in [("zh", "中文"), ("en", "English")]:
+    for lc in ("zh", "en", "ja", "ru"):
         sel = ' selected' if lc == lang else ''
-        lang_opts.append(f'        <option value="{lc}"{sel}>{lname}</option>')
+        lang_opts.append(f'        <option value="{lc}"{sel}>{language_meta[lc]["name"]}</option>')
 
     raw_title = page_title.strip('#').strip()
-    subtitle = 'IDM 使用文档' if lang == 'zh' else 'IDM User Guide'
+    meta = language_meta[lang]
 
     return f"""<!DOCTYPE html>
 <html lang="{lang_attr}">
@@ -584,10 +602,10 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="INDEX.html">IDM Wiki</a>
-    <span>{subtitle}</span>
+    <span>{meta["subtitle"]}</span>
   </div>
   <div class="sidebar-search">
-    <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
+    <input type="text" id="search-input" placeholder="{meta["search"]}" autocomplete="off">
   </div>
   <div class="sidebar-nav">
 {chr(10).join(sidebar_items)}
@@ -603,7 +621,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
- {md_to_html(md_content, "复制" if lang == "zh" else "Copy")}
+ {md_to_html(md_content, meta["copy"])}
 </main>
 <script>
 (function() {{
@@ -614,8 +632,8 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
   var langDir = '{lang}';
-  var copyLabel = '{"复制" if lang == "zh" else "Copy"}';
-  var copiedLabel = '{"已复制" if lang == "zh" else "Copied"}';
+  var copyLabel = '{meta["copy"]}';
+  var copiedLabel = '{meta["copied"]}';
   var copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg>';
   var copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>';
 
@@ -713,7 +731,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     matches.sort(function(a, b) {{ return b._score - a._score; }});
     var html = '';
     if (matches.length === 0) {{
-      html = '<div class="search-empty">No results found for "' + escapeHtml(q) + '"</div>';
+      html = '<div class="search-empty">{meta["empty_before"]}' + escapeHtml(q) + '{meta["empty_after"]}</div>';
     }} else {{
       for (var k = 0; k < Math.min(matches.length, 20); k++) {{
         var m = matches[k];
@@ -785,7 +803,15 @@ for lang_dir_name in sorted(os.listdir(content_dir)):
         continue
 
     lang_attr = lang_dir_name
-    nav_labels = nav_labels_zh if lang_dir_name == 'zh' else nav_labels_en
+    nav_labels = {
+        'zh': nav_labels_zh,
+        'en': nav_labels_en,
+        'ja': nav_labels_ja,
+        'ru': nav_labels_ru,
+    }.get(lang_dir_name)
+    if nav_labels is None:
+        print(f"WARNING: Unsupported language directory {lang_dir_name}, skipping")
+        continue
     lang_dist = os.path.join(dist_dir, lang_dir_name)
     os.makedirs(lang_dist, exist_ok=True)
 
