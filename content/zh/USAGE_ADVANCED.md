@@ -79,41 +79,6 @@ cd ~/IDM
 
 ---
 
-## 加速度计
-
-IDM 内置加速度计，用于共振补偿。
-
-**lis2dw 方形芯片**：
-
-```ini
-[lis2dw]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: lis2dw
-probe_points: 125,125,20
-```
-
-**adxl345 长方形芯片**：
-
-```ini
-[adxl345]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: adxl345
-probe_points: 125,125,20
-```
-
-执行共振测量：
-```gcode
-SHAPER_CALIBRATE
-```
-
----
-
 ## 热床网格
 
 ```ini

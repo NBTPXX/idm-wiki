@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DFU Mode Flashing - IDM Wiki</title>
+<title>加速度计 - IDM Wiki</title>
 <style>
 
 :root {
@@ -298,23 +298,23 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
   </div>
   <div class="sidebar-nav">
-      <div class="sec-header">Usage Tutorial</div>
-      <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
-      <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
-      <a href="ACCELEROMETER.html" class="nav-link">Accelerometer</a>
-      <a href="USAGE_ADVANCED.html" class="nav-link">Advanced Features</a>
-      <div class="sec-header">Flashing Guide</div>
-      <a href="INDEX.html" class="nav-link">Overview</a>
-      <a href="INSTALL.html" class="nav-link">Installation Guide</a>
-      <a href="MOONRAKER.html" class="nav-link">Moonraker Integration</a>
-      <a href="CAN_FLASH.html" class="nav-link">CAN Mode Flashing</a>
-      <a href="USB_FLASH.html" class="nav-link">USB Mode Flashing</a>
-      <a href="DFU_FLASH.html" class="nav-link active">DFU Mode Flashing</a>
+      <div class="sec-header">使用教程</div>
+      <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
+      <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
+      <a href="ACCELEROMETER.html" class="nav-link active">加速度计</a>
+      <a href="USAGE_ADVANCED.html" class="nav-link">高级功能</a>
+      <div class="sec-header">刷写指南</div>
+      <a href="INDEX.html" class="nav-link">概览</a>
+      <a href="INSTALL.html" class="nav-link">安装指南</a>
+      <a href="MOONRAKER.html" class="nav-link">Moonraker 集成</a>
+      <a href="CAN_FLASH.html" class="nav-link">CAN 模式刷写</a>
+      <a href="USB_FLASH.html" class="nav-link">USB 模式刷写</a>
+      <a href="DFU_FLASH.html" class="nav-link">DFU 模式刷写</a>
   </div>
   <div class="lang">
-    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'DFU_FLASH.html'">
-        <option value="zh">中文</option>
-        <option value="en" selected>English</option>
+    <select onchange="if(this.value) window.location.href='../' + this.value + '/' + 'ACCELEROMETER.html'">
+        <option value="zh" selected>中文</option>
+        <option value="en">English</option>
     </select>
   </div>
 </nav>
@@ -322,44 +322,31 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <div class="search-results-inner" id="search-results-inner"></div>
 </div>
 <main class="main">
-<h1 id="dfu-mode-flashing">DFU Mode Flashing</h1>
-<p>DFU mode uses the dfu-util tool, applicable when the device is in USB DFU mode.</p>
-<h2 id="prerequisites">Prerequisites</h2>
-<ul>
-<li>Install dfu-util: <code>sudo apt install -y dfu-util</code></li>
-<li>Attempts without sudo first; falls back to <code>sudo -n</code> if that fails</li>
-</ul>
-<h2 id="enter-dfu-mode">Enter DFU Mode</h2>
-<p>Short BOOT0, then power on the device to enter DFU mode.</p>
-<h2 id="flash-address">Flash Address</h2>
-<table>
-<tr>
-<th>Address</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>0x08002000</td>
-<td>Main Firmware</td>
-</tr>
-<tr>
-<td>0x08000000</td>
-<td>Bootloader</td>
-</tr>
-</table>
-<h2 id="detect-dfu-device">Detect DFU Device</h2>
-<p>Click "Detect DFU" to run <code>dfu-util -l</code> and scan for DFU devices.</p>
-<p><img src="../images/dfu-workflow.svg" alt="DFU Mode Flash Interface"></p>
-<h2 id="flashing-procedure">Flashing Procedure</h2>
-<ol>
-<li>Select DFU mode</li>
-<li>Select the correct Flash Address</li>
-<li>Select the firmware file</li>
-<li>Click "Detect DFU" to confirm the device</li>
-<li>Click "Start Flashing"</li>
-<li>Wait for the device to reset automatically and exit DFU mode</li>
-</ol>
+<h1 id="">加速度计</h1>
+<p>IDM 内置加速度计，可用于共振测量。加速度计配置必须放在 IDM 配置之后。</p>
+<h2 id="lis2dw-">lis2dw 版本（方形芯片）</h2>
+<pre><code class="language-ini">[lis2dw]
+cs_pin: idm:PA3
+spi_bus: spi1
+
+[resonance_tester]
+accel_chip: lis2dw
+probe_points:
+    125, 125, 20  # 设置为进行共振测量时喷头所处坐标</code></pre>
+<h2 id="adxl345-">adxl345 版本（长方形芯片）</h2>
+<pre><code class="language-ini">[adxl345]
+cs_pin: idm:PA3
+spi_bus: spi1
+
+[resonance_tester]
+accel_chip: adxl345
+probe_points:
+    125, 125, 20  # 设置为进行共振测量时喷头所处坐标</code></pre>
+<h2 id="">共振测量</h2>
+<p>配置完成后执行：</p>
+<pre><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
 <hr>
-<p><a href="INDEX.html">← Back to Home</a></p>
+<p><a href="INDEX.html">← 返回首页</a></p>
 
 </main>
 <script>
@@ -369,7 +356,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   var results = document.getElementById('search-results');
   var inner = document.getElementById('search-results-inner');
   var focusIdx = -1;
-  var langDir = 'en';
+  var langDir = 'zh';
 
   function loadIndex() {
     var xhr = new XMLHttpRequest();

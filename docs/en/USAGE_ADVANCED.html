@@ -301,6 +301,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
       <div class="sec-header">Usage Tutorial</div>
       <a href="USAGE_SETUP.html" class="nav-link">Setup & Config</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">Calibration</a>
+      <a href="ACCELEROMETER.html" class="nav-link">Accelerometer</a>
       <a href="USAGE_ADVANCED.html" class="nav-link active">Advanced Features</a>
       <div class="sec-header">Flashing Guide</div>
       <a href="INDEX.html" class="nav-link">Overview</a>
@@ -381,27 +382,6 @@ gcode:
 <pre><code class="language-bash">cd ~/IDM
 ~/klippy-env/bin/python arg_fit.py</code></pre>
 <p>Check <code>fit_result.png</code> and confirm that the compensated offsets stay within three digits.</p>
-<hr>
-<h2 id="accelerometer">Accelerometer</h2>
-<p>IDM includes a built-in accelerometer for resonance compensation.</p>
-<p><strong>lis2dw (square chip)</strong>:</p>
-<pre><code class="language-ini">[lis2dw]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: lis2dw
-probe_points: 125,125,20</code></pre>
-<p><strong>adxl345 (rectangular chip)</strong>:</p>
-<pre><code class="language-ini">[adxl345]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: adxl345
-probe_points: 125,125,20</code></pre>
-<p>Run resonance measurement:</p>
-<pre><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
 <hr>
 <h2 id="bed-mesh">Bed Mesh</h2>
 <pre><code class="language-ini">[bed_mesh]

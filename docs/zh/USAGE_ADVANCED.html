@@ -301,6 +301,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
       <div class="sec-header">使用教程</div>
       <a href="USAGE_SETUP.html" class="nav-link">安装与配置</a>
       <a href="USAGE_CALIBRATE.html" class="nav-link">校准</a>
+      <a href="ACCELEROMETER.html" class="nav-link">加速度计</a>
       <a href="USAGE_ADVANCED.html" class="nav-link active">高级功能</a>
       <div class="sec-header">刷写指南</div>
       <a href="INDEX.html" class="nav-link">概览</a>
@@ -381,27 +382,6 @@ gcode:
 <pre><code class="language-bash">cd ~/IDM
 ~/klippy-env/bin/python arg_fit.py</code></pre>
 <p>查看 <code>fit_result.png</code>，确认补偿后的偏移量控制在三位数以内。</p>
-<hr>
-<h2 id="">加速度计</h2>
-<p>IDM 内置加速度计，用于共振补偿。</p>
-<p><strong>lis2dw 方形芯片</strong>：</p>
-<pre><code class="language-ini">[lis2dw]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: lis2dw
-probe_points: 125,125,20</code></pre>
-<p><strong>adxl345 长方形芯片</strong>：</p>
-<pre><code class="language-ini">[adxl345]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: adxl345
-probe_points: 125,125,20</code></pre>
-<p>执行共振测量：</p>
-<pre><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
 <hr>
 <h2 id="">热床网格</h2>
 <pre><code class="language-ini">[bed_mesh]

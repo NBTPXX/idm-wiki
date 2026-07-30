@@ -79,41 +79,6 @@ Check `fit_result.png` and confirm that the compensated offsets stay within thre
 
 ---
 
-## Accelerometer
-
-IDM includes a built-in accelerometer for resonance compensation.
-
-**lis2dw (square chip)**:
-
-```ini
-[lis2dw]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: lis2dw
-probe_points: 125,125,20
-```
-
-**adxl345 (rectangular chip)**:
-
-```ini
-[adxl345]
-cs_pin: idm:PA3
-spi_bus: spi1
-
-[resonance_tester]
-accel_chip: adxl345
-probe_points: 125,125,20
-```
-
-Run resonance measurement:
-```gcode
-SHAPER_CALIBRATE
-```
-
----
-
 ## Bed Mesh
 
 ```ini
