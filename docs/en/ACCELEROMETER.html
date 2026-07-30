@@ -259,7 +259,12 @@ pre code {
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 5px 10px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   color: var(--text-muted);
   background: #ffffff;
   border: 1px solid var(--code-border);
@@ -268,6 +273,15 @@ pre code {
   font-size: 12px;
   line-height: 1.2;
   cursor: pointer;
+}
+.copy-code svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .copy-code:hover,
 .copy-code:focus-visible {
@@ -347,7 +361,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
  <h1 id="accelerometer">Accelerometer</h1>
 <p>IDM includes a built-in accelerometer for resonance measurement. Place the accelerometer configuration after the IDM configuration.</p>
 <h2 id="lis2dw-version-square-chip">lis2dw Version (Square Chip)</h2>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[lis2dw]
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[lis2dw]
 cs_pin: idm:PA3
 spi_bus: spi1
 
@@ -356,7 +370,7 @@ accel_chip: lis2dw
 probe_points:
     125, 125, 20  # Set this to the printhead coordinates used for resonance measurement</code></pre>
 <h2 id="adxl345-version-rectangular-chip">adxl345 Version (Rectangular Chip)</h2>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[adxl345]
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[adxl345]
 cs_pin: idm:PA3
 spi_bus: spi1
 
@@ -366,7 +380,7 @@ probe_points:
     125, 125, 20  # Set this to the printhead coordinates used for resonance measurement</code></pre>
 <h2 id="resonance-measurement">Resonance Measurement</h2>
 <p>After configuration, run:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-gcode">SHAPER_CALIBRATE</code></pre>
 <hr>
 <p><a href="INDEX.html">← Back to Home</a></p>
 
@@ -381,6 +395,8 @@ probe_points:
   var langDir = 'en';
   var copyLabel = 'Copy';
   var copiedLabel = 'Copied';
+  var copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg>';
+  var copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>';
 
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -402,8 +418,14 @@ probe_points:
     button.addEventListener('click', function() {
       var code = button.parentElement.querySelector('code');
       copyText(code.textContent).then(function() {
-        button.textContent = copiedLabel;
-        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+        button.innerHTML = copiedIcon;
+        button.title = copiedLabel;
+        button.setAttribute('aria-label', copiedLabel);
+        window.setTimeout(function() {
+          button.innerHTML = copyIcon;
+          button.title = copyLabel;
+          button.setAttribute('aria-label', copyLabel);
+        }, 1600);
       });
     });
   });

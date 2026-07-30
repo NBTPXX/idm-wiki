@@ -323,7 +323,12 @@ pre code {
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 5px 10px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   color: var(--text-muted);
   background: #ffffff;
   border: 1px solid var(--code-border);
@@ -332,6 +337,15 @@ pre code {
   font-size: 12px;
   line-height: 1.2;
   cursor: pointer;
+}
+.copy-code svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .copy-code:hover,
 .copy-code:focus-visible {
@@ -435,7 +449,7 @@ def md_to_html(text, copy_label):
             else:
                 lang_attr = f' class="language-{code_lang}"' if code_lang else ''
                 joined = "\n".join(code_lines)
-                result.append(f'<pre><button class="copy-code" type="button">{copy_label}</button><code{lang_attr}>{joined}</code></pre>')
+                result.append(f'<pre><button class="copy-code" type="button" title="{copy_label}" aria-label="{copy_label}"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code{lang_attr}>{joined}</code></pre>')
                 in_code_block = False
                 code_lang = ""
                 code_lines = []
@@ -586,6 +600,8 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
   var langDir = '{lang}';
   var copyLabel = '{"复制" if lang == "zh" else "Copy"}';
   var copiedLabel = '{"已复制" if lang == "zh" else "Copied"}';
+  var copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg>';
+  var copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>';
 
   function copyText(text) {{
     if (navigator.clipboard && navigator.clipboard.writeText) {{
@@ -607,8 +623,14 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
     button.addEventListener('click', function() {{
       var code = button.parentElement.querySelector('code');
       copyText(code.textContent).then(function() {{
-        button.textContent = copiedLabel;
-        window.setTimeout(function() {{ button.textContent = copyLabel; }}, 1600);
+        button.innerHTML = copiedIcon;
+        button.title = copiedLabel;
+        button.setAttribute('aria-label', copiedLabel);
+        window.setTimeout(function() {{
+          button.innerHTML = copyIcon;
+          button.title = copyLabel;
+          button.setAttribute('aria-label', copyLabel);
+        }}, 1600);
       }});
     }});
   }});

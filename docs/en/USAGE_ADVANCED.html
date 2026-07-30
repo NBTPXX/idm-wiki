@@ -259,7 +259,12 @@ pre code {
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 5px 10px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   color: var(--text-muted);
   background: #ffffff;
   border: 1px solid var(--code-border);
@@ -268,6 +273,15 @@ pre code {
   font-size: 12px;
   line-height: 1.2;
   cursor: pointer;
+}
+.copy-code svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 .copy-code:hover,
 .copy-code:focus-visible {
@@ -349,7 +363,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <p>IDM has built-in temperature compensation. Parameters can be optimized through data collection (~1 hour).</p>
 <h3 id="data-collection">Data Collection</h3>
 <p>Add this macro to <code>printer.cfg</code>:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[gcode_macro DATA_SAMPLE]
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[gcode_macro DATA_SAMPLE]
 gcode:
   {% set bed_temp = params.BED_TEMP|default(90)|int %}
   {% set nozzle_temp = params.NOZZLE_TEMP|default(250)|int %}
@@ -397,20 +411,20 @@ gcode:
   M104 S0
   M140 S0</code></pre>
 <p>Run:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-gcode">DATA_SAMPLE BED_TEMP=90 NOZZLE_TEMP=250 MIN_TEMP=40 MAX_TEMP=70</code></pre>
 <p>Data files are generated at <code>/tmp/data1</code>, <code>/tmp/data2</code>, <code>/tmp/data3</code>.</p>
 <h3 id="calculate-parameters">Calculate Parameters</h3>
 <p>Move the three data files to <code>~/IDM</code>, then run:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-bash">cd ~/IDM
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-bash">cd ~/IDM
 ~/klippy-env/bin/python arg_fit.py</code></pre>
 <p>Check <code>fit_result.png</code> and confirm that the compensated offsets stay within three digits.</p>
 <hr>
 <h2 id="bed-mesh">Bed Mesh</h2>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[bed_mesh]
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[bed_mesh]
 zero_reference_position: 125, 125      # Set this to the center of the bed</code></pre>
 <h3 id="high-power-bed-macro">High-Power Bed Macro</h3>
 <p>For AC heated beds (500W+), disable heater during probing:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-ini">[gcode_macro BED_MESH_CALIBRATE]
 rename_existing: _BED_MESH_CALIBRATE
 gcode:
     {% set TARGET_TEMP = printer.heater_bed.target %}
@@ -420,7 +434,7 @@ gcode:
 <hr>
 <h2 id="print-start-g-code">Print Start G-code</h2>
 <p>Add to the end of <code>PRINT_START</code> macro:</p>
-<pre><button class="copy-code" type="button">Copy</button><code class="language-gcode">IDM_TOUCH CALIBRATE=1
+<pre><button class="copy-code" type="button" title="Copy" aria-label="Copy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><code class="language-gcode">IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO</code></pre>
 <hr>
 <h2 id="troubleshooting">Troubleshooting</h2>
@@ -470,6 +484,8 @@ PROBE_CALIBRATE METHOD=AUTO</code></pre>
   var langDir = 'en';
   var copyLabel = 'Copy';
   var copiedLabel = 'Copied';
+  var copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg>';
+  var copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>';
 
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -491,8 +507,14 @@ PROBE_CALIBRATE METHOD=AUTO</code></pre>
     button.addEventListener('click', function() {
       var code = button.parentElement.querySelector('code');
       copyText(code.textContent).then(function() {
-        button.textContent = copiedLabel;
-        window.setTimeout(function() { button.textContent = copyLabel; }, 1600);
+        button.innerHTML = copiedIcon;
+        button.title = copiedLabel;
+        button.setAttribute('aria-label', copiedLabel);
+        window.setTimeout(function() {
+          button.innerHTML = copyIcon;
+          button.title = copyLabel;
+          button.setAttribute('aria-label', copyLabel);
+        }, 1600);
       });
     });
   });
