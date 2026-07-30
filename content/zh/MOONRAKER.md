@@ -28,23 +28,6 @@ info_tags:
     desc=IDM Flash Web Tool
 ```
 
-### IDM Klipper 模块更新
-
-```ini
-[update_manager idm]
-type: git_repo
-channel: dev
-path: ~/IDM
-origin: https://gitee.com/NBTP/IDM.git
-env: ~/klippy-env/bin/python
-requirements: requirements.txt
-install_script: install.sh
-is_system_service: False
-managed_services: klipper
-info_tags:
-  desc=idm
-```
-
 ### moonraker.asvc
 
 在 ~/printer_data/moonraker.asvc 中添加 idm_flash_web。
