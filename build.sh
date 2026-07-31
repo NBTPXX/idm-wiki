@@ -646,7 +646,7 @@ def build_page(lang, lang_attr, nav_labels, page_name, page_title, md_content):
 <body>
 <nav class="sidebar">
   <div class="sidebar-header">
-    <a href="INDEX.html">IDM Wiki</a>
+    <a href="USAGE_SETUP.html">IDM Wiki</a>
     <span>{meta["subtitle"]}</span>
   </div>
   <div class="sidebar-search">
