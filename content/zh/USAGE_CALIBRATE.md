@@ -54,8 +54,9 @@ PROBE_CALIBRATE METHOD=AUTO
 
 ### 第 6 步：配置打印起始 G-code
 
+打印起始 G-code 只需要：
+
 ```gcode
-IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 ```
 

@@ -442,8 +442,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <h3 id="-5--z-">第 5 步：自动 Z 偏移测量</h3>
 <div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
 <h3 id="-6--g-code">第 6 步：配置打印起始 G-code</h3>
-<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">IDM_TOUCH CALIBRATE=1
-PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
+<p>打印起始 G-code 只需要：</p>
+<div class="code-block"><button class="copy-code" type="button" title="复制" aria-label="复制"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"></path></svg></button><pre><code class="language-gcode">PROBE_CALIBRATE METHOD=AUTO</code></pre></div>
 <p>完整流程参见<a href="USAGE_ADVANCED.html">高级功能</a>。</p>
 <h2 id="second-probe-">Second Probe 模式</h2>
 <p>Second Probe 模式使用 TAP 或机械限位开关触发 Z 归零和自动 Z 偏移校准，适用于使用外部接触触发器的设备。</p>

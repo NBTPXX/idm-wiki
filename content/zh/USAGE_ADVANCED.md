@@ -104,10 +104,9 @@ gcode:
 
 ## 打印起始 G-code
 
-在 `PRINT_START` 宏末尾添加：
+在 `PRINT_START` 宏末尾只添加：
 
 ```gcode
-IDM_TOUCH CALIBRATE=1
 PROBE_CALIBRATE METHOD=AUTO
 ```
 
