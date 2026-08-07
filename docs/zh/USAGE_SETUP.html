@@ -474,6 +474,13 @@ mesh_main_direction: x
 mesh_cluster_size: 1
 mesh_runs: 1
 
+# Touch 网格采样
+touch_mesh_probe_count: 5,5            # 矩形 Touch 网格点数
+touch_mesh_probe_mode: full            # full：全床采样；custom：自定义采样
+touch_mesh_samples: 3                  # 每个 Touch 点采样次数
+touch_mesh_retry_threshold: 0.05       # Scanner 与 Touch 偏差触发复测的阈值
+touch_mesh_retry_points:               # 自定义额外采样点，每行 X,Y
+
 # Touch 模式专用
 scanner_touch_max_temp: 180
 scanner_touch_speed: 5
